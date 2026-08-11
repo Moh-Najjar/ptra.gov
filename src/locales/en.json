@@ -1,0 +1,278 @@
+{
+  "common": {
+    "home": "Home",
+    "comingSoon": "This page content will be added soon.",
+    "loginComingSoon": "The login form will be added soon.",
+    "menu": "Menu"
+  },
+  "language": {
+    "switchToEnglish": "English",
+    "switchToArabic": "العربية"
+  },
+  "nav": {
+    "home": "Home",
+    "crops": "Crops",
+    "foreignTrade": "Foreign Trade",
+    "exports": "Exports",
+    "imports": "Imports",
+    "transit": "Transit",
+    "tradeBalance": "Trade Balance",
+    "logisticsPerformance": "Logistics Performance",
+    "aqabaSez": "Aqaba Special Economic Zone",
+    "foreignTradeLogistics": "Foreign Trade Logistics",
+    "containerFlowStatistics": "Container Flow Statistics",
+    "overview": "Overview",
+    "releaseTime": "Release Time",
+    "containerDwellTime": "Container Dwell Time",
+    "operation": "Operation"
+  },
+  "utility": {
+    "faq": "FAQ",
+    "about": "About the Portal",
+    "contact": "Contact Us",
+    "favorites": "Favorites",
+    "print": "Print",
+    "search": "Search",
+    "accessibility": "Accessibility",
+    "switchToDarkMode": "Dark mode",
+    "switchToLightMode": "Light mode",
+    "decreaseFontSize": "Decrease font size",
+    "increaseFontSize": "Increase font size"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "loginTitle": "Login",
+    "username": "Username",
+    "password": "Password",
+    "cancel": "Cancel",
+    "loginError": "Login failed. Please check your credentials and try again."
+  },
+  "header": {
+    "customsDept": "Jordan Customs Department",
+    "customsDeptEn": "Jordan Customs Department",
+    "portalSubtitle": "Trade and Transport Portal for those interested in Jordan"
+  },
+  "hero": {
+    "title": "Jordan Trade and Logistics Performance Gateway",
+    "description": "An interactive digital platform that provides accurate real-time information on a wealth of trade and logistics performance metrics.",
+    "slides": {
+      "slide1": {
+        "title": "Jordan Trade and Logistics Performance Gateway",
+        "description": "An interactive digital platform that provides accurate real-time information on a wealth of trade and logistics performance metrics."
+      },
+      "slide2": {
+        "title": "Foreign Trade Indicators",
+        "description": "Track the latest export, import, and trade balance data to support your economic decisions."
+      },
+      "slide3": {
+        "title": "Logistics Performance at Ports",
+        "description": "View release time and container dwell time indicators to improve supply chain efficiency."
+      },
+      "slide4": {
+        "title": "Aqaba Special Economic Zone",
+        "description": "Explore trade and logistics activity indicators in the Aqaba Special Economic Zone."
+      }
+    }
+  },
+  "operation": {
+    "title": "Operation",
+    "description": "Welcome to the protected operation area. Operational content will be added here soon."
+  },
+  "home": {
+    "dashboardsTitle": "Foreign Trade and Logistics Performance Dashboards",
+    "statsTitle": "General Statistics"
+  },
+  "dashboardCards": {
+    "foreignTrade": "Foreign Trade",
+    "logisticsPerformance": "Logistics Performance",
+    "aqabaSez": "Aqaba Special Economic Zone",
+    "foreignTradeLogistics": "Foreign Trade Logistics",
+    "statistics": "Statistics"
+  },
+  "stats": {
+    "loadError": "Unable to load statistics. Please try again later.",
+    "imports": "Value of imports (billions)",
+    "exports": "Value of exports (billions)",
+    "tradeBalance": "Trade balance (billions)",
+    "containers": "Number of containers",
+    "carMovements": "Number of car movements",
+    "truckMovements": "Number of truck movements",
+    "visitorCount": "Site visitors: {{count}}"
+  },
+  "footer": {
+    "importantLinks": "Important Links",
+    "usagePolicies": "Usage Policies",
+    "tradeFacilitationPortal": "Jordanian Trade Facilitation Portal",
+    "eGovernment": "E-Government",
+    "about": "About the Portal",
+    "faq": "FAQ",
+    "accessibility": "Accessibility",
+    "privacy": "Privacy and Protection Policy",
+    "execution": "Execution:",
+    "partnership": "In partnership with:",
+    "funding": "Funded by:",
+    "copyright": "All rights reserved © 2026 Hashemite Kingdom of Jordan - Jordan Customs",
+    "poweredBy": "Powered By DataHub Analytics",
+    "partners": {
+      "jordanCustoms": "Jordan Customs Department",
+      "itc": "International Trade Centre",
+      "modee": "Ministry of Digital Economy and Entrepreneurship",
+      "customsDept": "Jordan Customs",
+      "giz": "GIZ",
+      "germanCooperation": "German Cooperation",
+      "collaboratingPartner": "Aqaba Special Economic Zone Authority"
+    }
+  },
+  "pages": {
+    "crops": { "title": "Crops" },
+    "foreignTrade": { "title": "Foreign Trade" },
+    "exports": { "title": "Exports" },
+    "imports": { "title": "Imports" },
+    "transit": { "title": "Transit" },
+    "tradeBalance": { "title": "Trade Balance" },
+    "logisticsPerformance": { "title": "Logistics Performance" },
+    "releaseTime": {
+      "title": "Release Time",
+      "description": "An electronic platform for measuring the time taken for customs clearance of goods, from their arrival at customs centers until release, tracking all stages and procedures including those issued by government departments and entities related to customs data. Times are displayed in detail by day, hour, and minute, enabling precise monitoring of customs process performance and identifying improvement opportunities."
+    },
+    "containerDwellTime": { "title": "Container Dwell Time" },
+    "aqabaSez": { "title": "Aqaba Special Economic Zone" },
+    "foreignTradeLogistics": { "title": "Foreign Trade Logistics" },
+    "containerFlowStatistics": { "title": "Container Flow Statistics" },
+    "statistics": { "title": "Statistics" },
+    "faq": { "title": "FAQ" },
+    "about": { "title": "About the Portal" },
+    "contact": { "title": "Contact Us" },
+    "accessibility": { "title": "Accessibility" },
+    "privacy": { "title": "Privacy and Protection Policy" },
+    "login": { "title": "Login" }
+  },
+  "powerBi": {
+    "loading": "Loading report...",
+    "loadError": "Unable to load the Power BI report. Please try again later."
+  },
+  "faq": {
+    "items": {
+      "releaseTime": {
+        "question": "What is Release Time?",
+        "answer1": "Release is the customs authority's approval allowing goods that have undergone customs procedures to be placed at the disposal of the person concerned.",
+        "answer2": "Release time is estimated as the average time difference between the arrival of goods at the port of arrival and their release under various customs regimes, such as domestic consumption (IM4), transit (TR8), and other customs regimes.",
+        "answer3": "Release time also measures the time required to complete the main customs clearance operations, such as submitting the import declaration, assessing duties due, physically inspecting goods, and their final release."
+      }
+    }
+  },
+  "about": {
+    "paragraphs": {
+      "p1": "In line with the Trade Facilitation Agreement arising from the World Trade Organization, the International Trade Centre (ITC) entered into a partnership with the Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) and the Government of the Hashemite Kingdom of Jordan, funded by the German Federal Ministry for Economic Cooperation and Development, to implement the project \"Improving the Business Environment for Small and Medium-Sized Enterprises through Trade Facilitation,\" which aims to enhance the competitiveness of Jordanian SMEs and promote the growth of Jordanian exports through trade facilitation.",
+      "p2": "To support the implementation of Trade Facilitation Agreement measures and align current implementation with best practices and international standards, the International Trade Centre, in cooperation with the Jordan Customs Department, established a dedicated portal to display foreign trade and logistics performance information.",
+      "p3": "This portal is part of an initiative aimed at increasing Jordan's compliance with the Trade Facilitation Agreement and enhancing the competitiveness of Jordanian small and medium-sized enterprises.",
+      "p4": "The Foreign Trade and Logistics Performance Information Portal is an interactive, bilingual digital platform that provides accurate, important, and up-to-date information for decision-makers, public and private sector institutions, as well as stakeholders and those interested in foreign trade and logistics performance indicators, including goods release time.",
+      "p5": "The International Trade Centre (ITC) is a joint agency of the World Trade Organization and the United Nations. Given its unique mandate within the UN system to strengthen the competitiveness of small and medium-sized enterprises in developing countries, transition economies, and least developed countries, the Centre focuses on enabling these enterprises to benefit from international trade opportunities, thereby contributing to higher incomes and job creation."
+    },
+    "objectives": {
+      "item1": "Establish a data repository containing all information related to foreign trade and logistics performance, including goods release time data.",
+      "item2": "Provide accurate, important, and up-to-date information for decision-makers, public and private sector institutions, and those interested in trade and logistics performance indicators.",
+      "item3": "Manage data and avoid duplication in trade statistics through a centralized information platform.",
+      "item4": "Improve transparency in publishing Jordan's merchandise foreign trade information."
+    }
+  },
+  "contact": {
+    "intro": "You can contact the Customs Department and submit any comments, suggestions, or complaints through the following channels:",
+    "labels": {
+      "email": "Email",
+      "phone": "Phone",
+      "fax": "Fax",
+      "complaintsPhones": "Complaints department phones",
+      "zain": "Zain",
+      "umniah": "Umniah",
+      "complaintsHotline": "Complaints hotline",
+      "extensions": "Extension numbers",
+      "workingHours": "Working hours",
+      "whatsapp": "WhatsApp",
+      "poBox": "P.O. Box",
+      "address": "Address"
+    },
+    "sections": {
+      "email": {
+        "title": "Email",
+        "value": "customs@customs.gov.jo"
+      },
+      "phone": {
+        "title": "Call Us",
+        "phoneValue": "+962 6 4623168",
+        "faxValue": "+962 6 6447791"
+      },
+      "complaints": {
+        "title": "Complaints Department",
+        "departmentPhone": "+962 6 4623168",
+        "zainPhone": "+962 796199923",
+        "umniahPhone": "+962 781247512",
+        "hotline": "117222",
+        "extensions": "25555 , 2563"
+      },
+      "hours": {
+        "title": "Working Hours",
+        "value": "Sunday - Thursday from 7:30 AM to 3:30 PM"
+      },
+      "whatsapp": {
+        "title": "WhatsApp Service",
+        "value": "+962 780349516"
+      },
+      "address": {
+        "title": "Address",
+        "poBox": "90 Amman 11118",
+        "location": "Amman - Abdali - King Hussein Street - Next to the Central Bank of Jordan"
+      }
+    }
+  },
+  "accessibility": {
+    "paragraphs": {
+      "p1": "The Foreign Trade and Logistics Performance Indicators Dashboard website is committed to applying the highest technical standards for websites, and continuously seeks to adopt every new technology that enriches the site and facilitates access to all of its content, thereby increasing the number of users and visitors and enhancing their engagement.",
+      "p2": "From this perspective, the website administration has ensured compliance with W3C standards and adherence to the Web Content Accessibility Guidelines (WCAG 2.0), which relate to ease of access to all components of the site's content.",
+      "p3": "The website is also compatible with all World Wide Web Consortium (W3C) standards regarding ease of use and accessibility, in addition to other technical standards that collectively contribute to improving websites.",
+      "p4": "The Foreign Trade and Logistics Performance Indicators Dashboard website is fully compatible with major browsers such as Microsoft Edge, Google Chrome, and Firefox, along with appropriate compatibility with other browsers."
+    },
+    "mobile": {
+      "title": "Browsing via Smartphones",
+      "p1": "The Foreign Trade and Logistics Performance Indicators Dashboard website can be browsed through smartphones via an internet browser, where many services and features are available, such as search and language selection.",
+      "p2": "Through a smartphone, users can also view foreign trade and logistics performance indicator statistics, submit complaints and suggestions, and contact the customer service center."
+    }
+  },
+  "privacy": {
+    "sections": {
+      "commitment": {
+        "title": "Our Commitment",
+        "body": "This policy explains how personal information that may be collected on our website is used. Please read this policy before using the site or submitting any personal information. Your use of this site constitutes your acceptance of the practices described in this privacy policy. These practices may change, but any changes will be announced here and will apply prospectively, not retroactively. We encourage you to review our privacy policy whenever you use this site to ensure you understand how any personal information you provide will be used. Note: The practices described in this policy apply to our website only. If you are linked to other websites, please review the privacy policies stated on those sites."
+      },
+      "ipAddresses": {
+        "title": "Internet Protocol (IP) Addresses",
+        "body": "Our website server system (as with any other website server) automatically sends your network address when you visit the site. IP addresses or network addresses function similarly to a home address and serve as a unique digital identifier for your computer, allowing data to reach the correct location on the internet when connecting to other devices, without revealing your personal identity. We also use IP addresses to help diagnose server-related problems and to collect statistical summaries about site usage."
+      },
+      "cookies": {
+        "title": "Use of Cookies",
+        "body": "The Foreign Trade and Logistics Performance Indicators Dashboard website uses cookies to facilitate browsing. Using this system helps you access certain pages quickly and easily. This type of system must be stored on the computer's hard drive. Cookies used on government websites are encrypted so that no one other than the government entity you are dealing with can read or view the information."
+      },
+      "informationProtection": {
+        "title": "Information Protection",
+        "body": "Your personal information submitted through your feedback is available only to the authorized government employee responsible for reviewing it, and cannot be viewed by anyone else unless you allow them to do so. On the internet, user information may be subject to hacking or sale and may be sent to a third party without your consent. Therefore, access is granted only to qualified employees responsible for providing services related to your activities on our website. The site also implements strict procedures to protect information from misuse or alteration. However, the site is not liable for any harm you or any party may suffer as a result of a breach of confidentiality regarding information transmitted to the site."
+      },
+      "informationSecurity": {
+        "title": "Information Security",
+        "body": "The Foreign Trade and Logistics Performance Indicators Dashboard website generally follows technical and operational protection standards to safeguard personal information and protect it from unauthorized disclosure, misuse, unlawful processing, loss, destruction, and damage. All administrators of the site are committed to strictly applying the protection policy and allow only authorized persons to access personal information, and these employees pledge to maintain the confidentiality of such information. The site's policy strongly emphasizes the use of Secure Socket Layer (SSL) technology to ensure the confidentiality of data submitted through forms on the site. Please note that not all online transactions or electronic information storage methods can be guaranteed to be 100% secure from the risk of breach."
+      },
+      "thirdPartyWebsites": {
+        "title": "Third-Party Websites",
+        "body": "Our website may, from time to time, contain links to other government or private websites, which does not imply our endorsement of those sites or their content. We provide these links to enable you to view information and benefit from services on our site. However, transmitting information over the internet is not completely secure despite our efforts to protect your personal data. When entering through external websites, you may leave information about yourself on our website, which may violate the terms of our information management policy. We cannot guarantee the security of any information you disclose on the internet. Therefore, before entering our site through an external website, please pay attention to the privacy warning, as the site bears no responsibility for information published or circulated through other websites."
+      },
+      "policyUpdates": {
+        "title": "Privacy Policy Updates",
+        "body": "All of our privacy procedures remain under review from time to time, and we will post any updates on this page only. This page should be reviewed periodically to learn of any changes. Your access to this site constitutes acceptance of this policy. To inquire or request more information about privacy, practices, or your dealings with the site, please do not hesitate to contact us through the (<contactLink>Contact Us</contactLink>) page. We strive to answer all your inquiries within a reasonable time and to do everything in our power to earn your satisfaction and trust."
+      }
+    }
+  },
+  "meta": {
+    "title": "Trade and Logistics Performance Portal in Jordan",
+    "description": "Trade and Logistics Performance Portal in Jordan - A digital, interactive, bilingual platform"
+  }
+}

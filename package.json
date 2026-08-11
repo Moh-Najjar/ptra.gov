@@ -1,0 +1,39 @@
+{
+  "name": "ptra.gov",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@fontsource/cairo": "^5.2.7",
+    "@mui/icons-material": "^9.1.1",
+    "@mui/material": "^9.1.2",
+    "@mui/stylis-plugin-rtl": "^9.1.1",
+    "@tanstack/react-query": "^5.101.1",
+    "axios": "^1.18.1",
+    "i18next": "^26.3.2",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-i18next": "^17.0.8",
+    "react-multi-carousel": "^2.8.6",
+    "react-router-dom": "^7.18.0",
+    "stylis": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@types/stylis": "^4.2.7",
+    "@vitejs/plugin-react": "^6.0.2",
+    "oxlint": "^1.69.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.1.0"
+  }
+}
