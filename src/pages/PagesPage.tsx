@@ -13,6 +13,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { ROUTES } from '../app/routes/paths';
@@ -20,7 +21,9 @@ import {
   AdminTableContainer,
   AdminTableHeadCell,
   AdminTableHeadRow,
+  getAdminTableInteractiveRowSx,
 } from '../components/common/AdminTable';
+import { PageDetailsDialog } from '../components/pages/PageDetailsDialog';
 import { getPagesTableLocale, usePages } from '../hooks/queries/usePages';
 import { useLanguage } from '../hooks/useLanguage';
 import type { CmsPage } from '../types/cmsPage';
@@ -64,6 +67,7 @@ export const PagesPage = () => {
   const { language } = useLanguage();
   const { data, isLoading, isError } = usePages();
   const tableLocale = getPagesTableLocale(language);
+  const [selectedPage, setSelectedPage] = useState<CmsPage | null>(null);
 
   const renderLanguageCode = (languageCode: CmsPage['languageCode']): string => {
     if (languageCode === null || languageCode.trim().length === 0) {
@@ -71,6 +75,14 @@ export const PagesPage = () => {
     }
 
     return languageCode.toUpperCase();
+  };
+
+  const openPageDetails = (page: CmsPage) => {
+    setSelectedPage(page);
+  };
+
+  const closePageDetails = () => {
+    setSelectedPage(null);
   };
 
   return (
@@ -120,27 +132,39 @@ export const PagesPage = () => {
               </AdminTableHeadRow>
             </TableHead>
             <TableBody>
-              {data.map((page) => (
-                <TableRow key={page.id} hover>
-                  <TableCell>{page.id}</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>{page.title}</TableCell>
-                  <TableCell>
-                    <Chip
-                      label={getStatusLabel(page.status, t)}
-                      color={getStatusColor(page.status)}
-                      size="small"
-                      variant="outlined"
-                    />
-                  </TableCell>
-                  <TableCell>{formatDateTime(page.publishedDate, tableLocale)}</TableCell>
-                  <TableCell>{formatDateTime(page.modifiedDate, tableLocale)}</TableCell>
-                  <TableCell>{renderLanguageCode(page.languageCode)}</TableCell>
-                </TableRow>
-              ))}
+              {data.map((page) => {
+                const isSelected = selectedPage?.id === page.id;
+
+                return (
+                  <TableRow
+                    key={page.id}
+                    hover
+                    selected={isSelected}
+                    sx={getAdminTableInteractiveRowSx(true)}
+                    onClick={() => openPageDetails(page)}
+                  >
+                    <TableCell>{page.id}</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>{page.title}</TableCell>
+                    <TableCell>
+                      <Chip
+                        label={getStatusLabel(page.status, t)}
+                        color={getStatusColor(page.status)}
+                        size="small"
+                        variant="outlined"
+                      />
+                    </TableCell>
+                    <TableCell>{formatDateTime(page.publishedDate, tableLocale)}</TableCell>
+                    <TableCell>{formatDateTime(page.modifiedDate, tableLocale)}</TableCell>
+                    <TableCell>{renderLanguageCode(page.languageCode)}</TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </AdminTableContainer>
       )}
+
+      <PageDetailsDialog page={selectedPage} onClose={closePageDetails} />
     </Container>
   );
 };

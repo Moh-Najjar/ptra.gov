@@ -1,5 +1,5 @@
-export const PAGES_QUERY_KEY = ['pages', 'list'] as const;
-
 export const pagesKeys = {
-  list: PAGES_QUERY_KEY,
+  list: ['pages', 'list'] as const,
+  details: (pageId: number, pageNumber: number, pageSize: number) =>
+    ['pages', 'details', pageId, pageNumber, pageSize] as const,
 } as const;

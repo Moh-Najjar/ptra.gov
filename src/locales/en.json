@@ -152,7 +152,7 @@
     },
     "pages": {
       "title": "Pages",
-      "description": "Manage and review site pages.",
+      "description": "Manage and review site pages. Click a page to view its records.",
       "loading": "Loading pages...",
       "loadError": "Unable to load pages. Please try again later.",
       "noData": "No pages found.",
@@ -171,6 +171,48 @@
         "draft": "Draft",
         "pending": "Pending",
         "private": "Private"
+      },
+      "details": {
+        "title": "Page records",
+        "pageId": "Page ID",
+        "loading": "Loading records...",
+        "loadError": "Unable to load page records. Please try again later.",
+        "noData": "No records found for this page.",
+        "close": "Close",
+        "addRecord": "Add record",
+        "editRecord": "Edit record",
+        "deleteRecord": "Delete record",
+        "deleteConfirm": "Are you sure you want to delete {{name}}?",
+        "comingSoon": "This action will be available when the API endpoint is ready.",
+        "table": {
+          "id": "ID",
+          "vesselName": "Vessel",
+          "imoNumber": "IMO",
+          "departure": "Departure",
+          "pilotOnboard": "Pilot onboard",
+          "pilotCompleted": "Pilot completed",
+          "movementFrom": "Movement from",
+          "updatedBy": "Updated by",
+          "actions": "Actions"
+        },
+        "pagination": {
+          "rowsPerPage": "Rows per page:",
+          "displayedRows": "{{from}}–{{to}} of {{count}}"
+        },
+        "form": {
+          "vesselName": "Vessel name",
+          "imoNumber": "IMO number",
+          "departureDate": "Departure date",
+          "departureTime": "Departure time",
+          "datePilotOnboard": "Pilot onboard date",
+          "timePilotOnboard": "Pilot onboard time",
+          "datePilotCompleted": "Pilot completed date",
+          "timePilotCompleted": "Pilot completed time",
+          "movementFrom": "Movement from",
+          "save": "Save",
+          "delete": "Delete",
+          "cancel": "Cancel"
+        }
       }
     },
     "users": {

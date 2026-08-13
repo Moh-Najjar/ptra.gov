@@ -152,7 +152,7 @@
     },
     "pages": {
       "title": "الصفحات",
-      "description": "إدارة ومراجعة صفحات الموقع.",
+      "description": "إدارة ومراجعة صفحات الموقع. انقر على صفحة لعرض سجلاتها.",
       "loading": "جاري تحميل الصفحات...",
       "loadError": "تعذر تحميل الصفحات. يرجى المحاولة لاحقاً.",
       "noData": "لا توجد صفحات.",
@@ -171,6 +171,48 @@
         "draft": "مسودة",
         "pending": "قيد المراجعة",
         "private": "خاص"
+      },
+      "details": {
+        "title": "سجلات الصفحة",
+        "pageId": "معرف الصفحة",
+        "loading": "جاري تحميل السجلات...",
+        "loadError": "تعذر تحميل سجلات الصفحة. يرجى المحاولة لاحقاً.",
+        "noData": "لا توجد سجلات لهذه الصفحة.",
+        "close": "إغلاق",
+        "addRecord": "إضافة سجل",
+        "editRecord": "تعديل سجل",
+        "deleteRecord": "حذف سجل",
+        "deleteConfirm": "هل أنت متأكد من حذف {{name}}؟",
+        "comingSoon": "ستكون هذه العملية متاحة عند جاهزية واجهة البرمجة.",
+        "table": {
+          "id": "المعرف",
+          "vesselName": "السفينة",
+          "imoNumber": "IMO",
+          "departure": "المغادرة",
+          "pilotOnboard": "صعود الطيار",
+          "pilotCompleted": "اكتمال الطيار",
+          "movementFrom": "الحركة من",
+          "updatedBy": "تم التحديث بواسطة",
+          "actions": "الإجراءات"
+        },
+        "pagination": {
+          "rowsPerPage": "عدد الصفوف:",
+          "displayedRows": "{{from}}–{{to}} من {{count}}"
+        },
+        "form": {
+          "vesselName": "اسم السفينة",
+          "imoNumber": "رقم IMO",
+          "departureDate": "تاريخ المغادرة",
+          "departureTime": "وقت المغادرة",
+          "datePilotOnboard": "تاريخ صعود الطيار",
+          "timePilotOnboard": "وقت صعود الطيار",
+          "datePilotCompleted": "تاريخ اكتمال الطيار",
+          "timePilotCompleted": "وقت اكتمال الطيار",
+          "movementFrom": "الحركة من",
+          "save": "حفظ",
+          "delete": "حذف",
+          "cancel": "إلغاء"
+        }
       }
     },
     "users": {
