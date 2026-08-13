@@ -23,27 +23,32 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { useEffect, useState, type ChangeEvent } from 'react';
+import { useEffect, useMemo, useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AdminTableContainer,
   AdminTableHeadCell,
   AdminTableHeadRow,
 } from '../common/AdminTable';
-import {
-  formatPageDetailDateTime,
-  getPagesTableLocale,
-  usePageDetails,
-} from '../../hooks/queries/usePages';
+import { usePageDetails } from '../../hooks/queries/usePages';
 import { useLanguage } from '../../hooks/useLanguage';
 import type { CmsPage } from '../../types/cmsPage';
 import {
-  createEmptyPageDetailFormValues,
   DEFAULT_PAGE_DETAILS_PAGE_SIZE,
-  mapPageDetailToFormValues,
-  type PageDetailFormValues,
   type PageDetailRecord,
 } from '../../types/pageDetails';
+import {
+  createEmptyPageDetailFormValues,
+  extractPageDetailColumnKeys,
+  formatPageDetailCellValue,
+  getEditablePageDetailFieldKeys,
+  getPageDetailFieldLabel,
+  getPageDetailInputType,
+  getPageDetailRecordKey,
+  getPageDetailRecordLabel,
+  getPageDetailsTableLocale,
+  mapPageDetailToFormValues,
+} from '../../utils/pageDetails';
 
 type PageDetailDialogMode = 'add' | 'edit';
 
@@ -55,7 +60,7 @@ interface PageDetailsDialogProps {
 export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => {
   const { t } = useTranslation();
   const { language } = useLanguage();
-  const tableLocale = getPagesTableLocale(language);
+  const tableLocale = getPageDetailsTableLocale(language);
 
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_DETAILS_PAGE_SIZE);
@@ -63,13 +68,21 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<PageDetailRecord | null>(null);
-  const [formValues, setFormValues] = useState<PageDetailFormValues>(
-    createEmptyPageDetailFormValues(),
-  );
+  const [formValues, setFormValues] = useState<Record<string, string>>({});
   const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
 
   const pageId = page?.id ?? null;
   const { data, isLoading, isError } = usePageDetails(pageId, pageNumber, pageSize);
+
+  const columnKeys = useMemo(
+    () => (data ? extractPageDetailColumnKeys(data.items) : []),
+    [data],
+  );
+
+  const editableFieldKeys = useMemo(
+    () => getEditablePageDetailFieldKeys(columnKeys),
+    [columnKeys],
+  );
 
   useEffect(() => {
     if (pageId !== null) {
@@ -86,14 +99,14 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
   const openAddDialog = () => {
     setDialogMode('add');
     setSelectedRecord(null);
-    setFormValues(createEmptyPageDetailFormValues());
+    setFormValues(createEmptyPageDetailFormValues(editableFieldKeys));
     setIsFormDialogOpen(true);
   };
 
   const openEditDialog = (record: PageDetailRecord) => {
     setDialogMode('edit');
     setSelectedRecord(record);
-    setFormValues(mapPageDetailToFormValues(record));
+    setFormValues(mapPageDetailToFormValues(record, editableFieldKeys));
     setIsFormDialogOpen(true);
   };
 
@@ -105,7 +118,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
   const closeFormDialog = () => {
     setIsFormDialogOpen(false);
     setSelectedRecord(null);
-    setFormValues(createEmptyPageDetailFormValues());
+    setFormValues({});
   };
 
   const closeDeleteDialog = () => {
@@ -119,10 +132,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
     setIsComingSoonOpen(true);
   };
 
-  const updateFormValue = <K extends keyof PageDetailFormValues>(
-    field: K,
-    value: PageDetailFormValues[K],
-  ) => {
+  const updateFormValue = (field: string, value: string) => {
     setFormValues((currentValues) => ({
       ...currentValues,
       [field]: value,
@@ -157,7 +167,12 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
                 </Typography>
               )}
             </Box>
-            <Button variant="contained" startIcon={<AddOutlinedIcon />} onClick={openAddDialog}>
+            <Button
+              variant="contained"
+              startIcon={<AddOutlinedIcon />}
+              onClick={openAddDialog}
+              disabled={editableFieldKeys.length === 0}
+            >
               {t('pages.pages.details.addRecord')}
             </Button>
           </Stack>
@@ -182,67 +197,34 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
 
           {!isLoading && !isError && data && data.items.length > 0 && (
             <AdminTableContainer>
-              <Table size="small" aria-label={t('pages.pages.details.title')}>
+              <Box sx={{ overflowX: 'auto' }}>
+                <Table size="small" aria-label={t('pages.pages.details.title')}>
                 <TableHead>
                   <AdminTableHeadRow>
-                    <AdminTableHeadCell>{t('pages.pages.details.table.id')}</AdminTableHeadCell>
-                    <AdminTableHeadCell>
-                      {t('pages.pages.details.table.vesselName')}
-                    </AdminTableHeadCell>
-                    <AdminTableHeadCell>
-                      {t('pages.pages.details.table.imoNumber')}
-                    </AdminTableHeadCell>
-                    <AdminTableHeadCell>
-                      {t('pages.pages.details.table.departure')}
-                    </AdminTableHeadCell>
-                    <AdminTableHeadCell>
-                      {t('pages.pages.details.table.pilotOnboard')}
-                    </AdminTableHeadCell>
-                    <AdminTableHeadCell>
-                      {t('pages.pages.details.table.pilotCompleted')}
-                    </AdminTableHeadCell>
-                    <AdminTableHeadCell>
-                      {t('pages.pages.details.table.movementFrom')}
-                    </AdminTableHeadCell>
-                    <AdminTableHeadCell>
-                      {t('pages.pages.details.table.updatedBy')}
-                    </AdminTableHeadCell>
+                    {columnKeys.map((key) => (
+                      <AdminTableHeadCell key={key}>
+                        {getPageDetailFieldLabel(key, t)}
+                      </AdminTableHeadCell>
+                    ))}
                     <AdminTableHeadCell align="center">
                       {t('pages.pages.details.table.actions')}
                     </AdminTableHeadCell>
                   </AdminTableHeadRow>
                 </TableHead>
                 <TableBody>
-                  {data.items.map((record) => (
-                    <TableRow key={record.id} hover>
-                      <TableCell>{record.id}</TableCell>
-                      <TableCell sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
-                        {record.vesselName}
-                      </TableCell>
-                      <TableCell>{record.imoNumber}</TableCell>
-                      <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                        {formatPageDetailDateTime(
-                          record.departureDate,
-                          record.departureTime,
-                          tableLocale,
-                        )}
-                      </TableCell>
-                      <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                        {formatPageDetailDateTime(
-                          record.datePilotOnboard,
-                          record.timePilotOnboard,
-                          tableLocale,
-                        )}
-                      </TableCell>
-                      <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                        {formatPageDetailDateTime(
-                          record.datePilotCompleted,
-                          record.timePilotCompleted,
-                          tableLocale,
-                        )}
-                      </TableCell>
-                      <TableCell>{record.movementFrom}</TableCell>
-                      <TableCell>{record.updatedBy}</TableCell>
+                  {data.items.map((record, index) => (
+                    <TableRow key={getPageDetailRecordKey(record, index)} hover>
+                      {columnKeys.map((key) => (
+                        <TableCell
+                          key={key}
+                          sx={{
+                            whiteSpace: 'nowrap',
+                            fontWeight: key === 'id' ? 600 : undefined,
+                          }}
+                        >
+                          {formatPageDetailCellValue(record[key], tableLocale)}
+                        </TableCell>
+                      ))}
                       <TableCell align="center">
                         <Stack direction="row" spacing={0.5} sx={{ justifyContent: 'center' }}>
                           <Tooltip title={t('pages.pages.details.editRecord')}>
@@ -271,6 +253,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
                   ))}
                 </TableBody>
               </Table>
+              </Box>
               <TablePagination
                 component="div"
                 count={data.totalCount}
@@ -297,80 +280,26 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
         <DialogTitle>{dialogTitle}</DialogTitle>
         <DialogContent>
           <Stack spacing={2.5} sx={{ pt: 1 }}>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <TextField
-                label={t('pages.pages.details.form.vesselName')}
-                value={formValues.vesselName}
-                onChange={(event) => updateFormValue('vesselName', event.target.value)}
-                fullWidth
-              />
-              <TextField
-                label={t('pages.pages.details.form.imoNumber')}
-                value={formValues.imoNumber}
-                onChange={(event) => updateFormValue('imoNumber', event.target.value)}
-                fullWidth
-              />
-            </Stack>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <TextField
-                label={t('pages.pages.details.form.departureDate')}
-                type="date"
-                value={formValues.departureDate}
-                onChange={(event) => updateFormValue('departureDate', event.target.value)}
-                fullWidth
-                slotProps={{ inputLabel: { shrink: true } }}
-              />
-              <TextField
-                label={t('pages.pages.details.form.departureTime')}
-                type="time"
-                value={formValues.departureTime}
-                onChange={(event) => updateFormValue('departureTime', event.target.value)}
-                fullWidth
-                slotProps={{ inputLabel: { shrink: true } }}
-              />
-            </Stack>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <TextField
-                label={t('pages.pages.details.form.datePilotOnboard')}
-                type="date"
-                value={formValues.datePilotOnboard}
-                onChange={(event) => updateFormValue('datePilotOnboard', event.target.value)}
-                fullWidth
-                slotProps={{ inputLabel: { shrink: true } }}
-              />
-              <TextField
-                label={t('pages.pages.details.form.timePilotOnboard')}
-                type="time"
-                value={formValues.timePilotOnboard}
-                onChange={(event) => updateFormValue('timePilotOnboard', event.target.value)}
-                fullWidth
-                slotProps={{ inputLabel: { shrink: true } }}
-              />
-            </Stack>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <TextField
-                label={t('pages.pages.details.form.datePilotCompleted')}
-                type="date"
-                value={formValues.datePilotCompleted}
-                onChange={(event) => updateFormValue('datePilotCompleted', event.target.value)}
-                fullWidth
-                slotProps={{ inputLabel: { shrink: true } }}
-              />
-              <TextField
-                label={t('pages.pages.details.form.timePilotCompleted')}
-                type="time"
-                value={formValues.timePilotCompleted}
-                onChange={(event) => updateFormValue('timePilotCompleted', event.target.value)}
-                fullWidth
-                slotProps={{ inputLabel: { shrink: true } }}
-              />
-            </Stack>
-            <TextField
-              label={t('pages.pages.details.form.movementFrom')}
-              value={formValues.movementFrom}
-              onChange={(event) => updateFormValue('movementFrom', event.target.value)}
-              fullWidth
-            />
+            {editableFieldKeys.map((key) => {
+              const value = formValues[key] ?? '';
+              const inputType = getPageDetailInputType(key, value);
+
+              return (
+                <TextField
+                  key={key}
+                  label={getPageDetailFieldLabel(key, t)}
+                  type={inputType}
+                  value={value}
+                  onChange={(event) => updateFormValue(key, event.target.value)}
+                  fullWidth
+                  slotProps={
+                    inputType === 'date' || inputType === 'time'
+                      ? { inputLabel: { shrink: true } }
+                      : undefined
+                  }
+                />
+              );
+            })}
           </Stack>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
@@ -386,7 +315,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
         <DialogContent>
           <Typography variant="body1" sx={{ pt: 0.5 }}>
             {t('pages.pages.details.deleteConfirm', {
-              name: selectedRecord?.vesselName ?? '',
+              name: selectedRecord ? getPageDetailRecordLabel(selectedRecord) : '',
             })}
           </Typography>
         </DialogContent>

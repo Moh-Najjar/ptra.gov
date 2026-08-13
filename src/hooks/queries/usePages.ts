@@ -36,19 +36,3 @@ export const usePageDetails = (
 export const getPagesTableLocale = (language: AppLanguage): string =>
   language === 'ar' ? 'ar-JO' : 'en-US';
 
-export const formatPageDetailDateTime = (
-  dateValue: string,
-  timeValue: string,
-  locale: string,
-): string => {
-  const parsedDate = new Date(`${dateValue}T${timeValue}`);
-  if (Number.isNaN(parsedDate.getTime())) {
-    return `${dateValue} ${timeValue}`.trim();
-  }
-
-  return new Intl.DateTimeFormat(locale, {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  }).format(parsedDate);
-};
-

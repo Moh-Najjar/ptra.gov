@@ -1,19 +1,7 @@
-export interface PageDetailRecord {
-  id: number;
-  vesselName: string;
-  imoNumber: string;
-  departureDate: string;
-  departureTime: string;
-  datePilotOnboard: string;
-  timePilotOnboard: string;
-  datePilotCompleted: string;
-  timePilotCompleted: string;
-  movementFrom: string;
-  createdAt: string;
-  createdBy: string;
-  updatedAt: string;
-  updatedBy: string;
-}
+/** A single page-details row. Shape varies by page id. */
+export type PageDetailValue = string | number | boolean | null;
+
+export type PageDetailRecord = Record<string, PageDetailValue>;
 
 export interface PaginatedPageDetails {
   items: PageDetailRecord[];
@@ -23,40 +11,12 @@ export interface PaginatedPageDetails {
   totalPages: number;
 }
 
-export interface PageDetailFormValues {
-  vesselName: string;
-  imoNumber: string;
-  departureDate: string;
-  departureTime: string;
-  datePilotOnboard: string;
-  timePilotOnboard: string;
-  datePilotCompleted: string;
-  timePilotCompleted: string;
-  movementFrom: string;
-}
-
-export const createEmptyPageDetailFormValues = (): PageDetailFormValues => ({
-  vesselName: '',
-  imoNumber: '',
-  departureDate: '',
-  departureTime: '',
-  datePilotOnboard: '',
-  timePilotOnboard: '',
-  datePilotCompleted: '',
-  timePilotCompleted: '',
-  movementFrom: '',
-});
-
-export const mapPageDetailToFormValues = (record: PageDetailRecord): PageDetailFormValues => ({
-  vesselName: record.vesselName,
-  imoNumber: record.imoNumber,
-  departureDate: record.departureDate,
-  departureTime: record.departureTime,
-  datePilotOnboard: record.datePilotOnboard,
-  timePilotOnboard: record.timePilotOnboard,
-  datePilotCompleted: record.datePilotCompleted,
-  timePilotCompleted: record.timePilotCompleted,
-  movementFrom: record.movementFrom,
-});
-
 export const DEFAULT_PAGE_DETAILS_PAGE_SIZE = 10;
+
+/** Audit fields excluded from add/edit forms until dedicated endpoints exist. */
+export const PAGE_DETAIL_AUDIT_FIELDS = [
+  'createdAt',
+  'createdBy',
+  'updatedAt',
+  'updatedBy',
+] as const;
