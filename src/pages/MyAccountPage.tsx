@@ -4,10 +4,14 @@ import {
   Breadcrumbs,
   Container,
   Link,
+  List,
+  ListItemButton,
+  ListItemText,
+  Paper,
   Stack,
   Typography,
 } from '@mui/material';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { ROUTES } from '../app/routes/paths';
@@ -21,6 +25,7 @@ const hasIframeUrl = (post: AuthoredPost): post is AuthoredPost & { iframeUrl: s
 export const MyAccountPage = () => {
   const { t } = useTranslation();
   const { data, isLoading, isError } = useAuthoredPosts();
+  const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
   const postsWithIframe = useMemo(
     () => (data ?? []).filter(hasIframeUrl),
@@ -31,6 +36,26 @@ export const MyAccountPage = () => {
     () => (data ?? []).filter((post) => !hasIframeUrl(post)),
     [data],
   );
+
+  const selectedPost = useMemo(() => {
+    if (selectedPostId === null) {
+      return null;
+    }
+
+    return postsWithIframe.find((post) => post.id === selectedPostId) ?? null;
+  }, [postsWithIframe, selectedPostId]);
+
+  useEffect(() => {
+    if (postsWithIframe.length === 0) {
+      setSelectedPostId(null);
+      return;
+    }
+
+    const selectedStillExists = postsWithIframe.some((post) => post.id === selectedPostId);
+    if (!selectedStillExists) {
+      setSelectedPostId(postsWithIframe[0].id);
+    }
+  }, [postsWithIframe, selectedPostId]);
 
   return (
     <Container maxWidth="xl" sx={{ py: { xs: 4, md: 6 } }}>
@@ -65,16 +90,68 @@ export const MyAccountPage = () => {
         <Alert severity="info">{t('pages.myAccount.noReports')}</Alert>
       )}
 
-      <Stack spacing={5}>
-        {postsWithIframe.map((post) => (
-          <Box key={post.id}>
-            <Typography variant="h5" component="h2" sx={{ fontWeight: 700, mb: 2 }}>
-              {post.title}
-            </Typography>
-            <PowerBiEmbed title={post.title} embedUrl={post.iframeUrl} />
+      {!isLoading && !isError && postsWithIframe.length > 0 && (
+        <Stack
+          direction={{ xs: 'column', lg: 'row' }}
+          spacing={3}
+          sx={{ alignItems: 'stretch' }}
+        >
+          <Paper
+            variant="outlined"
+            sx={{
+              width: { xs: '100%', lg: 320 },
+              flexShrink: 0,
+              borderRadius: 2,
+              overflow: 'hidden',
+            }}
+          >
+            <Box sx={{ px: 2, py: 1.5, bgcolor: 'action.hover' }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                {t('pages.myAccount.reportsList')}
+              </Typography>
+            </Box>
+            <List disablePadding>
+              {postsWithIframe.map((post) => {
+                const isSelected = post.id === selectedPostId;
+
+                return (
+                  <ListItemButton
+                    key={post.id}
+                    selected={isSelected}
+                    onClick={() => setSelectedPostId(post.id)}
+                    sx={{
+                      py: 1.5,
+                      borderBottom: '1px solid',
+                      borderColor: 'divider',
+                    }}
+                  >
+                    <ListItemText
+                      primary={post.title}
+                      sx={{
+                        '& .MuiListItemText-primary': {
+                          fontWeight: isSelected ? 700 : 500,
+                          color: isSelected ? 'primary.main' : 'text.primary',
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                );
+              })}
+            </List>
+          </Paper>
+
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            {selectedPost && (
+              <>
+                <Typography variant="h5" component="h2" sx={{ fontWeight: 700, mb: 2 }}>
+                  {selectedPost.title}
+                </Typography>
+                <PowerBiEmbed title={selectedPost.title} embedUrl={selectedPost.iframeUrl} />
+              </>
+            )}
           </Box>
-        ))}
-      </Stack>
+        </Stack>
+      )}
 
       {postsWithoutIframe.length > 0 && (
         <Box sx={{ mt: 5 }}>

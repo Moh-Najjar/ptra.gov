@@ -9,8 +9,8 @@ export { AboutPage } from './AboutPage';
 export { HomePage } from './HomePage';
 export { FaqPage } from './FaqPage';
 export { PagesPage } from './PagesPage';
-
-export const PostPage = () => <PagePlaceholder titleKey="pages.post.title" descriptionKey="pages.post.description" />;
+export { PostPage } from './PostPage';
+export { UsersPage } from './UsersPage';
 
 export const ForeignTradePage = () => <PagePlaceholder titleKey="pages.foreignTrade.title" />;
 

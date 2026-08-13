@@ -6,11 +6,9 @@ import {
   CircularProgress,
   Container,
   Link,
-  Paper,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
   Typography,
@@ -18,6 +16,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { ROUTES } from '../app/routes/paths';
+import {
+  AdminTableContainer,
+  AdminTableHeadCell,
+  AdminTableHeadRow,
+} from '../components/common/AdminTable';
 import { getPagesTableLocale, usePages } from '../hooks/queries/usePages';
 import { useLanguage } from '../hooks/useLanguage';
 import type { CmsPage } from '../types/cmsPage';
@@ -104,30 +107,17 @@ export const PagesPage = () => {
       )}
 
       {!isLoading && !isError && data && data.length > 0 && (
-        <TableContainer
-          component={Paper}
-          sx={{
-            borderRadius: 2,
-            border: '1px solid',
-            borderColor: 'divider',
-          }}
-        >
+        <AdminTableContainer>
           <Table aria-label={t('pages.pages.title')}>
             <TableHead>
-              <TableRow sx={{ bgcolor: 'action.hover' }}>
-                <TableCell sx={{ fontWeight: 700 }}>{t('pages.pages.table.id')}</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>{t('pages.pages.table.title')}</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>{t('pages.pages.table.status')}</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>
-                  {t('pages.pages.table.publishedDate')}
-                </TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>
-                  {t('pages.pages.table.modifiedDate')}
-                </TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>
-                  {t('pages.pages.table.language')}
-                </TableCell>
-              </TableRow>
+              <AdminTableHeadRow>
+                <AdminTableHeadCell>{t('pages.pages.table.id')}</AdminTableHeadCell>
+                <AdminTableHeadCell>{t('pages.pages.table.title')}</AdminTableHeadCell>
+                <AdminTableHeadCell>{t('pages.pages.table.status')}</AdminTableHeadCell>
+                <AdminTableHeadCell>{t('pages.pages.table.publishedDate')}</AdminTableHeadCell>
+                <AdminTableHeadCell>{t('pages.pages.table.modifiedDate')}</AdminTableHeadCell>
+                <AdminTableHeadCell>{t('pages.pages.table.language')}</AdminTableHeadCell>
+              </AdminTableHeadRow>
             </TableHead>
             <TableBody>
               {data.map((page) => (
@@ -149,7 +139,7 @@ export const PagesPage = () => {
               ))}
             </TableBody>
           </Table>
-        </TableContainer>
+        </AdminTableContainer>
       )}
     </Container>
   );

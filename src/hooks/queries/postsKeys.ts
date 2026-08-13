@@ -1,5 +1,4 @@
-export const POSTS_QUERY_KEY = ['posts', 'authored'] as const;
-
 export const postsKeys = {
-  authored: POSTS_QUERY_KEY,
+  authored: ['posts', 'authored'] as const,
+  list: ['posts', 'list'] as const,
 } as const;

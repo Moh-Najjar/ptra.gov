@@ -26,7 +26,8 @@
     "containerDwellTime": "Container Dwell Time",
     "myAccount": "My Account",
     "post": "Posts",
-    "pages": "Pages"
+    "pages": "Pages",
+    "users": "Users"
   },
   "utility": {
     "faq": "FAQ",
@@ -129,12 +130,25 @@
       "loading": "Loading your reports...",
       "loadError": "Unable to load your reports. Please try again later.",
       "noReports": "No reports are available for your account yet.",
+      "reportsList": "Your reports",
       "unavailableReportsTitle": "Reports without embed links",
       "noIframe": "No embed link available"
     },
     "post": {
       "title": "Posts",
-      "description": "Manage and publish posts. Content will be added here soon."
+      "description": "Manage posts and open linked Power BI reports.",
+      "loading": "Loading posts...",
+      "loadError": "Unable to load posts. Please try again later.",
+      "noData": "No posts found.",
+      "table": {
+        "id": "ID",
+        "title": "Title",
+        "authors": "Authors",
+        "report": "Report",
+        "viewReport": "View report",
+        "untitled": "Untitled",
+        "notAvailable": "—"
+      }
     },
     "pages": {
       "title": "Pages",
@@ -157,6 +171,46 @@
         "draft": "Draft",
         "pending": "Pending",
         "private": "Private"
+      }
+    },
+    "users": {
+      "title": "Users",
+      "description": "Manage portal users and their roles.",
+      "loading": "Loading users...",
+      "loadError": "Unable to load users. Please try again later.",
+      "noData": "No users found.",
+      "addUser": "Add user",
+      "editUser": "Edit user",
+      "deleteUser": "Delete user",
+      "deleteConfirm": "Are you sure you want to delete {{name}}?",
+      "comingSoon": "This action will be available when the API endpoint is ready.",
+      "table": {
+        "id": "ID",
+        "fullName": "Full name",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "form": {
+        "fullName": "Full name",
+        "email": "Email",
+        "role": "Role",
+        "isActive": "Active user",
+        "save": "Save",
+        "delete": "Delete",
+        "cancel": "Cancel"
+      },
+      "roles": {
+        "administrator": "Administrator",
+        "editor": "Editor",
+        "author": "Author",
+        "contributor": "Contributor",
+        "subscriber": "Subscriber"
       }
     },
     "crops": { "title": "Crops" },

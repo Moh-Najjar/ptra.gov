@@ -13,4 +13,9 @@ export const ROLE_ROUTES: readonly RoleRouteItem[] = [
     labelKey: 'nav.pages',
     roles: [USER_ROLES.ADMINISTRATOR],
   },
+  {
+    path: ROUTES.USERS,
+    labelKey: 'nav.users',
+    roles: [USER_ROLES.ADMINISTRATOR],
+  },
 ];
