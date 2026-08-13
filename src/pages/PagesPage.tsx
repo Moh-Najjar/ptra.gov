@@ -1,3 +1,4 @@
+import TableRowsOutlinedIcon from '@mui/icons-material/TableRowsOutlined';
 import {
   Alert,
   Box,
@@ -6,6 +7,7 @@ import {
   CircularProgress,
   Container,
   Link,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -26,7 +28,7 @@ import {
 import { PageDetailsDialog } from '../components/pages/PageDetailsDialog';
 import { getPagesTableLocale, usePages } from '../hooks/queries/usePages';
 import { useLanguage } from '../hooks/useLanguage';
-import type { CmsPage } from '../types/cmsPage';
+import { pageHasDetails, type CmsPage } from '../types/cmsPage';
 
 const formatDateTime = (value: string, locale: string): string => {
   const date = new Date(value);
@@ -78,6 +80,10 @@ export const PagesPage = () => {
   };
 
   const openPageDetails = (page: CmsPage) => {
+    if (!pageHasDetails(page)) {
+      return;
+    }
+
     setSelectedPage(page);
   };
 
@@ -129,22 +135,37 @@ export const PagesPage = () => {
                 <AdminTableHeadCell>{t('pages.pages.table.publishedDate')}</AdminTableHeadCell>
                 <AdminTableHeadCell>{t('pages.pages.table.modifiedDate')}</AdminTableHeadCell>
                 <AdminTableHeadCell>{t('pages.pages.table.language')}</AdminTableHeadCell>
+                <AdminTableHeadCell>{t('pages.pages.table.records')}</AdminTableHeadCell>
               </AdminTableHeadRow>
             </TableHead>
             <TableBody>
               {data.map((page) => {
                 const isSelected = selectedPage?.id === page.id;
+                const hasDetails = pageHasDetails(page);
 
                 return (
                   <TableRow
                     key={page.id}
-                    hover
+                    hover={hasDetails}
                     selected={isSelected}
-                    sx={getAdminTableInteractiveRowSx(true)}
+                    sx={getAdminTableInteractiveRowSx(hasDetails)}
                     onClick={() => openPageDetails(page)}
                   >
                     <TableCell>{page.id}</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>{page.title}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, maxWidth: 320 }}>
+                      <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                        <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>
+                          {page.title}
+                        </Typography>
+                        {hasDetails && (
+                          <TableRowsOutlinedIcon
+                            fontSize="small"
+                            color="primary"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </Stack>
+                    </TableCell>
                     <TableCell>
                       <Chip
                         label={getStatusLabel(page.status, t)}
@@ -156,6 +177,26 @@ export const PagesPage = () => {
                     <TableCell>{formatDateTime(page.publishedDate, tableLocale)}</TableCell>
                     <TableCell>{formatDateTime(page.modifiedDate, tableLocale)}</TableCell>
                     <TableCell>{renderLanguageCode(page.languageCode)}</TableCell>
+                    <TableCell>
+                      {hasDetails ? (
+                        <Chip
+                          icon={<TableRowsOutlinedIcon />}
+                          label={t('pages.pages.table.viewRecords')}
+                          size="small"
+                          color="primary"
+                          variant="outlined"
+                          clickable
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            openPageDetails(page);
+                          }}
+                        />
+                      ) : (
+                        <Typography variant="body2" color="text.secondary">
+                          {t('pages.pages.table.notAvailable')}
+                        </Typography>
+                      )}
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -164,7 +205,10 @@ export const PagesPage = () => {
         </AdminTableContainer>
       )}
 
-      <PageDetailsDialog page={selectedPage} onClose={closePageDetails} />
+      <PageDetailsDialog
+        page={selectedPage !== null && pageHasDetails(selectedPage) ? selectedPage : null}
+        onClose={closePageDetails}
+      />
     </Container>
   );
 };

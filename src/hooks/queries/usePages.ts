@@ -20,6 +20,7 @@ export const usePageDetails = (
   pageId: number | null,
   pageNumber: number,
   pageSize: number,
+  detailsEnabled = true,
 ) => {
   const { isAuthenticated } = useAuth();
 
@@ -29,7 +30,7 @@ export const usePageDetails = (
         ? ['pages', 'details', 'idle']
         : pagesKeys.details(pageId, pageNumber, pageSize),
     queryFn: () => pagesService.getPageDetails(pageId as number, pageNumber, pageSize),
-    enabled: isAuthenticated && pageId !== null,
+    enabled: isAuthenticated && pageId !== null && detailsEnabled,
   });
 };
 

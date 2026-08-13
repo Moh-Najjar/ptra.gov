@@ -72,7 +72,13 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
   const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
 
   const pageId = page?.id ?? null;
-  const { data, isLoading, isError } = usePageDetails(pageId, pageNumber, pageSize);
+  const detailsEnabled = page !== null && page.isPageDetailsEnabled;
+  const { data, isLoading, isError } = usePageDetails(
+    pageId,
+    pageNumber,
+    pageSize,
+    detailsEnabled,
+  );
 
   const columnKeys = useMemo(
     () => (data ? extractPageDetailColumnKeys(data.items) : []),
@@ -150,7 +156,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
 
   return (
     <>
-      <Dialog open={page !== null} onClose={onClose} fullWidth maxWidth="xl">
+      <Dialog open={page !== null && page.isPageDetailsEnabled} onClose={onClose} fullWidth maxWidth="xl">
         <DialogTitle sx={{ pr: 6 }}>
           <Stack
             direction={{ xs: 'column', sm: 'row' }}

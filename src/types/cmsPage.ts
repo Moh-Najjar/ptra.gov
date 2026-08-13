@@ -5,4 +5,7 @@ export interface CmsPage {
   publishedDate: string;
   modifiedDate: string;
   languageCode: string | null;
+  isPageDetailsEnabled: boolean;
 }
+
+export const pageHasDetails = (page: CmsPage): boolean => page.isPageDetailsEnabled;

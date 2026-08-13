@@ -152,7 +152,7 @@
     },
     "pages": {
       "title": "Pages",
-      "description": "Manage and review site pages. Click a page to view its records.",
+      "description": "Manage and review site pages. Pages with records can be opened to view their details.",
       "loading": "Loading pages...",
       "loadError": "Unable to load pages. Please try again later.",
       "noData": "No pages found.",
@@ -163,6 +163,8 @@
         "publishedDate": "Published",
         "modifiedDate": "Modified",
         "language": "Language",
+        "records": "Records",
+        "viewRecords": "View records",
         "notAvailable": "—"
       },
       "status": {

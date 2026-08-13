@@ -4,6 +4,17 @@ import type { PaginatedPageDetails } from '../types/pageDetails';
 import { normalizePageDetailItems } from '../utils/pageDetails';
 import { apiClient } from './api/client';
 
+interface RawCmsPage {
+  id: number;
+  title: string;
+  status: string;
+  publishedDate: string;
+  modifiedDate: string;
+  languageCode: string | null;
+  isPageDetailsEnabled?: boolean;
+  IsPageDetailsEnabled?: boolean;
+}
+
 interface RawPaginatedPageDetails {
   items: unknown[];
   pageNumber: number;
@@ -12,10 +23,20 @@ interface RawPaginatedPageDetails {
   totalPages: number;
 }
 
+const normalizeCmsPage = (page: RawCmsPage): CmsPage => ({
+  id: page.id,
+  title: page.title,
+  status: page.status,
+  publishedDate: page.publishedDate,
+  modifiedDate: page.modifiedDate,
+  languageCode: page.languageCode,
+  isPageDetailsEnabled: page.isPageDetailsEnabled ?? page.IsPageDetailsEnabled ?? false,
+});
+
 export const pagesService = {
   getPages: async (): Promise<CmsPage[]> => {
-    const { data } = await apiClient.get<ApiResponse<CmsPage[]>>('/Pages');
-    return data.data;
+    const { data } = await apiClient.get<ApiResponse<RawCmsPage[]>>('/Pages');
+    return data.data.map(normalizeCmsPage);
   },
 
   getPageDetails: async (
