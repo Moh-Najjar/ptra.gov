@@ -1,33 +1,33 @@
 export interface LoginCredentials {
   username: string;
   password: string;
-  expiresInMins?: number;
 }
 
-export interface LoginResponse {
-  id: number;
+export interface LoginApiData {
+  token: string;
+  expiresAt: string;
+  userId: number;
   username: string;
+  displayName: string;
+  fullName: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  gender: string;
-  image: string;
-  accessToken: string;
-  refreshToken: string;
+  isAdmin: boolean;
+  roles: string[];
+  forms: unknown[];
 }
 
 export interface AuthUser {
   id: number;
   username: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  gender: string;
-  image: string;
+  displayName: string;
+  fullName: string;
+  isAdmin: boolean;
+  roles: string[];
 }
 
 export interface AuthSession {
   user: AuthUser;
   accessToken: string;
-  refreshToken: string;
+  expiresAt: string;
 }

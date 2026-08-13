@@ -1,5 +1,4 @@
 import { Box, Typography } from '@mui/material';
-import { keyframes } from '@mui/material/styles';
 
 export type StatCircleSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -37,26 +36,13 @@ const SIZE_CONFIG: Record<StatCircleSize, StatCircleSizeConfig> = {
   },
 };
 
-const statCircleEnter = keyframes`
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-`;
-
 interface StatCircleProps {
   value: string;
   label: string;
   background: string;
   size?: StatCircleSize;
   overlap?: boolean;
-  index?: number;
   zIndex?: number;
-  isVisible?: boolean;
 }
 
 export const StatCircle = ({
@@ -65,12 +51,9 @@ export const StatCircle = ({
   background,
   size = 'md',
   overlap = true,
-  index = 0,
   zIndex = 1,
-  isVisible = true,
 }: StatCircleProps) => {
   const config = SIZE_CONFIG[size];
-  const animationDelay = `${index * 0.1}s`;
 
   return (
     <Box
@@ -98,15 +81,6 @@ export const StatCircle = ({
         boxShadow: '0 6px 20px rgba(0, 0, 0, 0.15)',
         zIndex,
         cursor: 'default',
-        opacity: isVisible ? 1 : 0,
-        animation: isVisible
-          ? `${statCircleEnter} 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards`
-          : 'none',
-        animationDelay,
-        '@media (prefers-reduced-motion: reduce)': {
-          animation: 'none',
-          opacity: 1,
-        },
         '&::before': {
           content: '""',
           position: 'absolute',

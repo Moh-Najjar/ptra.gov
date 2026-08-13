@@ -185,7 +185,7 @@ export const HeroSection = () => {
         responsive={HERO_CAROUSEL_RESPONSIVE}
         infinite
         autoPlay
-        autoPlaySpeed={1000055}
+        autoPlaySpeed={5000}
         showDots
         arrows={false}
         rtl={direction === 'rtl'}

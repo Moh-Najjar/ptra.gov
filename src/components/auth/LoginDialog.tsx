@@ -23,8 +23,8 @@ import {
 import { alpha, keyframes } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../app/routes/paths';
 import { useAuth } from '../../hooks/useAuth';
+import { getDefaultAuthenticatedRoute } from '../../utils/roles';
 import { getLoginErrorMessage } from '../../utils/authErrors';
 
 interface LoginDialogProps {
@@ -86,8 +86,8 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
   const { loginMutation } = useAuth();
   const isDarkMode = theme.palette.mode === 'dark';
 
-  const [username, setUsername] = useState('emilys');
-  const [password, setPassword] = useState('emilyspass');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showValidation, setShowValidation] = useState(false);
 
@@ -114,10 +114,9 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
       await loginMutation.mutateAsync({
         username: username.trim(),
         password: password.trim(),
-        expiresInMins: 30,
       });
       handleClose();
-      navigate(ROUTES.OPERATION);
+      navigate(getDefaultAuthenticatedRoute());
     } catch {
       // Error is surfaced via loginMutation.error
     }

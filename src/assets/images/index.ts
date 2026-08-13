@@ -52,7 +52,8 @@ export const statBackgrounds = {
   truckMovements: `url(${foreignTradeLogisticsCardImage})`,
 } as const;
 
-export { default as portalLogo } from './logo.png';
+export { default as portalLogoAr } from './logo-ar.png';
+export { default as portalLogoEn } from './logo-en.png';
 
 export const partnerLogoImages = {
   execution1: executionLogo1,

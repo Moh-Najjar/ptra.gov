@@ -24,7 +24,9 @@
     "overview": "نظرة عامة",
     "releaseTime": "زمن الإفراج",
     "containerDwellTime": "زمن مكوث الحاويات",
-    "operation": "العمليات"
+    "myAccount": "حسابي",
+    "post": "المقالات",
+    "pages": "الصفحات"
   },
   "utility": {
     "faq": "أسئلة متكررة",
@@ -75,10 +77,6 @@
       }
     }
   },
-  "operation": {
-    "title": "العمليات",
-    "description": "مرحباً بك في منطقة العمليات المحمية. سيتم إضافة المحتوى التشغيلي هنا قريباً."
-  },
   "home": {
     "dashboardsTitle": "لوحات معلومات التجارة الخارجية والأداء اللوجستي",
     "statsTitle": "إحصائيات عامة"
@@ -125,28 +123,100 @@
     }
   },
   "pages": {
-    "crops": { "title": "الحاصلات" },
-    "foreignTrade": { "title": "التجارة الخارجية" },
-    "exports": { "title": "الصادرات" },
-    "imports": { "title": "مستوردات" },
-    "transit": { "title": "ترانزيت" },
-    "tradeBalance": { "title": "ميزان تجاري" },
-    "logisticsPerformance": { "title": "الأداء اللوجستي" },
+    "myAccount": {
+      "title": "حسابي",
+      "description": "تقارير Power BI الخاصة بك.",
+      "loading": "جاري تحميل تقاريرك...",
+      "loadError": "تعذر تحميل تقاريرك. يرجى المحاولة لاحقاً.",
+      "noReports": "لا توجد تقارير متاحة لحسابك حالياً.",
+      "unavailableReportsTitle": "تقارير بدون رابط عرض",
+      "noIframe": "لا يوجد رابط عرض متاح"
+    },
+    "post": {
+      "title": "المقالات",
+      "description": "إدارة ونشر المقالات. سيتم إضافة المحتوى هنا قريباً."
+    },
+    "pages": {
+      "title": "الصفحات",
+      "description": "إدارة ومراجعة صفحات الموقع.",
+      "loading": "جاري تحميل الصفحات...",
+      "loadError": "تعذر تحميل الصفحات. يرجى المحاولة لاحقاً.",
+      "noData": "لا توجد صفحات.",
+      "table": {
+        "id": "المعرف",
+        "title": "العنوان",
+        "status": "الحالة",
+        "publishedDate": "تاريخ النشر",
+        "modifiedDate": "تاريخ التعديل",
+        "language": "اللغة",
+        "notAvailable": "—"
+      },
+      "status": {
+        "publish": "منشور",
+        "auto-draft": "مسودة تلقائية",
+        "draft": "مسودة",
+        "pending": "قيد المراجعة",
+        "private": "خاص"
+      }
+    },
+    "crops": {
+      "title": "الحاصلات"
+    },
+    "foreignTrade": {
+      "title": "التجارة الخارجية"
+    },
+    "exports": {
+      "title": "الصادرات"
+    },
+    "imports": {
+      "title": "مستوردات"
+    },
+    "transit": {
+      "title": "ترانزيت"
+    },
+    "tradeBalance": {
+      "title": "ميزان تجاري"
+    },
+    "logisticsPerformance": {
+      "title": "الأداء اللوجستي"
+    },
     "releaseTime": {
       "title": "زمن الإفراج",
       "description": "منصة إلكترونية لقياس الوقت المستغرق لعملية التخليص على البضائع، بدءا من لحظة وصولها إلى المراكز الجمركية وحتى مرحلة الإفراج عنها، مع تتبع كافة المراحل والإجراءات التي تتم عليها، بما في ذلك الإجراءات الصادرة عن جميع الدوائر الحكومية والجهات ذات العلاقة بالبيانات الجمركية. وتُعرض هذه الأوقات بشكل تفصيلي وفق وحدة اليوم والساعة والدقيقة، بما يتيح متابعة دقيقة لأداء العملية الجمركية وتحديد فرص التحسين."
     },
-    "containerDwellTime": { "title": "زمن مكوث الحاويات" },
-    "aqabaSez": { "title": "منطقة العقبة الاقتصادية الخاصة" },
-    "foreignTradeLogistics": { "title": "لوجستيات التجارة الخارجية" },
-    "containerFlowStatistics": { "title": "إحصائيات تدفق الحاويات" },
-    "statistics": { "title": "الإحصائيات" },
-    "faq": { "title": "أسئلة متكررة" },
-    "about": { "title": "حول البوابة" },
-    "contact": { "title": "تواصل معنا" },
-    "accessibility": { "title": "إمكانية الوصول" },
-    "privacy": { "title": "سياسة الخصوصية والحماية" },
-    "login": { "title": "تسجيل الدخول" }
+    "containerDwellTime": {
+      "title": "زمن مكوث الحاويات"
+    },
+    "aqabaSez": {
+      "title": "منطقة العقبة الاقتصادية الخاصة"
+    },
+    "foreignTradeLogistics": {
+      "title": "لوجستيات التجارة الخارجية"
+    },
+    "containerFlowStatistics": {
+      "title": "إحصائيات تدفق الحاويات"
+    },
+    "statistics": {
+      "title": "الإحصائيات"
+    },
+    "faq": {
+      "title": "أسئلة متكررة"
+    },
+    "about": {
+      "title": "حول البوابة"
+    },
+    "contact": {
+      "title": "تواصل معنا"
+    },
+    "accessibility": {
+      "title": "إمكانية الوصول"
+    },
+    "privacy": {
+      "title": "سياسة الخصوصية والحماية"
+    },
+    "login": {
+      "title": "تسجيل الدخول"
+    }
   },
   "powerBi": {
     "loading": "جاري تحميل التقرير...",

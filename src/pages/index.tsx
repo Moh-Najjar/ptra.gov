@@ -2,12 +2,15 @@ import { PagePlaceholder } from '../components/common/PagePlaceholder';
 import { PowerBiPage } from '../components/common/PowerBiPage';
 
 export { AccessibilityPage } from './AccessibilityPage';
-export { OperationPage } from './OperationPage';
+export { MyAccountPage } from './MyAccountPage';
 export { ContactPage } from './ContactPage';
 export { PrivacyPage } from './PrivacyPage';
 export { AboutPage } from './AboutPage';
 export { HomePage } from './HomePage';
 export { FaqPage } from './FaqPage';
+export { PagesPage } from './PagesPage';
+
+export const PostPage = () => <PagePlaceholder titleKey="pages.post.title" descriptionKey="pages.post.description" />;
 
 export const ForeignTradePage = () => <PagePlaceholder titleKey="pages.foreignTrade.title" />;
 

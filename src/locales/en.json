@@ -24,7 +24,9 @@
     "overview": "Overview",
     "releaseTime": "Release Time",
     "containerDwellTime": "Container Dwell Time",
-    "operation": "Operation"
+    "myAccount": "My Account",
+    "post": "Posts",
+    "pages": "Pages"
   },
   "utility": {
     "faq": "FAQ",
@@ -75,10 +77,6 @@
       }
     }
   },
-  "operation": {
-    "title": "Operation",
-    "description": "Welcome to the protected operation area. Operational content will be added here soon."
-  },
   "home": {
     "dashboardsTitle": "Foreign Trade and Logistics Performance Dashboards",
     "statsTitle": "General Statistics"
@@ -125,6 +123,42 @@
     }
   },
   "pages": {
+    "myAccount": {
+      "title": "My Account",
+      "description": "Your authored Power BI reports.",
+      "loading": "Loading your reports...",
+      "loadError": "Unable to load your reports. Please try again later.",
+      "noReports": "No reports are available for your account yet.",
+      "unavailableReportsTitle": "Reports without embed links",
+      "noIframe": "No embed link available"
+    },
+    "post": {
+      "title": "Posts",
+      "description": "Manage and publish posts. Content will be added here soon."
+    },
+    "pages": {
+      "title": "Pages",
+      "description": "Manage and review site pages.",
+      "loading": "Loading pages...",
+      "loadError": "Unable to load pages. Please try again later.",
+      "noData": "No pages found.",
+      "table": {
+        "id": "ID",
+        "title": "Title",
+        "status": "Status",
+        "publishedDate": "Published",
+        "modifiedDate": "Modified",
+        "language": "Language",
+        "notAvailable": "—"
+      },
+      "status": {
+        "publish": "Published",
+        "auto-draft": "Auto draft",
+        "draft": "Draft",
+        "pending": "Pending",
+        "private": "Private"
+      }
+    },
     "crops": { "title": "Crops" },
     "foreignTrade": { "title": "Foreign Trade" },
     "exports": { "title": "Exports" },

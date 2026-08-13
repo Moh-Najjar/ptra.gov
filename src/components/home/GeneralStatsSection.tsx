@@ -1,6 +1,5 @@
 import { Box, CircularProgress, Container, Typography } from '@mui/material';
-import { keyframes } from '@mui/material/styles';
-import { useEffect, useRef, useState } from 'react';
+import { motion, useReducedMotion, type Variants } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { useGeneralStats } from '../../hooks/queries/useGeneralStats';
 import { StatCircle, type StatCircleSize } from '../common/StatCircle';
@@ -10,69 +9,75 @@ const SIZE_PATTERN: StatCircleSize[] = ['xl', 'md', 'sm', 'md', 'sm', 'xl'];
 /** End circles sit above middle ones, matching the reference layering. */
 const Z_INDEX_PATTERN = [6, 3, 2, 2, 3, 6];
 
-const titleFadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+
+const VIEWPORT = { once: true, amount: 0.25, margin: '0px 0px -40px 0px' } as const;
+
+const titleVariants: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: EASE_OUT },
+  },
+};
+
+const statsContainerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+const statCircleVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.9, y: 20 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: EASE_OUT },
+  },
+};
 
 export const GeneralStatsSection = () => {
   const { t } = useTranslation();
   const { data: stats, isLoading, isError } = useGeneralStats();
-  const stackRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
-  useEffect(() => {
-    const node = stackRef.current;
-    if (!node || !stats?.length) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.25, rootMargin: '0px 0px -40px 0px' },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [stats]);
+  const motionInitial = shouldReduceMotion ? 'visible' : 'hidden';
 
   return (
     <Box sx={{ py: { xs: 5, md: 7 }, bgcolor: 'background.default' }}>
       <Container maxWidth="xl">
         <Typography
           variant="h3"
-          component="h2"
+          component={motion.h2}
+          initial={motionInitial}
+          whileInView="visible"
+          viewport={VIEWPORT}
+          variants={titleVariants}
           sx={{
             mb: { xs: 3, md: 5 },
             fontWeight: 700,
             textAlign: 'center',
             color: 'text.primary',
-            opacity: isVisible ? 1 : 0,
-            animation: isVisible
-              ? `${titleFadeIn} 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards`
-              : 'none',
-            '@media (prefers-reduced-motion: reduce)': {
-              animation: 'none',
-              opacity: 1,
-            },
           }}
         >
           {t('home.statsTitle')}
         </Typography>
 
         {isLoading && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+          <Box
+            component={motion.div}
+            initial={motionInitial}
+            whileInView="visible"
+            viewport={VIEWPORT}
+            variants={titleVariants}
+            sx={{ display: 'flex', justifyContent: 'center', py: 4 }}
+          >
             <CircularProgress />
           </Box>
         )}
@@ -85,7 +90,6 @@ export const GeneralStatsSection = () => {
 
         {stats && (
           <Box
-            ref={stackRef}
             sx={{
               display: 'flex',
               justifyContent: 'center',
@@ -96,6 +100,11 @@ export const GeneralStatsSection = () => {
             }}
           >
             <Box
+              component={motion.div}
+              initial={motionInitial}
+              whileInView="visible"
+              viewport={VIEWPORT}
+              variants={statsContainerVariants}
               sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -104,17 +113,21 @@ export const GeneralStatsSection = () => {
               }}
             >
               {stats.map((stat, index) => (
-                <StatCircle
+                <Box
                   key={stat.id}
-                  value={stat.value}
-                  label={stat.label}
-                  background={stat.background}
-                  size={SIZE_PATTERN[index % SIZE_PATTERN.length]}
-                  overlap={index > 0}
-                  index={index}
-                  zIndex={Z_INDEX_PATTERN[index % Z_INDEX_PATTERN.length]}
-                  isVisible={isVisible}
-                />
+                  component={motion.div}
+                  variants={statCircleVariants}
+                  sx={{ display: 'flex' }}
+                >
+                  <StatCircle
+                    value={stat.value}
+                    label={stat.label}
+                    background={stat.background}
+                    size={SIZE_PATTERN[index % SIZE_PATTERN.length]}
+                    overlap={index > 0}
+                    zIndex={Z_INDEX_PATTERN[index % Z_INDEX_PATTERN.length]}
+                  />
+                </Box>
               ))}
             </Box>
           </Box>

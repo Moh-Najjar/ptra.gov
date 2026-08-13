@@ -18,7 +18,9 @@ export const ROUTES = {
   CONTACT: '/contact',
   ACCESSIBILITY: '/accessibility',
   PRIVACY: '/privacy',
-  OPERATION: '/operation',
+  MY_ACCOUNT: '/my-account',
+  POST: '/post',
+  PAGES: '/pages',
 } as const;
 
 export type RoutePath = (typeof ROUTES)[keyof typeof ROUTES];

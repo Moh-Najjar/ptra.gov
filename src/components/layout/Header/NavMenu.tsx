@@ -1,4 +1,4 @@
-import { useMemo, useState, type MouseEvent } from 'react';
+import { useState, type MouseEvent } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
@@ -19,14 +19,8 @@ import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../../app/routes/paths';
 import { NAV_ITEMS } from '../../../constants/navigation';
-import { useAuth } from '../../../hooks/useAuth';
 import type { NavItem } from '../../../types/navigation';
 import { alpha, type Theme } from '@mui/material/styles';
-
-const OPERATION_NAV_ITEM: NavItem = {
-  labelKey: 'nav.operation',
-  path: ROUTES.OPERATION,
-};
 
 const isNavItemActive = (pathname: string, item: NavItem): boolean => {
   if (item.path === ROUTES.HOME) {
@@ -287,31 +281,22 @@ const MobileNav = ({ navItems }: MobileNavProps) => {
   );
 };
 
-export const NavMenu = () => {
-  const { isAuthenticated } = useAuth();
-
-  const navItems = useMemo<NavItem[]>(
-    () => (isAuthenticated ? [...NAV_ITEMS, OPERATION_NAV_ITEM] : NAV_ITEMS),
-    [isAuthenticated],
-  );
-
-  return (
-    <>
-      <Stack
-        direction="row"
-        spacing={0.5}
-        sx={{
-          display: { xs: 'none', md: 'flex' },
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        {navItems.map((item) => (
-          <NavDropdown key={item.path} item={item} />
-        ))}
-      </Stack>
-      <MobileNav navItems={navItems} />
-    </>
-  );
-};
+export const NavMenu = () => (
+  <>
+    <Stack
+      direction="row"
+      spacing={0.5}
+      sx={{
+        display: { xs: 'none', md: 'flex' },
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      {NAV_ITEMS.map((item) => (
+        <NavDropdown key={item.path} item={item} />
+      ))}
+    </Stack>
+    <MobileNav navItems={NAV_ITEMS} />
+  </>
+);
