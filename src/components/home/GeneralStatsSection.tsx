@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Container, Typography } from '@mui/material';
 import { motion, useReducedMotion, type Variants } from 'motion/react';
 import { useTranslation } from 'react-i18next';
-import { useGeneralStats } from '../../hooks/queries/useGeneralStats';
+import { useGeneralStats } from '../../hooks/useGeneralStats';
 import { StatCircle, type StatCircleSize } from '../common/StatCircle';
 
 const SIZE_PATTERN: StatCircleSize[] = ['xl', 'md', 'sm', 'md', 'sm', 'xl'];

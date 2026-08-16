@@ -1,11 +1,13 @@
-import { useAuthSession } from './queries/useAuthSession';
-import { useLogin } from './queries/useLogin';
-import { useLogout } from './queries/useLogout';
+import {
+  useAuthSessionQuery,
+  useLoginMutation,
+  useLogoutMutation,
+} from './queries/auth';
 
 export const useAuth = () => {
-  const sessionQuery = useAuthSession();
-  const loginMutation = useLogin();
-  const logoutMutation = useLogout();
+  const sessionQuery = useAuthSessionQuery();
+  const loginMutation = useLoginMutation();
+  const logoutMutation = useLogoutMutation();
 
   const session = sessionQuery.data ?? null;
 

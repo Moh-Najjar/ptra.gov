@@ -30,7 +30,7 @@ import {
   getAdminTableInteractiveRowSx,
 } from '../components/common/AdminTable';
 import { PowerBiEmbed } from '../components/common/PowerBiEmbed';
-import { useAdminPosts } from '../hooks/queries/useAuthoredPosts';
+import { useAdminPosts } from '../hooks/usePosts';
 import { formatPostAuthors, hasPostIframe, type AdminPost } from '../types/posts';
 
 export const PostPage = () => {

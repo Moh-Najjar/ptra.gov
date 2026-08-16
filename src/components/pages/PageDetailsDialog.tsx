@@ -30,7 +30,7 @@ import {
   AdminTableHeadCell,
   AdminTableHeadRow,
 } from '../common/AdminTable';
-import { usePageDetails } from '../../hooks/queries/usePages';
+import { usePageDetails } from '../../hooks/usePages';
 import { useLanguage } from '../../hooks/useLanguage';
 import type { CmsPage } from '../../types/cmsPage';
 import {

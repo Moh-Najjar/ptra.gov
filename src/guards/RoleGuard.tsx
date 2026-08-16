@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { Box, CircularProgress } from '@mui/material';
 import { ROUTES } from '../app/routes/paths';
-import { useAuthSession } from '../hooks/queries/useAuthSession';
+import { useAuthSession } from '../hooks/useAuthSession';
 import { userHasAnyRole } from '../utils/roles';
 import type { UserRole } from '../types/roles';
 

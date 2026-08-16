@@ -1,12 +1,16 @@
-export interface StatisticItem {
-  id: string;
-  value: string;
-  labelKey: string;
-  background: string;
+export interface GeneralCounterItem {
+  id: number;
+  code: string;
+  value: number;
+  titleAr: string;
+  titleEn: string;
 }
 
-export interface TranslatedStatisticItem extends Omit<StatisticItem, 'labelKey'> {
+export interface TranslatedStatisticItem {
+  id: number;
+  value: string;
   label: string;
+  background: string;
 }
 
 export interface DashboardCardItem {

@@ -8,7 +8,7 @@ import {
 import { alpha, keyframes } from '@mui/material/styles';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGeneralStats } from '../../hooks/queries/useGeneralStats';
+import { useGeneralStats } from '../../hooks/useGeneralStats';
 import type { TranslatedStatisticItem } from '../../types/statistics';
 
 const GRID_COLUMNS = { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)' } as const;

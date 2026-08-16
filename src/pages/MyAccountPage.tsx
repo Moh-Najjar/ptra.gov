@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { ROUTES } from '../app/routes/paths';
 import { PowerBiEmbed } from '../components/common/PowerBiEmbed';
-import { useAuthoredPosts } from '../hooks/queries/useAuthoredPosts';
+import { useAuthoredPosts } from '../hooks/usePosts';
 import type { AuthoredPost } from '../types/posts';
 
 const hasIframeUrl = (post: AuthoredPost): post is AuthoredPost & { iframeUrl: string } =>

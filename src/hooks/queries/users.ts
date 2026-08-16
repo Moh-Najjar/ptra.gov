@@ -1,14 +1,24 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { usersService } from '../../services/usersService';
 import type { UpdateUserPayload } from '../../types/user';
-import { usersKeys } from './usersKeys';
+
+export const usersKeys = {
+  list: ['users', 'list'] as const,
+} as const;
 
 interface UpdateUserVariables {
   userId: string;
   payload: UpdateUserPayload;
 }
 
-export const useUpdateUser = () => {
+export const useUsersQuery = (enabled: boolean) =>
+  useQuery({
+    queryKey: usersKeys.list,
+    queryFn: usersService.getUsers,
+    enabled,
+  });
+
+export const useUpdateUserMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -20,7 +30,7 @@ export const useUpdateUser = () => {
   });
 };
 
-export const useDeleteUser = () => {
+export const useDeleteUserMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

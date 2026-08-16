@@ -42,9 +42,8 @@ import {
   AdminTableHeadRow,
 } from '../components/common/AdminTable';
 import { AddUserDialog } from '../components/users/AddUserDialog';
-import { useUsers } from '../hooks/queries/useUsers';
-import { useDeleteUser, useUpdateUser } from '../hooks/queries/useUserMutations';
-import { useRoles } from '../hooks/queries/useRoles';
+import { useUsers, useUpdateUser, useDeleteUser } from '../hooks/useUsers';
+import { useRoles } from '../hooks/useRoles';
 import {
   buildUpdateUserPayload,
   createEmptyAddUserFormValues,

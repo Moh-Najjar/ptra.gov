@@ -26,7 +26,7 @@ import {
   getAdminTableInteractiveRowSx,
 } from '../components/common/AdminTable';
 import { PageDetailsDialog } from '../components/pages/PageDetailsDialog';
-import { getPagesTableLocale, usePages } from '../hooks/queries/usePages';
+import { getPagesTableLocale, usePages } from '../hooks/usePages';
 import { useLanguage } from '../hooks/useLanguage';
 import { pageHasDetails, type CmsPage } from '../types/cmsPage';
 
