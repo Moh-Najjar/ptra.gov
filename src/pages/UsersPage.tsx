@@ -42,12 +42,14 @@ import {
   AdminTableHeadRow,
 } from '../components/common/AdminTable';
 import { AddUserDialog } from '../components/users/AddUserDialog';
-import { useUsers, useUpdateUser, useDeleteUser } from '../hooks/useUsers';
+import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from '../hooks/useUsers';
 import { useRoles } from '../hooks/useRoles';
 import {
+  buildCreateUserPayload,
   buildUpdateUserPayload,
   createEmptyAddUserFormValues,
   createEmptyUserFormValues,
+  isAddUserFormValid,
   isUserFormValid,
   mapAdminUserToFormValues,
   type AddUserFormValues,
@@ -73,6 +75,7 @@ interface UserNotice {
 export const UsersPage = () => {
   const { t } = useTranslation();
   const { data, isLoading, isError } = useUsers();
+  const createUserMutation = useCreateUser();
   const updateUserMutation = useUpdateUser();
   const deleteUserMutation = useDeleteUser();
   const {
@@ -137,9 +140,22 @@ export const UsersPage = () => {
     setSelectedUser(null);
   };
 
-  const showComingSoonNotice = () => {
-    closeAddDialog();
-    setNotice({ severity: 'info', message: t('pages.users.comingSoon') });
+  const handleSaveAdd = async () => {
+    if (!isAddUserFormValid(addFormValues)) {
+      setNotice({ severity: 'error', message: t('pages.users.validationError') });
+      return;
+    }
+
+    try {
+      await createUserMutation.mutateAsync(buildCreateUserPayload(addFormValues));
+      closeAddDialog();
+      setNotice({ severity: 'success', message: t('pages.users.createSuccess') });
+    } catch (error) {
+      setNotice({
+        severity: 'error',
+        message: getApiErrorMessage(error, t('pages.users.createError')),
+      });
+    }
   };
 
   const handleSaveEdit = async () => {
@@ -327,8 +343,11 @@ export const UsersPage = () => {
         roles={roles}
         isRolesLoading={isRolesLoading}
         isRolesError={isRolesError}
+        isSaving={createUserMutation.isPending}
         onClose={closeAddDialog}
-        onSave={showComingSoonNotice}
+        onSave={() => {
+          void handleSaveAdd();
+        }}
         onChange={updateAddFormValue}
       />
 

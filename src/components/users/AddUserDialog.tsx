@@ -37,6 +37,7 @@ interface AddUserDialogProps {
   roles: readonly AppRole[];
   isRolesLoading: boolean;
   isRolesError: boolean;
+  isSaving?: boolean;
   onClose: () => void;
   onSave: () => void;
   onChange: <K extends keyof AddUserFormValues>(field: K, value: AddUserFormValues[K]) => void;
@@ -50,6 +51,7 @@ export const AddUserDialog = ({
   roles,
   isRolesLoading,
   isRolesError,
+  isSaving = false,
   onClose,
   onSave,
   onChange,
@@ -242,13 +244,15 @@ export const AddUserDialog = ({
         </Stack>
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2 }}>
-        <Button onClick={onClose}>{t('pages.users.form.cancel')}</Button>
+        <Button onClick={onClose} disabled={isSaving}>
+          {t('pages.users.form.cancel')}
+        </Button>
         <Button
           variant="contained"
           onClick={onSave}
-          disabled={isRolesLoading || roles.length === 0}
+          disabled={isRolesLoading || roles.length === 0 || isSaving}
         >
-          {t('pages.users.form.save')}
+          {isSaving ? t('pages.users.form.saving') : t('pages.users.form.save')}
         </Button>
       </DialogActions>
     </Dialog>

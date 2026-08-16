@@ -1,5 +1,5 @@
 import type { ApiResponse } from '../types/api';
-import type { AdminUser, UpdateUserPayload } from '../types/user';
+import type { AdminUser, CreateUserPayload, UpdateUserPayload } from '../types/user';
 import { apiClient } from './api/client';
 
 interface RawAdminUser {
@@ -60,6 +60,10 @@ export const usersService = {
   getUsers: async (): Promise<AdminUser[]> => {
     const { data } = await apiClient.get<RawAdminUser[] | ApiResponse<RawAdminUser[]>>('/Users');
     return normalizeUsersResponse(data);
+  },
+
+  createUser: async (payload: CreateUserPayload): Promise<void> => {
+    await apiClient.post<ApiResponse<unknown>>('/users', payload);
   },
 
   updateUser: async (userId: string, payload: UpdateUserPayload): Promise<void> => {

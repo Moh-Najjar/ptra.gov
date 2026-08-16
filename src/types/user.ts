@@ -25,6 +25,14 @@ export interface UpdateUserPayload {
   departmentId: number | null;
 }
 
+export interface CreateUserPayload {
+  fullName: string;
+  email: string;
+  password: string;
+  role: string;
+  departmentId: number | null;
+}
+
 export interface AddUserFormValues {
   username: string;
   email: string;
@@ -74,6 +82,33 @@ export const isUserFormValid = (values: UserFormValues): boolean =>
   values.fullName.trim().length > 0 &&
   values.email.trim().length > 0 &&
   values.role.trim().length > 0;
+
+export const buildAddUserFullName = (formValues: AddUserFormValues): string => {
+  const nameParts = [formValues.firstName.trim(), formValues.lastName.trim()].filter(
+    (part) => part.length > 0,
+  );
+
+  if (nameParts.length > 0) {
+    return nameParts.join(' ');
+  }
+
+  return formValues.username.trim();
+};
+
+export const isAddUserFormValid = (formValues: AddUserFormValues): boolean =>
+  formValues.username.trim().length > 0 &&
+  formValues.email.trim().length > 0 &&
+  formValues.password.trim().length > 0 &&
+  formValues.role.trim().length > 0 &&
+  buildAddUserFullName(formValues).length > 0;
+
+export const buildCreateUserPayload = (formValues: AddUserFormValues): CreateUserPayload => ({
+  fullName: buildAddUserFullName(formValues),
+  email: formValues.email.trim(),
+  password: formValues.password,
+  role: formValues.role,
+  departmentId: null,
+});
 
 export const buildUpdateUserPayload = (formValues: UserFormValues): UpdateUserPayload => {
   const payload: UpdateUserPayload = {

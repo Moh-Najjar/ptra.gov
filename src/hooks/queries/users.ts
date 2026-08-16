@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { usersService } from '../../services/usersService';
-import type { UpdateUserPayload } from '../../types/user';
+import type { CreateUserPayload, UpdateUserPayload } from '../../types/user';
 
 export const usersKeys = {
   list: ['users', 'list'] as const,
@@ -24,6 +24,17 @@ export const useUpdateUserMutation = () => {
   return useMutation({
     mutationFn: ({ userId, payload }: UpdateUserVariables) =>
       usersService.updateUser(userId, payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: usersKeys.list });
+    },
+  });
+};
+
+export const useCreateUserMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: CreateUserPayload) => usersService.createUser(payload),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: usersKeys.list });
     },

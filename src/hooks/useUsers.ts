@@ -1,4 +1,5 @@
 import {
+  useCreateUserMutation,
   useDeleteUserMutation,
   useUpdateUserMutation,
   useUsersQuery,
@@ -9,6 +10,8 @@ export const useUsers = () => {
   const { isAuthenticated } = useAuth();
   return useUsersQuery(isAuthenticated);
 };
+
+export const useCreateUser = () => useCreateUserMutation();
 
 export const useUpdateUser = () => useUpdateUserMutation();
 
