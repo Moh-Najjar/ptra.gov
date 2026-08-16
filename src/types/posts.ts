@@ -4,6 +4,16 @@ export interface PostAuthor {
   slug: string;
 }
 
+export interface SearchablePostAuthor {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export interface AssignPostAuthorPayload {
+  userId: number;
+}
+
 export interface AuthoredPost {
   id: number;
   title: string;

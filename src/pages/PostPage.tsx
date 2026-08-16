@@ -1,5 +1,5 @@
 import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
-import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
+import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import {
   Alert,
   Box,
@@ -10,6 +10,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  IconButton,
   Link,
   Stack,
   Table,
@@ -17,6 +18,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { useMemo, useState } from 'react';
@@ -27,33 +29,22 @@ import {
   AdminTableContainer,
   AdminTableHeadCell,
   AdminTableHeadRow,
-  getAdminTableInteractiveRowSx,
 } from '../components/common/AdminTable';
 import { PowerBiEmbed } from '../components/common/PowerBiEmbed';
+import { PostAuthorsDialog } from '../components/posts/PostAuthorsDialog';
 import { useAdminPosts } from '../hooks/usePosts';
 import { formatPostAuthors, hasPostIframe, type AdminPost } from '../types/posts';
 
 export const PostPage = () => {
   const { t } = useTranslation();
   const { data, isLoading, isError } = useAdminPosts();
-  const [selectedPost, setSelectedPost] = useState<AdminPost | null>(null);
+  const [previewPost, setPreviewPost] = useState<AdminPost | null>(null);
+  const [authorsPost, setAuthorsPost] = useState<AdminPost | null>(null);
 
   const sortedPosts = useMemo(
     () => [...(data ?? [])].sort((first, second) => second.id - first.id),
     [data],
   );
-
-  const closePreviewDialog = () => {
-    setSelectedPost(null);
-  };
-
-  const openPreviewDialog = (post: AdminPost) => {
-    if (!hasPostIframe(post)) {
-      return;
-    }
-
-    setSelectedPost(post);
-  };
 
   const renderPostTitle = (post: AdminPost): string => {
     if (post.title.trim().length > 0) {
@@ -63,7 +54,7 @@ export const PostPage = () => {
     return t('pages.post.table.untitled');
   };
 
-  const renderAuthors = (post: AdminPost): string => {
+  const renderAuthorsSummary = (post: AdminPost): string => {
     const authorsText = formatPostAuthors(post.authors);
     if (authorsText.length === 0) {
       return t('pages.post.table.notAvailable');
@@ -113,7 +104,9 @@ export const PostPage = () => {
                 <AdminTableHeadCell>{t('pages.post.table.id')}</AdminTableHeadCell>
                 <AdminTableHeadCell>{t('pages.post.table.title')}</AdminTableHeadCell>
                 <AdminTableHeadCell>{t('pages.post.table.authors')}</AdminTableHeadCell>
-                <AdminTableHeadCell>{t('pages.post.table.report')}</AdminTableHeadCell>
+                <AdminTableHeadCell align="center">
+                  {t('pages.post.table.actions')}
+                </AdminTableHeadCell>
               </AdminTableHeadRow>
             </TableHead>
             <TableBody>
@@ -122,51 +115,63 @@ export const PostPage = () => {
                 const postTitle = renderPostTitle(post);
 
                 return (
-                  <TableRow
-                    key={post.id}
-                    hover
-                    sx={getAdminTableInteractiveRowSx(postHasIframe)}
-                    onClick={() => openPreviewDialog(post)}
-                  >
+                  <TableRow key={post.id} hover>
                     <TableCell>{post.id}</TableCell>
                     <TableCell sx={{ fontWeight: 600, maxWidth: 320 }}>
-                      <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-                        <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>
-                          {postTitle}
-                        </Typography>
-                        {postHasIframe && (
-                          <OpenInNewOutlinedIcon
-                            fontSize="small"
-                            color="primary"
-                            aria-hidden="true"
-                          />
-                        )}
-                      </Stack>
-                    </TableCell>
-                    <TableCell sx={{ maxWidth: 420 }}>
-                      <Typography variant="body2" color="text.secondary" noWrap>
-                        {renderAuthors(post)}
+                      <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>
+                        {postTitle}
                       </Typography>
                     </TableCell>
-                    <TableCell>
-                      {postHasIframe ? (
-                        <Chip
-                          icon={<BarChartOutlinedIcon />}
-                          label={t('pages.post.table.viewReport')}
-                          size="small"
-                          color="primary"
-                          variant="outlined"
-                          clickable
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            openPreviewDialog(post);
-                          }}
-                        />
+                    <TableCell sx={{ maxWidth: 420 }}>
+                      {post.authors.length > 0 ? (
+                        <Stack direction="row" spacing={0.75} useFlexGap sx={{ flexWrap: 'wrap' }}>
+                          {post.authors.map((author) => (
+                            <Chip
+                              key={author.id}
+                              label={author.name}
+                              size="small"
+                              variant="outlined"
+                            />
+                          ))}
+                        </Stack>
                       ) : (
                         <Typography variant="body2" color="text.secondary">
-                          {t('pages.post.table.notAvailable')}
+                          {renderAuthorsSummary(post)}
                         </Typography>
                       )}
+                    </TableCell>
+                    <TableCell align="center">
+                      <Stack direction="row" spacing={0.5} sx={{ justifyContent: 'center' }}>
+                        <Tooltip title={t('pages.post.table.manageAuthors')}>
+                          <IconButton
+                            size="small"
+                            color="primary"
+                            aria-label={t('pages.post.table.manageAuthors')}
+                            onClick={() => setAuthorsPost(post)}
+                          >
+                            <GroupOutlinedIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip
+                          title={
+                            postHasIframe
+                              ? t('pages.post.table.viewReport')
+                              : t('pages.post.table.reportUnavailable')
+                          }
+                        >
+                          <span>
+                            <IconButton
+                              size="small"
+                              color="primary"
+                              aria-label={t('pages.post.table.viewReport')}
+                              disabled={!postHasIframe}
+                              onClick={() => setPreviewPost(post)}
+                            >
+                              <BarChartOutlinedIcon fontSize="small" />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
+                      </Stack>
                     </TableCell>
                   </TableRow>
                 );
@@ -176,9 +181,11 @@ export const PostPage = () => {
         </AdminTableContainer>
       )}
 
+      <PostAuthorsDialog post={authorsPost} onClose={() => setAuthorsPost(null)} />
+
       <Dialog
-        open={selectedPost !== null && hasPostIframe(selectedPost)}
-        onClose={closePreviewDialog}
+        open={previewPost !== null && hasPostIframe(previewPost)}
+        onClose={() => setPreviewPost(null)}
         fullWidth
         maxWidth="xl"
       >
@@ -186,13 +193,13 @@ export const PostPage = () => {
           <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
             <BarChartOutlinedIcon color="primary" />
             <Typography variant="h6" component="span" sx={{ fontWeight: 700 }}>
-              {selectedPost ? renderPostTitle(selectedPost) : ''}
+              {previewPost ? renderPostTitle(previewPost) : ''}
             </Typography>
           </Stack>
         </DialogTitle>
         <DialogContent sx={{ pb: 3 }}>
-          {selectedPost && hasPostIframe(selectedPost) && (
-            <PowerBiEmbed title={renderPostTitle(selectedPost)} embedUrl={selectedPost.iframeUrl} />
+          {previewPost && hasPostIframe(previewPost) && (
+            <PowerBiEmbed title={renderPostTitle(previewPost)} embedUrl={previewPost.iframeUrl} />
           )}
         </DialogContent>
       </Dialog>

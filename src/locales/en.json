@@ -144,10 +144,30 @@
         "id": "ID",
         "title": "Title",
         "authors": "Authors",
-        "report": "Report",
+        "actions": "Actions",
         "viewReport": "View report",
+        "manageAuthors": "Manage authors",
+        "reportUnavailable": "No report available",
         "untitled": "Untitled",
         "notAvailable": "—"
+      },
+      "authors": {
+        "title": "Post authors",
+        "postLabel": "Post",
+        "currentAuthors": "Current authors",
+        "assignAuthor": "Assign author",
+        "searchLabel": "Search authors",
+        "searchPlaceholder": "Type at least 2 characters",
+        "searchHint": "Type at least 2 characters to search",
+        "noSearchResults": "No authors found",
+        "noAuthors": "No authors assigned yet.",
+        "loading": "Loading authors...",
+        "loadError": "Unable to load post authors. Please try again later.",
+        "searchError": "Unable to search authors. Please try again later.",
+        "assignError": "Unable to assign author. Please try again later.",
+        "assign": "Assign author",
+        "assigning": "Assigning...",
+        "close": "Close"
       }
     },
     "pages": {

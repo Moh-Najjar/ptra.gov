@@ -144,10 +144,30 @@
         "id": "المعرف",
         "title": "العنوان",
         "authors": "الكتّاب",
-        "report": "التقرير",
+        "actions": "الإجراءات",
         "viewReport": "عرض التقرير",
+        "manageAuthors": "إدارة الكتّاب",
+        "reportUnavailable": "لا يوجد تقرير",
         "untitled": "بدون عنوان",
         "notAvailable": "—"
+      },
+      "authors": {
+        "title": "كتّاب المقال",
+        "postLabel": "المقال",
+        "currentAuthors": "الكتّاب الحاليون",
+        "assignAuthor": "تعيين كاتب",
+        "searchLabel": "بحث عن كتّاب",
+        "searchPlaceholder": "اكتب حرفين على الأقل",
+        "searchHint": "اكتب حرفين على الأقل للبحث",
+        "noSearchResults": "لم يتم العثور على كتّاب",
+        "noAuthors": "لا يوجد كتّاب معيّنون بعد.",
+        "loading": "جاري تحميل الكتّاب...",
+        "loadError": "تعذر تحميل كتّاب المقال. يرجى المحاولة لاحقاً.",
+        "searchError": "تعذر البحث عن الكتّاب. يرجى المحاولة لاحقاً.",
+        "assignError": "تعذر تعيين الكاتب. يرجى المحاولة لاحقاً.",
+        "assign": "تعيين كاتب",
+        "assigning": "جاري التعيين...",
+        "close": "إغلاق"
       }
     },
     "pages": {
