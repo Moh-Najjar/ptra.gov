@@ -41,67 +41,96 @@ import {
   AdminTableHeadCell,
   AdminTableHeadRow,
 } from '../components/common/AdminTable';
+import { AddUserDialog } from '../components/users/AddUserDialog';
 import { useUsers } from '../hooks/queries/useUsers';
+import { useDeleteUser, useUpdateUser } from '../hooks/queries/useUserMutations';
+import { useRoles } from '../hooks/queries/useRoles';
 import {
+  buildUpdateUserPayload,
+  createEmptyAddUserFormValues,
   createEmptyUserFormValues,
+  isUserFormValid,
   mapAdminUserToFormValues,
+  type AddUserFormValues,
   type AdminUser,
   type UserFormValues,
 } from '../types/user';
-import { USER_ROLES } from '../types/roles';
+import { getApiErrorMessage } from '../utils/apiErrors';
+import {
+  getDefaultAddUserRoleKey,
+  getDefaultRoleKey,
+  getRoleDisplayName,
+  isAdministratorRole,
+} from '../utils/roleLabels';
+import { generateSecurePassword } from '../utils/password';
 
-type UserDialogMode = 'add' | 'edit';
+type UserNoticeSeverity = 'success' | 'error' | 'info';
 
-const ROLE_OPTIONS = Object.values(USER_ROLES);
-
-const getRoleLabel = (role: string, t: (key: string) => string): string => {
-  const translationKey = `pages.users.roles.${role}`;
-  const translated = t(translationKey);
-  return translated === translationKey ? role : translated;
-};
+interface UserNotice {
+  severity: UserNoticeSeverity;
+  message: string;
+}
 
 export const UsersPage = () => {
   const { t } = useTranslation();
   const { data, isLoading, isError } = useUsers();
+  const updateUserMutation = useUpdateUser();
+  const deleteUserMutation = useDeleteUser();
+  const {
+    data: roles = [],
+    isLoading: isRolesLoading,
+    isError: isRolesError,
+  } = useRoles();
 
-  const [dialogMode, setDialogMode] = useState<UserDialogMode>('add');
-  const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
-  const [formValues, setFormValues] = useState<UserFormValues>(createEmptyUserFormValues());
-  const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
+  const [addFormValues, setAddFormValues] = useState<AddUserFormValues>(
+    createEmptyAddUserFormValues(),
+  );
+  const [editFormValues, setEditFormValues] = useState<UserFormValues>(createEmptyUserFormValues());
+  const [notice, setNotice] = useState<UserNotice | null>(null);
 
   const sortedUsers = useMemo(
     () => [...(data ?? [])].sort((first, second) => first.fullName.localeCompare(second.fullName)),
     [data],
   );
 
-  const dialogTitle =
-    dialogMode === 'add' ? t('pages.users.addUser') : t('pages.users.editUser');
+  const getRoleLabel = (roleKey: string): string => getRoleDisplayName(roleKey, roles, t);
+
+  const createInitialAddFormValues = (): AddUserFormValues =>
+    createEmptyAddUserFormValues(
+      getDefaultAddUserRoleKey(roles),
+      generateSecurePassword(),
+    );
 
   const openAddDialog = () => {
-    setDialogMode('add');
     setSelectedUser(null);
-    setFormValues(createEmptyUserFormValues());
-    setIsFormDialogOpen(true);
+    setAddFormValues(createInitialAddFormValues());
+    setIsAddDialogOpen(true);
   };
 
   const openEditDialog = (user: AdminUser) => {
-    setDialogMode('edit');
     setSelectedUser(user);
-    setFormValues(mapAdminUserToFormValues(user));
-    setIsFormDialogOpen(true);
+    setEditFormValues(mapAdminUserToFormValues(user));
+    setIsEditDialogOpen(true);
+  };
+
+  const closeAddDialog = () => {
+    setIsAddDialogOpen(false);
+    setAddFormValues(createEmptyAddUserFormValues());
+  };
+
+  const closeEditDialog = () => {
+    setIsEditDialogOpen(false);
+    setSelectedUser(null);
+    setEditFormValues(createEmptyUserFormValues(getDefaultRoleKey(roles)));
   };
 
   const openDeleteDialog = (user: AdminUser) => {
     setSelectedUser(user);
     setIsDeleteDialogOpen(true);
-  };
-
-  const closeFormDialog = () => {
-    setIsFormDialogOpen(false);
-    setSelectedUser(null);
-    setFormValues(createEmptyUserFormValues());
   };
 
   const closeDeleteDialog = () => {
@@ -110,16 +139,63 @@ export const UsersPage = () => {
   };
 
   const showComingSoonNotice = () => {
-    closeFormDialog();
-    closeDeleteDialog();
-    setIsComingSoonOpen(true);
+    closeAddDialog();
+    setNotice({ severity: 'info', message: t('pages.users.comingSoon') });
   };
 
-  const updateFormValue = <K extends keyof UserFormValues>(
+  const handleSaveEdit = async () => {
+    if (!selectedUser || !isUserFormValid(editFormValues)) {
+      setNotice({ severity: 'error', message: t('pages.users.validationError') });
+      return;
+    }
+
+    try {
+      await updateUserMutation.mutateAsync({
+        userId: selectedUser.id,
+        payload: buildUpdateUserPayload(editFormValues),
+      });
+      closeEditDialog();
+      setNotice({ severity: 'success', message: t('pages.users.saveSuccess') });
+    } catch (error) {
+      setNotice({
+        severity: 'error',
+        message: getApiErrorMessage(error, t('pages.users.saveError')),
+      });
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    if (!selectedUser) {
+      return;
+    }
+
+    try {
+      await deleteUserMutation.mutateAsync(selectedUser.id);
+      closeDeleteDialog();
+      setNotice({ severity: 'success', message: t('pages.users.deleteSuccess') });
+    } catch (error) {
+      setNotice({
+        severity: 'error',
+        message: getApiErrorMessage(error, t('pages.users.deleteError')),
+      });
+    }
+  };
+
+  const updateAddFormValue = <K extends keyof AddUserFormValues>(
+    field: K,
+    value: AddUserFormValues[K],
+  ) => {
+    setAddFormValues((currentValues) => ({
+      ...currentValues,
+      [field]: value,
+    }));
+  };
+
+  const updateEditFormValue = <K extends keyof UserFormValues>(
     field: K,
     value: UserFormValues[K],
   ) => {
-    setFormValues((currentValues) => ({
+    setEditFormValues((currentValues) => ({
       ...currentValues,
       [field]: value,
     }));
@@ -197,10 +273,10 @@ export const UsersPage = () => {
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
                     <Chip
-                      label={getRoleLabel(user.role, t)}
+                      label={getRoleLabel(user.role)}
                       size="small"
                       variant="outlined"
-                      color={user.role === USER_ROLES.ADMINISTRATOR ? 'primary' : 'default'}
+                      color={isAdministratorRole(user.role) ? 'primary' : 'default'}
                     />
                   </TableCell>
                   <TableCell>
@@ -246,43 +322,74 @@ export const UsersPage = () => {
         </AdminTableContainer>
       )}
 
-      <Dialog open={isFormDialogOpen} onClose={closeFormDialog} fullWidth maxWidth="sm">
-        <DialogTitle>{dialogTitle}</DialogTitle>
+      <AddUserDialog
+        open={isAddDialogOpen}
+        formValues={addFormValues}
+        roles={roles}
+        isRolesLoading={isRolesLoading}
+        isRolesError={isRolesError}
+        onClose={closeAddDialog}
+        onSave={showComingSoonNotice}
+        onChange={updateAddFormValue}
+      />
+
+      <Dialog open={isEditDialogOpen} onClose={closeEditDialog} fullWidth maxWidth="sm">
+        <DialogTitle>{t('pages.users.editUser')}</DialogTitle>
         <DialogContent>
           <Stack spacing={2.5} sx={{ pt: 1 }}>
             <TextField
               label={t('pages.users.form.fullName')}
-              value={formValues.fullName}
-              onChange={(event) => updateFormValue('fullName', event.target.value)}
+              value={editFormValues.fullName}
+              onChange={(event) => updateEditFormValue('fullName', event.target.value)}
               fullWidth
+              required
             />
             <TextField
               label={t('pages.users.form.email')}
               type="email"
-              value={formValues.email}
-              onChange={(event) => updateFormValue('email', event.target.value)}
+              value={editFormValues.email}
+              onChange={(event) => updateEditFormValue('email', event.target.value)}
               fullWidth
+              required
             />
-            <FormControl fullWidth>
+            <TextField
+              label={t('pages.users.form.newPassword')}
+              type="password"
+              value={editFormValues.password}
+              onChange={(event) => updateEditFormValue('password', event.target.value)}
+              fullWidth
+              autoComplete="new-password"
+              helperText={t('pages.users.form.newPasswordHint')}
+            />
+            <FormControl fullWidth error={isRolesError}>
               <InputLabel id="user-role-label">{t('pages.users.form.role')}</InputLabel>
               <Select
                 labelId="user-role-label"
                 label={t('pages.users.form.role')}
-                value={formValues.role}
-                onChange={(event) => updateFormValue('role', event.target.value)}
+                value={editFormValues.role}
+                onChange={(event) => updateEditFormValue('role', event.target.value)}
+                disabled={isRolesLoading || roles.length === 0}
               >
-                {ROLE_OPTIONS.map((role) => (
-                  <MenuItem key={role} value={role}>
-                    {getRoleLabel(role, t)}
+                {roles.map((role) => (
+                  <MenuItem key={role.key} value={role.key}>
+                    {role.name}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
+            {isRolesLoading && (
+              <Typography variant="body2" color="text.secondary">
+                {t('pages.users.rolesLoading')}
+              </Typography>
+            )}
+            {isRolesError && (
+              <Alert severity="error">{t('pages.users.rolesLoadError')}</Alert>
+            )}
             <FormControlLabel
               control={
                 <Switch
-                  checked={formValues.isActive}
-                  onChange={(event) => updateFormValue('isActive', event.target.checked)}
+                  checked={editFormValues.isActive}
+                  onChange={(event) => updateEditFormValue('isActive', event.target.checked)}
                 />
               }
               label={t('pages.users.form.isActive')}
@@ -290,9 +397,21 @@ export const UsersPage = () => {
           </Stack>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={closeFormDialog}>{t('pages.users.form.cancel')}</Button>
-          <Button variant="contained" onClick={showComingSoonNotice}>
-            {t('pages.users.form.save')}
+          <Button onClick={closeEditDialog} disabled={updateUserMutation.isPending}>
+            {t('pages.users.form.cancel')}
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              void handleSaveEdit();
+            }}
+            disabled={
+              isRolesLoading || roles.length === 0 || updateUserMutation.isPending
+            }
+          >
+            {updateUserMutation.isPending
+              ? t('pages.users.form.saving')
+              : t('pages.users.form.save')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -305,21 +424,36 @@ export const UsersPage = () => {
           </Typography>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={closeDeleteDialog}>{t('pages.users.form.cancel')}</Button>
-          <Button variant="contained" color="error" onClick={showComingSoonNotice}>
-            {t('pages.users.form.delete')}
+          <Button onClick={closeDeleteDialog} disabled={deleteUserMutation.isPending}>
+            {t('pages.users.form.cancel')}
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              void handleDeleteUser();
+            }}
+            disabled={deleteUserMutation.isPending}
+          >
+            {deleteUserMutation.isPending
+              ? t('pages.users.form.deleting')
+              : t('pages.users.form.delete')}
           </Button>
         </DialogActions>
       </Dialog>
 
       <Snackbar
-        open={isComingSoonOpen}
+        open={notice !== null}
         autoHideDuration={4000}
-        onClose={() => setIsComingSoonOpen(false)}
+        onClose={() => setNotice(null)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert severity="info" onClose={() => setIsComingSoonOpen(false)} sx={{ width: '100%' }}>
-          {t('pages.users.comingSoon')}
+        <Alert
+          severity={notice?.severity ?? 'info'}
+          onClose={() => setNotice(null)}
+          sx={{ width: '100%' }}
+        >
+          {notice?.message ?? ''}
         </Alert>
       </Snackbar>
     </Container>

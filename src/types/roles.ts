@@ -1,15 +1,9 @@
 import type { RoutePath } from '../app/routes/paths';
 
-/** Role keys returned by the auth API. */
-export const USER_ROLES = {
-  ADMINISTRATOR: 'administrator',
-  EDITOR: 'editor',
-  AUTHOR: 'author',
-  CONTRIBUTOR: 'contributor',
-  SUBSCRIBER: 'subscriber',
-} as const;
+/** Role key required for administrator-only routes and guards. */
+export const ADMINISTRATOR_ROLE = 'administrator' as const;
 
-export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
+export type UserRole = string;
 
 export interface AuthenticatedMenuItem {
   path: RoutePath;
