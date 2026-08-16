@@ -1,9 +1,7 @@
 import type { RoutePath } from '../app/routes/paths';
+import type { UserRoleKey } from '../constants/userRoles';
 
-/** Role key required for administrator-only routes and guards. */
-export const ADMINISTRATOR_ROLE = 'administrator' as const;
-
-export type UserRole = string;
+export type UserRole = UserRoleKey | string;
 
 export interface AuthenticatedMenuItem {
   path: RoutePath;

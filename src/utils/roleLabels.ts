@@ -1,9 +1,9 @@
 import type { AppRole } from '../types/role';
 
-export const ADMINISTRATOR_ROLE_KEY = 'administrator';
+import { USER_ROLES } from '../constants/userRoles';
 
 export const isAdministratorRole = (roleKey: string): boolean =>
-  roleKey.trim().toLowerCase() === ADMINISTRATOR_ROLE_KEY;
+  roleKey.trim().toLowerCase() === USER_ROLES.ADMINISTRATOR;
 
 export const getDefaultAddUserRoleKey = (roles: readonly AppRole[]): string => {
   const subscriberRole = roles.find((role) => role.key.toLowerCase() === 'subscriber');

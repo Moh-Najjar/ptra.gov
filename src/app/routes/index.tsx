@@ -2,7 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { MainLayout } from '../../components/layout/MainLayout';
 import { AuthGuard } from '../../guards/AuthGuard';
 import { RoleGuard } from '../../guards/RoleGuard';
-import { ADMINISTRATOR_ROLE } from '../../types/roles';
+import { USER_ROLES } from '../../constants/userRoles';
 import {
   AboutPage,
   AccessibilityPage,
@@ -57,7 +57,7 @@ export const router = createBrowserRouter([
         children: [
           { path: ROUTES.MY_ACCOUNT, element: <MyAccountPage /> },
           {
-            element: <RoleGuard requiredRoles={[ADMINISTRATOR_ROLE]} />,
+            element: <RoleGuard requiredRoles={[USER_ROLES.ADMINISTRATOR, USER_ROLES.AUTHOR]} />,
             children: [
               { path: ROUTES.POST, element: <PostPage /> },
               { path: ROUTES.PAGES, element: <PagesPage /> },
