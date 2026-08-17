@@ -1,7 +1,23 @@
 import { ROUTES } from '../app/routes/paths';
+import type { AppLanguage } from '../i18n/types';
 import type { SurveyQuestionId, SurveyRatingValue } from '../types/survey';
 
 export const SURVEY_ID = 'user-evaluation-v1';
+
+/** Backend survey IDs per language. */
+export const SURVEY_API_IDS: Record<AppLanguage, number> = {
+  ar: 3,
+  en: 4,
+};
+
+/** Maps each question to the API field key expected by the backend. */
+export const SURVEY_API_FIELD_KEYS: Record<SurveyQuestionId, string> = {
+  dataAccess: 'input_radio',
+  accuracyComprehensiveness: 'input_radio_4',
+  dashboardEffectiveness: 'input_radio_3',
+  timeEffortSavings: 'input_radio_2',
+  overallSatisfaction: 'input_radio_1',
+};
 
 /** Minimum time on site (ms) before the prompt can appear. */
 export const SURVEY_MIN_TIME_MS = 45_000;

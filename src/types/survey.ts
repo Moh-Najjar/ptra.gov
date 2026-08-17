@@ -18,4 +18,14 @@ export interface SurveySubmissionPayload {
   overallSatisfaction: SurveyRatingValue;
 }
 
+export interface SurveyApiAnswer {
+  key: string;
+  value: string;
+}
+
+export interface SurveyApiPayload {
+  sourceUrl: string;
+  answers: SurveyApiAnswer[];
+}
+
 export type SurveyDismissReason = 'notNow' | 'never';
