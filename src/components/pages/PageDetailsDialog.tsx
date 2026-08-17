@@ -9,7 +9,11 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
   Snackbar,
   Stack,
   Table,
@@ -29,12 +33,15 @@ import {
   AdminTableHeadCell,
   AdminTableHeadRow,
 } from '../common/AdminTable';
-import { useCreatePageDetail, usePageDetails, useUpdatePageDetail } from '../../hooks/usePages';
+import { useCreatePageDetail, useApmscoMovements, usePageDetails, useUpdatePageDetail } from '../../hooks/usePages';
 import { useLanguage } from '../../hooks/useLanguage';
+import { buildApmscoMovementValueMap, getApmscoMovementLabel } from '../../types/apmscoBerthing';
 import type { CmsPage } from '../../types/cmsPage';
 import {
   DEFAULT_PAGE_DETAILS_PAGE_SIZE,
+  isPageDetailMovementField,
   type PageDetailRecord,
+  type PageDetailValue,
 } from '../../types/pageDetails';
 import { getApiErrorMessage } from '../../utils/apiErrors';
 import {
@@ -100,6 +107,94 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
     () => getEditablePageDetailFieldKeys(columnKeys),
     [columnKeys],
   );
+
+  const needsMovementOptions = useMemo(
+    () => columnKeys.some(isPageDetailMovementField),
+    [columnKeys],
+  );
+
+  const {
+    data: movements = [],
+    isLoading: isMovementsLoading,
+    isError: isMovementsError,
+  } = useApmscoMovements(detailsEnabled && needsMovementOptions);
+
+  const movementByValue = useMemo(() => buildApmscoMovementValueMap(movements), [movements]);
+
+  const renderRecordCellValue = (key: string, value: PageDetailValue | undefined): string => {
+    if (isPageDetailMovementField(key) && typeof value === 'string') {
+      const movement = movementByValue.get(value);
+      if (movement) {
+        return getApmscoMovementLabel(movement, language);
+      }
+    }
+
+    return formatPageDetailCellValue(value, tableLocale);
+  };
+
+  const renderFormField = (key: string) => {
+    const value = formValues[key] ?? '';
+    const fieldLabel = getPageDetailFieldLabel(key, t);
+
+    if (isPageDetailMovementField(key)) {
+      const selectedMovement = value.length > 0 ? movementByValue.get(value) : undefined;
+      const hasUnknownValue = value.length > 0 && selectedMovement === undefined;
+
+      return (
+        <FormControl key={key} fullWidth disabled={isSaving || isMovementsLoading}>
+          <InputLabel id={`${key}-label`}>{fieldLabel}</InputLabel>
+          <Select
+            labelId={`${key}-label`}
+            label={fieldLabel}
+            value={value}
+            displayEmpty
+            onChange={(event) => updateFormValue(key, event.target.value)}
+            renderValue={(selected) => {
+              if (selected.length === 0) {
+                return (
+                  <Typography component="span" color="text.secondary">
+                    {t('pages.pages.details.selectMovement')}
+                  </Typography>
+                );
+              }
+
+              const movement = movementByValue.get(selected);
+              return movement ? getApmscoMovementLabel(movement, language) : selected;
+            }}
+          >
+            <MenuItem value="">
+              <em>{t('pages.pages.details.selectMovement')}</em>
+            </MenuItem>
+            {hasUnknownValue && <MenuItem value={value}>{value}</MenuItem>}
+            {movements.map((movement) => (
+              <MenuItem key={movement.value} value={movement.value}>
+                {getApmscoMovementLabel(movement, language)}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      );
+    }
+
+    const inputType = getPageDetailInputType(key, value);
+
+    return (
+      <TextField
+        key={key}
+        label={fieldLabel}
+        type={inputType}
+        value={value}
+        onChange={(event) => updateFormValue(key, event.target.value)}
+        fullWidth
+        disabled={isSaving}
+        slotProps={
+          inputType === 'date' || inputType === 'time'
+            ? { inputLabel: { shrink: true } }
+            : undefined
+        }
+      />
+    );
+  };
 
   useEffect(() => {
     if (pageId !== null) {
@@ -280,7 +375,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
                             fontWeight: key === 'id' ? 600 : undefined,
                           }}
                         >
-                          {formatPageDetailCellValue(record[key], tableLocale)}
+                          {renderRecordCellValue(key, record[key])}
                         </TableCell>
                       ))}
                       <TableCell align="center">
@@ -329,27 +424,17 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
         <DialogTitle>{dialogTitle}</DialogTitle>
         <DialogContent>
           <Stack spacing={2.5} sx={{ pt: 1 }}>
-            {editableFieldKeys.map((key) => {
-              const value = formValues[key] ?? '';
-              const inputType = getPageDetailInputType(key, value);
+            {editableFieldKeys.map((key) => renderFormField(key))}
 
-              return (
-                <TextField
-                  key={key}
-                  label={getPageDetailFieldLabel(key, t)}
-                  type={inputType}
-                  value={value}
-                  onChange={(event) => updateFormValue(key, event.target.value)}
-                  fullWidth
-                  disabled={isSaving}
-                  slotProps={
-                    inputType === 'date' || inputType === 'time'
-                      ? { inputLabel: { shrink: true } }
-                      : undefined
-                  }
-                />
-              );
-            })}
+            {isMovementsLoading && needsMovementOptions && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', py: 1 }}>
+                <CircularProgress size={24} aria-label={t('pages.pages.details.loading')} />
+              </Box>
+            )}
+
+            {isMovementsError && needsMovementOptions && (
+              <Alert severity="error">{t('pages.pages.details.movementsLoadError')}</Alert>
+            )}
 
             {formError && <Alert severity="error">{formError}</Alert>}
           </Stack>
@@ -363,7 +448,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
             onClick={() => {
               void handleSave();
             }}
-            disabled={isSaving}
+            disabled={isSaving || (needsMovementOptions && isMovementsLoading)}
           >
             {isSaving ? t('pages.pages.details.form.saving') : t('pages.pages.details.form.save')}
           </Button>

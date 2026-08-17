@@ -1,3 +1,4 @@
+import { useApmscoMovementsQuery } from './queries/apmscoBerthing';
 import {
   useCreatePageDetailMutation,
   usePageDetailsQuery,
@@ -33,3 +34,8 @@ export const usePageDetails = (
 export const useCreatePageDetail = () => useCreatePageDetailMutation();
 
 export const useUpdatePageDetail = () => useUpdatePageDetailMutation();
+
+export const useApmscoMovements = (enabled: boolean) => {
+  const { isAuthenticated } = useAuth();
+  return useApmscoMovementsQuery(isAuthenticated && enabled);
+};

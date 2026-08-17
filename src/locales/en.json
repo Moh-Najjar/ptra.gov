@@ -211,6 +211,8 @@
         "createSuccess": "Record created successfully.",
         "updateSuccess": "Record updated successfully.",
         "saveError": "Unable to save record. Please try again later.",
+        "movementsLoadError": "Unable to load movement options. Please try again later.",
+        "selectMovement": "Select movement",
         "table": {
           "actions": "Actions"
         },

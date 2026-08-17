@@ -20,3 +20,12 @@ export const PAGE_DETAIL_AUDIT_FIELDS = [
   'updatedAt',
   'updatedBy',
 ] as const;
+
+export const PAGE_DETAIL_MOVEMENT_FIELDS = ['movementTo', 'movementFrom'] as const;
+
+export type PageDetailMovementField = (typeof PAGE_DETAIL_MOVEMENT_FIELDS)[number];
+
+const movementFieldSet = new Set<string>(PAGE_DETAIL_MOVEMENT_FIELDS);
+
+export const isPageDetailMovementField = (key: string): key is PageDetailMovementField =>
+  movementFieldSet.has(key);
