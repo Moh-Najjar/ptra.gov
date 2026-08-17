@@ -7,7 +7,7 @@ export const ROLE_ROUTES: readonly RoleRouteItem[] = [
   {
     path: ROUTES.POST,
     labelKey: 'nav.post',
-    roles: [USER_ROLES.ADMINISTRATOR, USER_ROLES.AUTHOR],
+    roles: [USER_ROLES.ADMINISTRATOR],
   },
   {
     path: ROUTES.PAGES,
@@ -17,6 +17,6 @@ export const ROLE_ROUTES: readonly RoleRouteItem[] = [
   {
     path: ROUTES.USERS,
     labelKey: 'nav.users',
-    roles: [USER_ROLES.ADMINISTRATOR, USER_ROLES.AUTHOR],
+    roles: [USER_ROLES.ADMINISTRATOR],
   },
 ];

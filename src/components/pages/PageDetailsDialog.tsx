@@ -1,5 +1,4 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import {
   Alert,
@@ -45,7 +44,6 @@ import {
   getPageDetailFieldLabel,
   getPageDetailInputType,
   getPageDetailRecordKey,
-  getPageDetailRecordLabel,
   getPageDetailsTableLocale,
   mapPageDetailToFormValues,
 } from '../../utils/pageDetails';
@@ -66,8 +64,6 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_DETAILS_PAGE_SIZE);
   const [dialogMode, setDialogMode] = useState<PageDetailDialogMode>('add');
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [selectedRecord, setSelectedRecord] = useState<PageDetailRecord | null>(null);
   const [formValues, setFormValues] = useState<Record<string, string>>({});
   const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
 
@@ -104,37 +100,23 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
 
   const openAddDialog = () => {
     setDialogMode('add');
-    setSelectedRecord(null);
     setFormValues(createEmptyPageDetailFormValues(editableFieldKeys));
     setIsFormDialogOpen(true);
   };
 
   const openEditDialog = (record: PageDetailRecord) => {
     setDialogMode('edit');
-    setSelectedRecord(record);
     setFormValues(mapPageDetailToFormValues(record, editableFieldKeys));
     setIsFormDialogOpen(true);
   };
 
-  const openDeleteDialog = (record: PageDetailRecord) => {
-    setSelectedRecord(record);
-    setIsDeleteDialogOpen(true);
-  };
-
   const closeFormDialog = () => {
     setIsFormDialogOpen(false);
-    setSelectedRecord(null);
     setFormValues({});
-  };
-
-  const closeDeleteDialog = () => {
-    setIsDeleteDialogOpen(false);
-    setSelectedRecord(null);
   };
 
   const showComingSoonNotice = () => {
     closeFormDialog();
-    closeDeleteDialog();
     setIsComingSoonOpen(true);
   };
 
@@ -243,16 +225,6 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
                               <EditOutlinedIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
-                          <Tooltip title={t('pages.pages.details.deleteRecord')}>
-                            <IconButton
-                              size="small"
-                              color="error"
-                              aria-label={t('pages.pages.details.deleteRecord')}
-                              onClick={() => openDeleteDialog(record)}
-                            >
-                              <DeleteOutlineOutlinedIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
                         </Stack>
                       </TableCell>
                     </TableRow>
@@ -312,23 +284,6 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
           <Button onClick={closeFormDialog}>{t('pages.pages.details.form.cancel')}</Button>
           <Button variant="contained" onClick={showComingSoonNotice}>
             {t('pages.pages.details.form.save')}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog open={isDeleteDialogOpen} onClose={closeDeleteDialog} fullWidth maxWidth="xs">
-        <DialogTitle>{t('pages.pages.details.deleteRecord')}</DialogTitle>
-        <DialogContent>
-          <Typography variant="body1" sx={{ pt: 0.5 }}>
-            {t('pages.pages.details.deleteConfirm', {
-              name: selectedRecord ? getPageDetailRecordLabel(selectedRecord) : '',
-            })}
-          </Typography>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={closeDeleteDialog}>{t('pages.pages.details.form.cancel')}</Button>
-          <Button variant="contained" color="error" onClick={showComingSoonNotice}>
-            {t('pages.pages.details.form.delete')}
           </Button>
         </DialogActions>
       </Dialog>

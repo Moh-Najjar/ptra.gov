@@ -32,14 +32,20 @@ import {
 } from '../components/common/AdminTable';
 import { PowerBiEmbed } from '../components/common/PowerBiEmbed';
 import { PostAuthorsDialog } from '../components/posts/PostAuthorsDialog';
+import { USER_ROLES } from '../constants/userRoles';
+import { useAuth } from '../hooks/useAuth';
 import { useAdminPosts } from '../hooks/usePosts';
 import { formatPostAuthors, hasPostIframe, type AdminPost } from '../types/posts';
+import { userHasAnyRole } from '../utils/roles';
 
 export const PostPage = () => {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const { data, isLoading, isError } = useAdminPosts();
   const [previewPost, setPreviewPost] = useState<AdminPost | null>(null);
   const [authorsPost, setAuthorsPost] = useState<AdminPost | null>(null);
+
+  const canManageAuthors = userHasAnyRole(user, [USER_ROLES.ADMINISTRATOR]);
 
   const sortedPosts = useMemo(
     () => [...(data ?? [])].sort((first, second) => second.id - first.id),
@@ -142,16 +148,18 @@ export const PostPage = () => {
                     </TableCell>
                     <TableCell align="center">
                       <Stack direction="row" spacing={0.5} sx={{ justifyContent: 'center' }}>
-                        <Tooltip title={t('pages.post.table.manageAuthors')}>
-                          <IconButton
-                            size="small"
-                            color="primary"
-                            aria-label={t('pages.post.table.manageAuthors')}
-                            onClick={() => setAuthorsPost(post)}
-                          >
-                            <GroupOutlinedIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
+                        {canManageAuthors && (
+                          <Tooltip title={t('pages.post.table.manageAuthors')}>
+                            <IconButton
+                              size="small"
+                              color="primary"
+                              aria-label={t('pages.post.table.manageAuthors')}
+                              onClick={() => setAuthorsPost(post)}
+                            >
+                              <GroupOutlinedIcon fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
+                        )}
                         <Tooltip
                           title={
                             postHasIframe

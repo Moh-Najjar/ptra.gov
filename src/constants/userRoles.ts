@@ -1,8 +1,8 @@
 /** Role keys returned by GET /api/Roles — keep in sync with the backend. */
 export const USER_ROLES = {
   ADMINISTRATOR: 'administrator',
-  EDITOR: 'editor',
   AUTHOR: 'author',
+  EDITOR: 'editor',
   CONTRIBUTOR: 'contributor',
   SUBSCRIBER: 'subscriber',
 } as const;
