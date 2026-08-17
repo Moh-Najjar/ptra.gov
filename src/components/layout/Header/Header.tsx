@@ -10,7 +10,7 @@ import { UserMenu } from './UserMenu';
 
 export const Header = () => {
   const { t } = useTranslation();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [loginOpen, setLoginOpen] = useState(false);
 
   const authTooltip = useMemo(() => t('auth.login'), [t]);
@@ -36,7 +36,7 @@ export const Header = () => {
               <NavMenu />
             </Box>
 
-            {isAuthenticated ? (
+            {isAuthenticated && user ? (
               <UserMenu />
             ) : (
               <Tooltip title={authTooltip}>

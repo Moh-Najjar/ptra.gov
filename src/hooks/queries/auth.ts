@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { authService } from '../../services/authService';
 import type { AuthSession, LoginCredentials } from '../../types/auth';
+import { authService } from '../../services/authService';
 
 export const authKeys = {
   session: ['auth', 'session'] as const,
@@ -34,8 +34,10 @@ export const useLogoutMutation = () => {
   return useMutation({
     mutationFn: async () => authService.logout(),
     onSuccess: () => {
-      queryClient.clear();
       queryClient.setQueryData(authKeys.session, null);
+      queryClient.removeQueries({
+        predicate: (query) => query.queryKey[0] !== 'auth',
+      });
     },
   });
 };
