@@ -9,11 +9,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
   IconButton,
-  InputLabel,
   MenuItem,
-  Select,
   Snackbar,
   Stack,
   Table,
@@ -137,42 +134,49 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
     const fieldLabel = getPageDetailFieldLabel(key, t);
 
     if (isPageDetailMovementField(key)) {
-      const selectedMovement = value.length > 0 ? movementByValue.get(value) : undefined;
-      const hasUnknownValue = value.length > 0 && selectedMovement === undefined;
+      const hasUnknownValue =
+        value.length > 0 && movementByValue.get(value) === undefined;
 
       return (
-        <FormControl key={key} fullWidth disabled={isSaving || isMovementsLoading}>
-          <InputLabel id={`${key}-label`}>{fieldLabel}</InputLabel>
-          <Select
-            labelId={`${key}-label`}
-            label={fieldLabel}
-            value={value}
-            displayEmpty
-            onChange={(event) => updateFormValue(key, event.target.value)}
-            renderValue={(selected) => {
-              if (selected.length === 0) {
-                return (
-                  <Typography component="span" color="text.secondary">
-                    {t('pages.pages.details.selectMovement')}
-                  </Typography>
-                );
-              }
+        <TextField
+          key={key}
+          select
+          label={fieldLabel}
+          value={value}
+          onChange={(event) => updateFormValue(key, event.target.value)}
+          fullWidth
+          disabled={isSaving || isMovementsLoading}
+          slotProps={{
+            inputLabel: { shrink: true },
+            select: {
+              displayEmpty: true,
+              renderValue: (selected: unknown) => {
+                const selectedValue = typeof selected === 'string' ? selected : '';
 
-              const movement = movementByValue.get(selected);
-              return movement ? getApmscoMovementLabel(movement, language) : selected;
-            }}
-          >
-            <MenuItem value="">
-              <em>{t('pages.pages.details.selectMovement')}</em>
+                if (selectedValue.length === 0) {
+                  return (
+                    <Typography component="span" color="text.secondary">
+                      {t('pages.pages.details.selectMovement')}
+                    </Typography>
+                  );
+                }
+
+                const movement = movementByValue.get(selectedValue);
+                return movement ? getApmscoMovementLabel(movement, language) : selectedValue;
+              },
+            },
+          }}
+        >
+          <MenuItem value="">
+            <em>{t('pages.pages.details.selectMovement')}</em>
+          </MenuItem>
+          {hasUnknownValue && <MenuItem value={value}>{value}</MenuItem>}
+          {movements.map((movement) => (
+            <MenuItem key={movement.value} value={movement.value}>
+              {getApmscoMovementLabel(movement, language)}
             </MenuItem>
-            {hasUnknownValue && <MenuItem value={value}>{value}</MenuItem>}
-            {movements.map((movement) => (
-              <MenuItem key={movement.value} value={movement.value}>
-                {getApmscoMovementLabel(movement, language)}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+          ))}
+        </TextField>
       );
     }
 
