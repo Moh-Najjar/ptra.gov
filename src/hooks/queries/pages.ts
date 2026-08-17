@@ -1,6 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppLanguage } from '../../i18n/types';
 import { pagesService } from '../../services/pagesService';
+import type { PageDetailRecord } from '../../types/pageDetails';
 
 export const pagesKeys = {
   list: ['pages', 'list'] as const,
@@ -29,3 +30,63 @@ export const usePageDetailsQuery = (
     queryFn: () => pagesService.getPageDetails(pageId as number, pageNumber, pageSize),
     enabled: enabled && pageId !== null,
   });
+
+interface CreatePageDetailVariables {
+  pageId: number;
+  pageNumber: number;
+  pageSize: number;
+  payload: PageDetailRecord;
+}
+
+interface UpdatePageDetailVariables {
+  pageId: number;
+  recordId: number;
+  pageNumber: number;
+  pageSize: number;
+  payload: PageDetailRecord;
+}
+
+const invalidatePageDetails = async (
+  queryClient: ReturnType<typeof useQueryClient>,
+  pageId: number,
+  pageNumber: number,
+  pageSize: number,
+): Promise<void> => {
+  await queryClient.invalidateQueries({
+    queryKey: pagesKeys.details(pageId, pageNumber, pageSize),
+  });
+};
+
+export const useCreatePageDetailMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ pageId, payload }: CreatePageDetailVariables) =>
+      pagesService.createPageDetail(pageId, payload),
+    onSuccess: async (_data, variables) => {
+      await invalidatePageDetails(
+        queryClient,
+        variables.pageId,
+        variables.pageNumber,
+        variables.pageSize,
+      );
+    },
+  });
+};
+
+export const useUpdatePageDetailMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ pageId, recordId, payload }: UpdatePageDetailVariables) =>
+      pagesService.updatePageDetail(pageId, recordId, payload),
+    onSuccess: async (_data, variables) => {
+      await invalidatePageDetails(
+        queryClient,
+        variables.pageId,
+        variables.pageNumber,
+        variables.pageSize,
+      );
+    },
+  });
+};

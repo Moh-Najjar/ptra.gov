@@ -232,6 +232,20 @@ export const getPageDetailRecordKey = (record: PageDetailRecord, index: number):
   return `row-${index}`;
 };
 
+export const getPageDetailRecordId = (record: PageDetailRecord): number | null => {
+  const { id } = record;
+
+  if (typeof id === 'number' && Number.isFinite(id)) {
+    return id;
+  }
+
+  if (typeof id === 'string' && /^\d+$/.test(id.trim())) {
+    return Number(id.trim());
+  }
+
+  return null;
+};
+
 export const getPageDetailsTableLocale = (language: AppLanguage): string =>
   language === 'ar' ? 'ar-JO' : 'en-US';
 

@@ -208,7 +208,9 @@
         "editRecord": "Edit record",
         "deleteRecord": "Delete record",
         "deleteConfirm": "Are you sure you want to delete {{name}}?",
-        "comingSoon": "This action will be available when the API endpoint is ready.",
+        "createSuccess": "Record created successfully.",
+        "updateSuccess": "Record updated successfully.",
+        "saveError": "Unable to save record. Please try again later.",
         "table": {
           "actions": "Actions"
         },
@@ -266,6 +268,7 @@
         },
         "form": {
           "save": "Save",
+          "saving": "Saving...",
           "delete": "Delete",
           "cancel": "Cancel"
         }

@@ -1,4 +1,9 @@
-import { usePageDetailsQuery, usePagesQuery } from './queries/pages';
+import {
+  useCreatePageDetailMutation,
+  usePageDetailsQuery,
+  usePagesQuery,
+  useUpdatePageDetailMutation,
+} from './queries/pages';
 import { useAuth } from './useAuth';
 import { useLanguage } from './useLanguage';
 
@@ -24,3 +29,7 @@ export const usePageDetails = (
     pageSize,
   );
 };
+
+export const useCreatePageDetail = () => useCreatePageDetailMutation();
+
+export const useUpdatePageDetail = () => useUpdatePageDetailMutation();

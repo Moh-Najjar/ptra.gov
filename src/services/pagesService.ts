@@ -1,7 +1,7 @@
 import type { ApiResponse } from '../types/api';
 import type { CmsPage } from '../types/cmsPage';
-import type { PaginatedPageDetails } from '../types/pageDetails';
-import { normalizePageDetailItems } from '../utils/pageDetails';
+import type { PageDetailRecord, PaginatedPageDetails } from '../types/pageDetails';
+import { normalizePageDetailItem, normalizePageDetailItems } from '../utils/pageDetails';
 import { apiClient } from './api/client';
 
 interface RawCmsPage {
@@ -61,5 +61,40 @@ export const pagesService = {
       totalCount: data.data.totalCount,
       totalPages: data.data.totalPages,
     };
+  },
+
+  createPageDetail: async (
+    pageId: number,
+    payload: PageDetailRecord,
+  ): Promise<PageDetailRecord> => {
+    const { data } = await apiClient.post<ApiResponse<unknown>>(
+      `/pageDetails/${pageId}`,
+      payload,
+    );
+
+    const normalized = normalizePageDetailItem(data.data);
+    if (normalized === null) {
+      throw new Error('Invalid page detail create response.');
+    }
+
+    return normalized;
+  },
+
+  updatePageDetail: async (
+    pageId: number,
+    recordId: number,
+    payload: PageDetailRecord,
+  ): Promise<PageDetailRecord> => {
+    const { data } = await apiClient.put<ApiResponse<unknown>>(
+      `/pageDetails/${pageId}/${recordId}`,
+      payload,
+    );
+
+    const normalized = normalizePageDetailItem(data.data);
+    if (normalized === null) {
+      throw new Error('Invalid page detail update response.');
+    }
+
+    return normalized;
   },
 };

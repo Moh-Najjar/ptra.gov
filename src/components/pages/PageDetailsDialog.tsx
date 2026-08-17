@@ -29,26 +29,34 @@ import {
   AdminTableHeadCell,
   AdminTableHeadRow,
 } from '../common/AdminTable';
-import { usePageDetails } from '../../hooks/usePages';
+import { useCreatePageDetail, usePageDetails, useUpdatePageDetail } from '../../hooks/usePages';
 import { useLanguage } from '../../hooks/useLanguage';
 import type { CmsPage } from '../../types/cmsPage';
 import {
   DEFAULT_PAGE_DETAILS_PAGE_SIZE,
   type PageDetailRecord,
 } from '../../types/pageDetails';
+import { getApiErrorMessage } from '../../utils/apiErrors';
 import {
+  buildPageDetailPayload,
   createEmptyPageDetailFormValues,
   extractPageDetailColumnKeys,
   formatPageDetailCellValue,
   getEditablePageDetailFieldKeys,
   getPageDetailFieldLabel,
   getPageDetailInputType,
+  getPageDetailRecordId,
   getPageDetailRecordKey,
   getPageDetailsTableLocale,
   mapPageDetailToFormValues,
 } from '../../utils/pageDetails';
 
 type PageDetailDialogMode = 'add' | 'edit';
+
+interface PageDetailNotice {
+  severity: 'success' | 'error';
+  message: string;
+}
 
 interface PageDetailsDialogProps {
   page: CmsPage | null;
@@ -64,8 +72,10 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_DETAILS_PAGE_SIZE);
   const [dialogMode, setDialogMode] = useState<PageDetailDialogMode>('add');
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
+  const [editingRecordId, setEditingRecordId] = useState<number | null>(null);
   const [formValues, setFormValues] = useState<Record<string, string>>({});
-  const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<PageDetailNotice | null>(null);
 
   const pageId = page?.id ?? null;
   const detailsEnabled = page !== null && page.isPageDetailsEnabled;
@@ -75,6 +85,11 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
     pageSize,
     detailsEnabled,
   );
+
+  const createPageDetailMutation = useCreatePageDetail();
+  const updatePageDetailMutation = useUpdatePageDetail();
+
+  const isSaving = createPageDetailMutation.isPending || updatePageDetailMutation.isPending;
 
   const columnKeys = useMemo(
     () => (data ? extractPageDetailColumnKeys(data.items) : []),
@@ -100,24 +115,78 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
 
   const openAddDialog = () => {
     setDialogMode('add');
+    setEditingRecordId(null);
+    setFormError(null);
     setFormValues(createEmptyPageDetailFormValues(editableFieldKeys));
     setIsFormDialogOpen(true);
   };
 
   const openEditDialog = (record: PageDetailRecord) => {
+    const recordId = getPageDetailRecordId(record);
+    if (recordId === null) {
+      setNotice({
+        severity: 'error',
+        message: t('pages.pages.details.saveError'),
+      });
+      return;
+    }
+
     setDialogMode('edit');
+    setEditingRecordId(recordId);
+    setFormError(null);
     setFormValues(mapPageDetailToFormValues(record, editableFieldKeys));
     setIsFormDialogOpen(true);
   };
 
   const closeFormDialog = () => {
     setIsFormDialogOpen(false);
+    setEditingRecordId(null);
     setFormValues({});
+    setFormError(null);
   };
 
-  const showComingSoonNotice = () => {
-    closeFormDialog();
-    setIsComingSoonOpen(true);
+  const handleSave = async () => {
+    if (pageId === null) {
+      return;
+    }
+
+    setFormError(null);
+
+    const payload = buildPageDetailPayload(formValues, editableFieldKeys);
+
+    try {
+      if (dialogMode === 'add') {
+        await createPageDetailMutation.mutateAsync({
+          pageId,
+          pageNumber,
+          pageSize,
+          payload,
+        });
+        setNotice({
+          severity: 'success',
+          message: t('pages.pages.details.createSuccess'),
+        });
+      } else if (editingRecordId !== null) {
+        await updatePageDetailMutation.mutateAsync({
+          pageId,
+          recordId: editingRecordId,
+          pageNumber,
+          pageSize,
+          payload,
+        });
+        setNotice({
+          severity: 'success',
+          message: t('pages.pages.details.updateSuccess'),
+        });
+      } else {
+        setFormError(t('pages.pages.details.saveError'));
+        return;
+      }
+
+      closeFormDialog();
+    } catch (error) {
+      setFormError(getApiErrorMessage(error, t('pages.pages.details.saveError')));
+    }
   };
 
   const updateFormValue = (field: string, value: string) => {
@@ -125,6 +194,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
       ...currentValues,
       [field]: value,
     }));
+    setFormError(null);
   };
 
   const handlePageChange = (_event: unknown, nextPage: number) => {
@@ -159,7 +229,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
               variant="contained"
               startIcon={<AddOutlinedIcon />}
               onClick={openAddDialog}
-              disabled={editableFieldKeys.length === 0}
+              disabled={editableFieldKeys.length === 0 || isSaving}
             >
               {t('pages.pages.details.addRecord')}
             </Button>
@@ -221,6 +291,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
                               color="primary"
                               aria-label={t('pages.pages.details.editRecord')}
                               onClick={() => openEditDialog(record)}
+                              disabled={isSaving || getPageDetailRecordId(record) === null}
                             >
                               <EditOutlinedIcon fontSize="small" />
                             </IconButton>
@@ -270,6 +341,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
                   value={value}
                   onChange={(event) => updateFormValue(key, event.target.value)}
                   fullWidth
+                  disabled={isSaving}
                   slotProps={
                     inputType === 'date' || inputType === 'time'
                       ? { inputLabel: { shrink: true } }
@@ -278,24 +350,38 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
                 />
               );
             })}
+
+            {formError && <Alert severity="error">{formError}</Alert>}
           </Stack>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={closeFormDialog}>{t('pages.pages.details.form.cancel')}</Button>
-          <Button variant="contained" onClick={showComingSoonNotice}>
-            {t('pages.pages.details.form.save')}
+          <Button onClick={closeFormDialog} disabled={isSaving}>
+            {t('pages.pages.details.form.cancel')}
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              void handleSave();
+            }}
+            disabled={isSaving}
+          >
+            {isSaving ? t('pages.pages.details.form.saving') : t('pages.pages.details.form.save')}
           </Button>
         </DialogActions>
       </Dialog>
 
       <Snackbar
-        open={isComingSoonOpen}
+        open={notice !== null}
         autoHideDuration={4000}
-        onClose={() => setIsComingSoonOpen(false)}
+        onClose={() => setNotice(null)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert severity="info" onClose={() => setIsComingSoonOpen(false)} sx={{ width: '100%' }}>
-          {t('pages.pages.details.comingSoon')}
+        <Alert
+          severity={notice?.severity ?? 'success'}
+          onClose={() => setNotice(null)}
+          sx={{ width: '100%' }}
+        >
+          {notice?.message ?? ''}
         </Alert>
       </Snackbar>
     </>
