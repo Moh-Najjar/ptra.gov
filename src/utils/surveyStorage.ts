@@ -72,3 +72,12 @@ export const wasPromptShownThisSession = (): boolean =>
 export const markPromptShownThisSession = (): void => {
   sessionStorage.setItem(SURVEY_STORAGE_KEYS.promptShown, 'true');
 };
+
+/** Clears survey prompt state so you can test the flow again. */
+export const resetSurveyState = (): void => {
+  localStorage.removeItem(SURVEY_STORAGE_KEYS.submitted);
+  localStorage.removeItem(SURVEY_STORAGE_KEYS.dismissedUntil);
+  sessionStorage.removeItem(SURVEY_STORAGE_KEYS.sessionPageViews);
+  sessionStorage.removeItem(SURVEY_STORAGE_KEYS.sessionStartedAt);
+  sessionStorage.removeItem(SURVEY_STORAGE_KEYS.promptShown);
+};

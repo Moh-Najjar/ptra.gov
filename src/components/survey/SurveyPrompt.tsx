@@ -30,6 +30,11 @@ export const SurveyPrompt = ({ open, onClose, onDismiss }: SurveyPromptProps) =>
     openSurvey();
   };
 
+  /** X only hides the slide-in for this session; it does not long-term dismiss. */
+  const handleClosePrompt = (): void => {
+    onClose();
+  };
+
   const handleNotNow = (): void => {
     dismissSurvey('notNow');
     onDismiss('notNow');
@@ -80,7 +85,7 @@ export const SurveyPrompt = ({ open, onClose, onDismiss }: SurveyPromptProps) =>
           <IconButton
             size="small"
             aria-label={t('survey.close')}
-            onClick={handleNotNow}
+            onClick={handleClosePrompt}
             sx={{
               color: 'inherit',
               bgcolor: alpha('#FFFFFF', 0.12),

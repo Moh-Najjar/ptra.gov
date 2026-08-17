@@ -103,25 +103,33 @@ export const Footer = () => {
   const renderFooterLink = (link: FooterLink) => {
     if (link.action === 'survey') {
       return (
-        <Link
+        <Box
           key={link.labelKey}
           component="button"
           type="button"
           onClick={openSurvey}
-          underline="hover"
-          color="text.secondary"
-          variant="body2"
           sx={{
             border: 'none',
             bgcolor: 'transparent',
             cursor: 'pointer',
             p: 0,
+            m: 0,
             textAlign: 'start',
             font: 'inherit',
+            color: 'text.secondary',
+            fontSize: '0.875rem',
+            lineHeight: 1.43,
+            textDecoration: 'none',
+            display: 'block',
+            width: '100%',
+            '&:hover': {
+              textDecoration: 'underline',
+              color: 'primary.main',
+            },
           }}
         >
           {t(link.labelKey)}
-        </Link>
+        </Box>
       );
     }
 
