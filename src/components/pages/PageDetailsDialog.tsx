@@ -1,14 +1,11 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import {
   Alert,
   Box,
   Button,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   IconButton,
   MenuItem,
   Snackbar,
@@ -30,6 +27,15 @@ import {
   AdminTableHeadCell,
   AdminTableHeadRow,
 } from '../common/AdminTable';
+import {
+  AdminDialog,
+  AdminDialogCancelButton,
+  AdminDialogContent,
+  AdminDialogFooter,
+  AdminDialogHeader,
+  AdminDialogPrimaryButton,
+  AdminDialogSection,
+} from '../common/AdminDialog';
 import { useCreatePageDetail, useApmscoMovements, usePageDetails, useUpdatePageDetail } from '../../hooks/usePages';
 import { useLanguage } from '../../hooks/useLanguage';
 import { buildApmscoMovementValueMap, getApmscoMovementLabel } from '../../types/apmscoBerthing';
@@ -307,35 +313,43 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
 
   return (
     <>
-      <Dialog open={page !== null && page.isPageDetailsEnabled} onClose={onClose} fullWidth maxWidth="xl">
-        <DialogTitle sx={{ pr: 6 }}>
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={2}
-            sx={{ alignItems: { sm: 'center' }, justifyContent: 'space-between' }}
-          >
-            <Box>
-              <Typography variant="h6" component="span" sx={{ fontWeight: 700 }}>
-                {page?.title}
-              </Typography>
-              {page && (
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                  {`${t('pages.pages.details.pageId')}: ${page.id}`}
-                </Typography>
-              )}
-            </Box>
+      <AdminDialog
+        open={page !== null && page.isPageDetailsEnabled}
+        onClose={onClose}
+        fullWidth
+        maxWidth="xl"
+      >
+        <AdminDialogHeader
+          title={page?.title ?? t('pages.pages.details.title')}
+          subtitle={
+            page ? `${t('pages.pages.details.pageId')}: ${page.id}` : undefined
+          }
+          icon={DescriptionOutlinedIcon}
+          onClose={onClose}
+          closeLabel={t('pages.pages.details.close')}
+          action={
             <Button
               variant="contained"
               startIcon={<AddOutlinedIcon />}
               onClick={openAddDialog}
               disabled={editableFieldKeys.length === 0 || isSaving}
+              sx={{
+                bgcolor: 'background.paper',
+                color: 'primary.main',
+                fontWeight: 700,
+                '&:hover': {
+                  bgcolor: 'background.paper',
+                  opacity: 0.92,
+                },
+              }}
             >
               {t('pages.pages.details.addRecord')}
             </Button>
-          </Stack>
-        </DialogTitle>
+          }
+        />
 
-        <DialogContent sx={{ pb: 1 }}>
+        <AdminDialogContent disablePadding>
+          <Box sx={{ px: { xs: 2, sm: 3 }, py: 2 }}>
           {isLoading && (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
               <CircularProgress aria-label={t('pages.pages.details.loading')} />
@@ -417,47 +431,57 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
               />
             </AdminTableContainer>
           )}
-        </DialogContent>
+          </Box>
+        </AdminDialogContent>
 
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={onClose}>{t('pages.pages.details.close')}</Button>
-        </DialogActions>
-      </Dialog>
+        <AdminDialogFooter>
+          <AdminDialogCancelButton onClick={onClose}>
+            {t('pages.pages.details.close')}
+          </AdminDialogCancelButton>
+        </AdminDialogFooter>
+      </AdminDialog>
 
-      <Dialog open={isFormDialogOpen} onClose={closeFormDialog} fullWidth maxWidth="md">
-        <DialogTitle>{dialogTitle}</DialogTitle>
-        <DialogContent>
-          <Stack spacing={2.5} sx={{ pt: 1 }}>
-            {editableFieldKeys.map((key) => renderFormField(key))}
+      <AdminDialog open={isFormDialogOpen} onClose={closeFormDialog} fullWidth maxWidth="md">
+        <AdminDialogHeader
+          title={dialogTitle}
+          icon={dialogMode === 'add' ? AddOutlinedIcon : EditOutlinedIcon}
+          onClose={closeFormDialog}
+          closeLabel={t('pages.pages.details.form.cancel')}
+          closeDisabled={isSaving}
+        />
+        <AdminDialogContent>
+          <AdminDialogSection>
+            <Stack spacing={2.5}>
+              {editableFieldKeys.map((key) => renderFormField(key))}
 
-            {isMovementsLoading && needsMovementOptions && (
-              <Box sx={{ display: 'flex', justifyContent: 'center', py: 1 }}>
-                <CircularProgress size={24} aria-label={t('pages.pages.details.loading')} />
-              </Box>
-            )}
+              {isMovementsLoading && needsMovementOptions && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', py: 1 }}>
+                  <CircularProgress size={24} aria-label={t('pages.pages.details.loading')} />
+                </Box>
+              )}
 
-            {isMovementsError && needsMovementOptions && (
-              <Alert severity="error">{t('pages.pages.details.movementsLoadError')}</Alert>
-            )}
+              {isMovementsError && needsMovementOptions && (
+                <Alert severity="error">{t('pages.pages.details.movementsLoadError')}</Alert>
+              )}
 
-            {formError && <Alert severity="error">{formError}</Alert>}
-          </Stack>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={closeFormDialog} disabled={isSaving}>
+              {formError && <Alert severity="error">{formError}</Alert>}
+            </Stack>
+          </AdminDialogSection>
+        </AdminDialogContent>
+        <AdminDialogFooter>
+          <AdminDialogCancelButton onClick={closeFormDialog} disabled={isSaving}>
             {t('pages.pages.details.form.cancel')}
-          </Button>
-          <Button
-            variant="contained"
+          </AdminDialogCancelButton>
+          <AdminDialogPrimaryButton
             onClick={() => {
               void handleSave();
             }}
             disabled={isSaving || (needsMovementOptions && isMovementsLoading)}
           >
             {isSaving ? t('pages.pages.details.form.saving') : t('pages.pages.details.form.save')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          </AdminDialogPrimaryButton>
+        </AdminDialogFooter>
+      </AdminDialog>
 
       <Snackbar
         open={notice !== null}

@@ -1,3 +1,4 @@
+import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import {
@@ -5,10 +6,6 @@ import {
   Box,
   Button,
   Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   FormControl,
   FormControlLabel,
   InputAdornment,
@@ -22,6 +19,15 @@ import {
 } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+  AdminDialog,
+  AdminDialogCancelButton,
+  AdminDialogContent,
+  AdminDialogFooter,
+  AdminDialogHeader,
+  AdminDialogPrimaryButton,
+  AdminDialogSection,
+} from '../common/AdminDialog';
 import type { AppRole } from '../../types/role';
 import type { AddUserFormValues } from '../../types/user';
 import {
@@ -85,10 +91,18 @@ export const AddUserDialog = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <DialogTitle>{t('pages.users.addNewUser')}</DialogTitle>
-      <DialogContent>
-        <Stack spacing={2.5} sx={{ pt: 1 }}>
+    <AdminDialog open={open} onClose={onClose} fullWidth maxWidth="md">
+      <AdminDialogHeader
+        title={t('pages.users.addNewUser')}
+        icon={PersonAddOutlinedIcon}
+        onClose={onClose}
+        closeLabel={t('pages.users.form.cancel')}
+        closeDisabled={isSaving}
+      />
+
+      <AdminDialogContent>
+        <AdminDialogSection>
+          <Stack spacing={2.5}>
           <TextField
             label={t('pages.users.form.usernameRequired')}
             value={formValues.username}
@@ -241,20 +255,21 @@ export const AddUserDialog = ({
             </Typography>
           )}
           {isRolesError && <Alert severity="error">{t('pages.users.rolesLoadError')}</Alert>}
-        </Stack>
-      </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 2 }}>
-        <Button onClick={onClose} disabled={isSaving}>
+          </Stack>
+        </AdminDialogSection>
+      </AdminDialogContent>
+
+      <AdminDialogFooter>
+        <AdminDialogCancelButton onClick={onClose} disabled={isSaving}>
           {t('pages.users.form.cancel')}
-        </Button>
-        <Button
-          variant="contained"
+        </AdminDialogCancelButton>
+        <AdminDialogPrimaryButton
           onClick={onSave}
           disabled={isRolesLoading || roles.length === 0 || isSaving}
         >
           {isSaving ? t('pages.users.form.saving') : t('pages.users.form.save')}
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </AdminDialogPrimaryButton>
+      </AdminDialogFooter>
+    </AdminDialog>
   );
 };

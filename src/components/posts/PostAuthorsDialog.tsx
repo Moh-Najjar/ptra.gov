@@ -1,26 +1,27 @@
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import {
   Alert,
   Autocomplete,
   Box,
-  Button,
   Chip,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  Divider,
-  IconButton,
   Snackbar,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
-import { alpha } from '@mui/material/styles';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+  AdminDialog,
+  AdminDialogCancelButton,
+  AdminDialogContent,
+  AdminDialogFooter,
+  AdminDialogHeader,
+  AdminDialogPrimaryButton,
+  AdminDialogSection,
+} from '../common/AdminDialog';
 import {
   useAssignPostAuthor,
   usePostAuthors,
@@ -155,115 +156,34 @@ export const PostAuthorsDialog = ({ post, onClose }: PostAuthorsDialogProps) => 
   const postTitle =
     post && post.title.trim().length > 0 ? post.title : t('pages.post.table.untitled');
 
-  const sectionSurfaceSx = {
-    p: 2,
-    borderRadius: 2,
-    border: '1px solid',
-    borderColor: 'divider',
-    bgcolor: (theme: { palette: { primary: { main: string }; mode: string } }) =>
-      alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.12 : 0.05),
-  } as const;
-
   return (
     <>
-      <Dialog
-        open={isOpen}
-        onClose={onClose}
-        fullWidth
-        maxWidth="sm"
-        slotProps={{
-          paper: {
-            sx: {
-              borderRadius: 3,
-              overflow: 'hidden',
-              boxShadow: (theme) => `0 16px 40px ${alpha(theme.palette.primary.main, 0.18)}`,
-            },
-          },
-        }}
-      >
-        <Box
-          sx={{
-            position: 'relative',
-            px: 3,
-            py: 2.5,
-            bgcolor: 'primary.main',
-            color: 'primary.contrastText',
-          }}
-        >
-          <IconButton
-            aria-label={t('pages.post.authors.close')}
-            onClick={onClose}
-            disabled={isActionPending}
-            sx={{
-              position: 'absolute',
-              top: 8,
-              insetInlineEnd: 8,
-              color: 'inherit',
-              bgcolor: alpha('#FFFFFF', 0.12),
-              '&:hover': {
-                bgcolor: alpha('#FFFFFF', 0.22),
-              },
-            }}
-          >
-            <CloseOutlinedIcon fontSize="small" />
-          </IconButton>
+      <AdminDialog open={isOpen} onClose={onClose} fullWidth maxWidth="sm">
+        <AdminDialogHeader
+          title={t('pages.post.authors.title')}
+          subtitle={postTitle}
+          icon={GroupOutlinedIcon}
+          onClose={onClose}
+          closeLabel={t('pages.post.authors.close')}
+          closeDisabled={isActionPending}
+        />
 
-          <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center', pe: 5 }}>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 44,
-                height: 44,
-                borderRadius: 2,
-                bgcolor: alpha('#FFFFFF', 0.16),
-                border: '1px solid',
-                borderColor: alpha('#FFFFFF', 0.28),
-              }}
-            >
-              <GroupOutlinedIcon />
-            </Box>
-            <Box sx={{ minWidth: 0 }}>
-              <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.3 }}>
-                {t('pages.post.authors.title')}
-              </Typography>
-              <Typography variant="body2" sx={{ opacity: 0.92, mt: 0.25 }} noWrap>
-                {postTitle}
-              </Typography>
-            </Box>
-          </Stack>
-        </Box>
-
-        <DialogContent
-          sx={{
-            px: 3,
-            py: 3,
-            bgcolor: (theme) =>
-              alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.06 : 0.025),
-          }}
-        >
+        <AdminDialogContent>
           <Stack spacing={2.5}>
-            <Box sx={sectionSurfaceSx}>
-              <Stack
-                direction="row"
-                spacing={1}
-                sx={{ alignItems: 'center', mb: 1.5, color: 'primary.main' }}
-              >
-                <GroupOutlinedIcon fontSize="small" />
-                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                  {t('pages.post.authors.currentAuthors')}
-                </Typography>
-                {!isAuthorsLoading && !isAuthorsError && (
+            <AdminDialogSection
+              title={t('pages.post.authors.currentAuthors')}
+              icon={GroupOutlinedIcon}
+              action={
+                !isAuthorsLoading && !isAuthorsError ? (
                   <Chip
                     label={authors.length}
                     size="small"
                     color="primary"
                     sx={{ height: 22, fontWeight: 700 }}
                   />
-                )}
-              </Stack>
-
+                ) : undefined
+              }
+            >
               {isAuthorsLoading && (
                 <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
                   <CircularProgress size={24} aria-label={t('pages.post.authors.loading')} />
@@ -293,28 +213,20 @@ export const PostAuthorsDialog = ({ post, onClose }: PostAuthorsDialogProps) => 
                       onDelete={() => {
                         void handleRemoveAuthor(author);
                       }}
-                      sx={{
-                        bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
+                      sx={(theme) => ({
+                        bgcolor: theme.palette.mode === 'dark' ? 'transparent' : undefined,
                         fontWeight: 600,
-                      }}
+                      })}
                     />
                   ))}
                 </Stack>
               )}
-            </Box>
+            </AdminDialogSection>
 
-            <Box sx={sectionSurfaceSx}>
-              <Stack
-                direction="row"
-                spacing={1}
-                sx={{ alignItems: 'center', mb: 1.5, color: 'primary.main' }}
-              >
-                <PersonAddOutlinedIcon fontSize="small" />
-                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                  {t('pages.post.authors.assignAuthor')}
-                </Typography>
-              </Stack>
-
+            <AdminDialogSection
+              title={t('pages.post.authors.assignAuthor')}
+              icon={PersonAddOutlinedIcon}
+            >
               <Autocomplete
                 options={availableSearchResults}
                 value={selectedAuthor}
@@ -364,47 +276,27 @@ export const PostAuthorsDialog = ({ post, onClose }: PostAuthorsDialogProps) => 
                   {actionError}
                 </Alert>
               )}
-            </Box>
+            </AdminDialogSection>
           </Stack>
-        </DialogContent>
+        </AdminDialogContent>
 
-        <Divider />
-
-        <DialogActions
-          sx={{
-            px: 3,
-            py: 2,
-            gap: 1,
-            bgcolor: (theme) =>
-              alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.08 : 0.04),
-          }}
-        >
-          <Button
-            onClick={onClose}
-            disabled={isActionPending}
-            sx={{ color: 'text.secondary', fontWeight: 600 }}
-          >
+        <AdminDialogFooter>
+          <AdminDialogCancelButton onClick={onClose} disabled={isActionPending}>
             {t('pages.post.authors.close')}
-          </Button>
-          <Button
-            variant="contained"
+          </AdminDialogCancelButton>
+          <AdminDialogPrimaryButton
             startIcon={<PersonAddOutlinedIcon />}
             onClick={() => {
               void handleAssignAuthor();
             }}
             disabled={selectedAuthor === null || isActionPending}
-            sx={{
-              px: 2.5,
-              fontWeight: 700,
-              boxShadow: (theme) => `0 8px 20px ${alpha(theme.palette.primary.main, 0.28)}`,
-            }}
           >
             {assignAuthorMutation.isPending
               ? t('pages.post.authors.assigning')
               : t('pages.post.authors.assign')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          </AdminDialogPrimaryButton>
+        </AdminDialogFooter>
+      </AdminDialog>
 
       <Snackbar
         open={notice !== null}

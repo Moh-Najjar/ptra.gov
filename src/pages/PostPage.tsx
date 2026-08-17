@@ -7,9 +7,6 @@ import {
   Chip,
   CircularProgress,
   Container,
-  Dialog,
-  DialogContent,
-  DialogTitle,
   IconButton,
   Link,
   Stack,
@@ -30,6 +27,13 @@ import {
   AdminTableHeadCell,
   AdminTableHeadRow,
 } from '../components/common/AdminTable';
+import {
+  AdminDialog,
+  AdminDialogCancelButton,
+  AdminDialogContent,
+  AdminDialogFooter,
+  AdminDialogHeader,
+} from '../components/common/AdminDialog';
 import { PowerBiEmbed } from '../components/common/PowerBiEmbed';
 import { PostAuthorsDialog } from '../components/posts/PostAuthorsDialog';
 import { USER_ROLES } from '../constants/userRoles';
@@ -191,26 +195,32 @@ export const PostPage = () => {
 
       <PostAuthorsDialog post={authorsPost} onClose={() => setAuthorsPost(null)} />
 
-      <Dialog
+      <AdminDialog
         open={previewPost !== null && hasPostIframe(previewPost)}
         onClose={() => setPreviewPost(null)}
         fullWidth
         maxWidth="xl"
       >
-        <DialogTitle sx={{ pr: 6 }}>
-          <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-            <BarChartOutlinedIcon color="primary" />
-            <Typography variant="h6" component="span" sx={{ fontWeight: 700 }}>
-              {previewPost ? renderPostTitle(previewPost) : ''}
-            </Typography>
-          </Stack>
-        </DialogTitle>
-        <DialogContent sx={{ pb: 3 }}>
-          {previewPost && hasPostIframe(previewPost) && (
-            <PowerBiEmbed title={renderPostTitle(previewPost)} embedUrl={previewPost.iframeUrl} />
-          )}
-        </DialogContent>
-      </Dialog>
+        <AdminDialogHeader
+          title={previewPost ? renderPostTitle(previewPost) : ''}
+          subtitle={t('pages.post.table.viewReport')}
+          icon={BarChartOutlinedIcon}
+          onClose={() => setPreviewPost(null)}
+          closeLabel={t('pages.post.authors.close')}
+        />
+        <AdminDialogContent disablePadding>
+          <Box sx={{ px: { xs: 2, sm: 3 }, py: 3 }}>
+            {previewPost && hasPostIframe(previewPost) && (
+              <PowerBiEmbed title={renderPostTitle(previewPost)} embedUrl={previewPost.iframeUrl} />
+            )}
+          </Box>
+        </AdminDialogContent>
+        <AdminDialogFooter>
+          <AdminDialogCancelButton onClick={() => setPreviewPost(null)}>
+            {t('pages.post.authors.close')}
+          </AdminDialogCancelButton>
+        </AdminDialogFooter>
+      </AdminDialog>
     </Container>
   );
 };

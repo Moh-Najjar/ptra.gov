@@ -9,10 +9,6 @@ import {
   Chip,
   CircularProgress,
   Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   FormControl,
   FormControlLabel,
   IconButton,
@@ -36,6 +32,16 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { ROUTES } from '../app/routes/paths';
+import {
+  AdminDialog,
+  AdminDialogCancelButton,
+  AdminDialogContent,
+  AdminDialogDangerButton,
+  AdminDialogFooter,
+  AdminDialogHeader,
+  AdminDialogPrimaryButton,
+  AdminDialogSection,
+} from '../components/common/AdminDialog';
 import {
   AdminTableContainer,
   AdminTableHeadCell,
@@ -351,10 +357,18 @@ export const UsersPage = () => {
         onChange={updateAddFormValue}
       />
 
-      <Dialog open={isEditDialogOpen} onClose={closeEditDialog} fullWidth maxWidth="sm">
-        <DialogTitle>{t('pages.users.editUser')}</DialogTitle>
-        <DialogContent>
-          <Stack spacing={2.5} sx={{ pt: 1 }}>
+      <AdminDialog open={isEditDialogOpen} onClose={closeEditDialog} fullWidth maxWidth="sm">
+        <AdminDialogHeader
+          title={t('pages.users.editUser')}
+          subtitle={selectedUser?.fullName}
+          icon={EditOutlinedIcon}
+          onClose={closeEditDialog}
+          closeLabel={t('pages.users.form.cancel')}
+          closeDisabled={updateUserMutation.isPending}
+        />
+        <AdminDialogContent>
+          <AdminDialogSection>
+            <Stack spacing={2.5}>
             <TextField
               label={t('pages.users.form.fullName')}
               value={editFormValues.fullName}
@@ -412,42 +426,54 @@ export const UsersPage = () => {
               }
               label={t('pages.users.form.isActive')}
             />
-          </Stack>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={closeEditDialog} disabled={updateUserMutation.isPending}>
+            </Stack>
+          </AdminDialogSection>
+        </AdminDialogContent>
+        <AdminDialogFooter>
+          <AdminDialogCancelButton
+            onClick={closeEditDialog}
+            disabled={updateUserMutation.isPending}
+          >
             {t('pages.users.form.cancel')}
-          </Button>
-          <Button
-            variant="contained"
+          </AdminDialogCancelButton>
+          <AdminDialogPrimaryButton
             onClick={() => {
               void handleSaveEdit();
             }}
-            disabled={
-              isRolesLoading || roles.length === 0 || updateUserMutation.isPending
-            }
+            disabled={isRolesLoading || roles.length === 0 || updateUserMutation.isPending}
           >
             {updateUserMutation.isPending
               ? t('pages.users.form.saving')
               : t('pages.users.form.save')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          </AdminDialogPrimaryButton>
+        </AdminDialogFooter>
+      </AdminDialog>
 
-      <Dialog open={isDeleteDialogOpen} onClose={closeDeleteDialog} fullWidth maxWidth="xs">
-        <DialogTitle>{t('pages.users.deleteUser')}</DialogTitle>
-        <DialogContent>
-          <Typography variant="body1" sx={{ pt: 0.5 }}>
-            {t('pages.users.deleteConfirm', { name: selectedUser?.fullName ?? '' })}
-          </Typography>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={closeDeleteDialog} disabled={deleteUserMutation.isPending}>
+      <AdminDialog open={isDeleteDialogOpen} onClose={closeDeleteDialog} fullWidth maxWidth="xs">
+        <AdminDialogHeader
+          title={t('pages.users.deleteUser')}
+          subtitle={selectedUser?.fullName}
+          icon={DeleteOutlineOutlinedIcon}
+          tone="error"
+          onClose={closeDeleteDialog}
+          closeLabel={t('pages.users.form.cancel')}
+          closeDisabled={deleteUserMutation.isPending}
+        />
+        <AdminDialogContent>
+          <AdminDialogSection>
+            <Typography variant="body1">
+              {t('pages.users.deleteConfirm', { name: selectedUser?.fullName ?? '' })}
+            </Typography>
+          </AdminDialogSection>
+        </AdminDialogContent>
+        <AdminDialogFooter>
+          <AdminDialogCancelButton
+            onClick={closeDeleteDialog}
+            disabled={deleteUserMutation.isPending}
+          >
             {t('pages.users.form.cancel')}
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
+          </AdminDialogCancelButton>
+          <AdminDialogDangerButton
             onClick={() => {
               void handleDeleteUser();
             }}
@@ -456,9 +482,9 @@ export const UsersPage = () => {
             {deleteUserMutation.isPending
               ? t('pages.users.form.deleting')
               : t('pages.users.form.delete')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          </AdminDialogDangerButton>
+        </AdminDialogFooter>
+      </AdminDialog>
 
       <Snackbar
         open={notice !== null}
