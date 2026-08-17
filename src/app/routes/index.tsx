@@ -60,12 +60,14 @@ export const router = createBrowserRouter([
             element: <RoleGuard requiredRoles={[USER_ROLES.ADMINISTRATOR]} />,
             children: [
               { path: ROUTES.POST, element: <PostPage /> },
-              { path: ROUTES.PAGES, element: <PagesPage /> },
-              {
-                element: <RoleGuard requiredRoles={[USER_ROLES.AUTHOR]} />,
-                children: [{ path: ROUTES.PAGES, element: <PagesPage /> }],
-              },
+              { path: ROUTES.USERS, element: <UsersPage /> },
             ],
+          },
+          {
+            element: (
+              <RoleGuard requiredRoles={[USER_ROLES.ADMINISTRATOR, USER_ROLES.AUTHOR]} />
+            ),
+            children: [{ path: ROUTES.PAGES, element: <PagesPage /> }],
           },
         ],
       },
