@@ -41,7 +41,6 @@ export interface AddUserFormValues {
   website: string;
   language: string;
   password: string;
-  sendNotification: boolean;
   role: string;
 }
 
@@ -65,7 +64,6 @@ export const createEmptyAddUserFormValues = (
   website: '',
   language: '',
   password,
-  sendNotification: true,
   role: defaultRole,
 });
 

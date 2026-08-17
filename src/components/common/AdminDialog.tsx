@@ -26,14 +26,14 @@ const getAdminDialogPaperSx = (theme: Theme) => ({
 const getAdminDialogContentSx = (theme: Theme) => ({
   px: 3,
   py: 3,
-  bgcolor: alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.06 : 0.025),
+  bgcolor: alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.03 : 0.012),
 });
 
 const getAdminDialogFooterSx = (theme: Theme) => ({
   px: 3,
   py: 2,
   gap: 1,
-  bgcolor: alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.08 : 0.04),
+  bgcolor: alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.04 : 0.018),
 });
 
 export const adminDialogSectionSx = {
@@ -42,7 +42,7 @@ export const adminDialogSectionSx = {
   border: '1px solid',
   borderColor: 'divider',
   bgcolor: (theme: Theme) =>
-    alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.12 : 0.05),
+    alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.05 : 0.02),
 } as const;
 
 export const adminDialogCancelButtonSx = {

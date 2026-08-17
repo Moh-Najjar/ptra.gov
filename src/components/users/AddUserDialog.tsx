@@ -5,9 +5,7 @@ import {
   Alert,
   Box,
   Button,
-  Checkbox,
   FormControl,
-  FormControlLabel,
   InputAdornment,
   InputLabel,
   LinearProgress,
@@ -221,16 +219,6 @@ export const AddUserDialog = ({
               </Box>
             )}
           </Box>
-
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={formValues.sendNotification}
-                onChange={(event) => onChange('sendNotification', event.target.checked)}
-              />
-            }
-            label={t('pages.users.form.sendNotification')}
-          />
 
           <FormControl fullWidth error={isRolesError}>
             <InputLabel id="add-user-role-label">{t('pages.users.form.role')}</InputLabel>
