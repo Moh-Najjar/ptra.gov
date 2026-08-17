@@ -15,8 +15,13 @@ const preferredRecordLabelFields = [
   'portName',
 ] as const;
 
-const isNumericFieldKey = (key: string): boolean =>
-  /(year|sequence|number|code|count|id)$/i.test(key) || key.endsWith('Sequence');
+const isNumericFieldKey = (key: string): boolean => {
+  if (/imo/i.test(key) || /Number$/i.test(key)) {
+    return false;
+  }
+
+  return /(year|sequence|code|count|id)$/i.test(key) || key.endsWith('Sequence');
+};
 
 const isDateOnlyValue = (value: string): boolean => /^\d{4}-\d{2}-\d{2}$/.test(value);
 
@@ -265,7 +270,7 @@ export const getPageDetailInputType = (key: string, value: string): string => {
   return 'text';
 };
 
-/** Converts form values back to API-friendly record shape for future create/update calls. */
+/** Converts form values to API payload — all values are sent as strings. */
 export const buildPageDetailPayload = (
   formValues: Record<string, string>,
   fieldKeys: readonly string[],
@@ -275,17 +280,9 @@ export const buildPageDetailPayload = (
   fieldKeys.forEach((key) => {
     const rawValue = formValues[key]?.trim() ?? '';
 
-    if (rawValue.length === 0) {
-      payload[key] = null;
-      return;
+    if (rawValue.length > 0) {
+      payload[key] = rawValue;
     }
-
-    if (isNumericFieldKey(key) && /^-?\d+$/.test(rawValue)) {
-      payload[key] = Number(rawValue);
-      return;
-    }
-
-    payload[key] = rawValue;
   });
 
   return payload;

@@ -43,11 +43,11 @@ import {
   extractPageDetailColumnKeys,
   formatPageDetailCellValue,
   getEditablePageDetailFieldKeys,
-  getPageDetailFieldLabel,
   getPageDetailInputType,
   getPageDetailRecordId,
   getPageDetailRecordKey,
   getPageDetailsTableLocale,
+  humanizePageDetailFieldKey,
   mapPageDetailToFormValues,
 } from '../../utils/pageDetails';
 
@@ -260,9 +260,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
                 <TableHead>
                   <AdminTableHeadRow>
                     {columnKeys.map((key) => (
-                      <AdminTableHeadCell key={key}>
-                        {getPageDetailFieldLabel(key, t)}
-                      </AdminTableHeadCell>
+                      <AdminTableHeadCell key={key}>{key}</AdminTableHeadCell>
                     ))}
                     <AdminTableHeadCell align="center">
                       {t('pages.pages.details.table.actions')}
@@ -336,7 +334,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
               return (
                 <TextField
                   key={key}
-                  label={getPageDetailFieldLabel(key, t)}
+                  label={humanizePageDetailFieldKey(key)}
                   type={inputType}
                   value={value}
                   onChange={(event) => updateFormValue(key, event.target.value)}
