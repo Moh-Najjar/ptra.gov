@@ -3,6 +3,7 @@ import {
   useAssignPostAuthorMutation,
   useAuthoredPostsQuery,
   usePostAuthorsQuery,
+  useRemovePostAuthorMutation,
   useSearchPostAuthorsQuery,
 } from './queries/posts';
 import { useAuth } from './useAuth';
@@ -30,3 +31,5 @@ export const useSearchPostAuthors = (query: string, enabled: boolean) => {
 };
 
 export const useAssignPostAuthor = () => useAssignPostAuthorMutation();
+
+export const useRemovePostAuthor = () => useRemovePostAuthorMutation();

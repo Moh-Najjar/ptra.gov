@@ -55,3 +55,21 @@ export const useAssignPostAuthorMutation = () => {
     },
   });
 };
+
+interface RemovePostAuthorVariables {
+  postId: number;
+  userId: number;
+}
+
+export const useRemovePostAuthorMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ postId, userId }: RemovePostAuthorVariables) =>
+      postsService.removePostAuthor(postId, userId),
+    onSuccess: async (_data, variables) => {
+      await queryClient.invalidateQueries({ queryKey: postsKeys.authors(variables.postId) });
+      await queryClient.invalidateQueries({ queryKey: postsKeys.list });
+    },
+  });
+};

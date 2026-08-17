@@ -165,6 +165,9 @@
         "loadError": "Unable to load post authors. Please try again later.",
         "searchError": "Unable to search authors. Please try again later.",
         "assignError": "Unable to assign author. Please try again later.",
+        "assignSuccess": "Author \"{{name}}\" assigned successfully.",
+        "removeError": "Unable to remove author. Please try again later.",
+        "removeSuccess": "Author \"{{name}}\" removed successfully.",
         "assign": "Assign author",
         "assigning": "Assigning...",
         "close": "Close"

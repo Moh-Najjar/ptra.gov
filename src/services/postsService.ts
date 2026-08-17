@@ -97,4 +97,8 @@ export const postsService = {
       .map((author) => normalizePostAuthor(author))
       .filter((author): author is PostAuthor => author !== null);
   },
+
+  removePostAuthor: async (postId: number, userId: number): Promise<void> => {
+    await apiClient.delete(`/posts/${postId}/authors/${userId}`);
+  },
 };
