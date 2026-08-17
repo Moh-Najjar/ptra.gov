@@ -14,6 +14,7 @@ export interface FooterLink {
   path?: string;
   href?: string;
   external?: boolean;
+  action?: 'survey';
 }
 
 export interface FooterLinkGroup {

@@ -17,7 +17,8 @@ import {
   POWERED_BY_URL,
 } from '../../../constants/footerLinks';
 import { VISITOR_COUNT } from '../../../constants/statistics';
-import type { PartnerLogo } from '../../../types/navigation';
+import { useSurvey } from '../../../contexts/SurveyContext';
+import type { FooterLink, PartnerLogo } from '../../../types/navigation';
 
 const PartnerLogoImage = ({ logo }: { logo: PartnerLogo }) => {
   const { t } = useTranslation();
@@ -97,6 +98,62 @@ const PartnerGroup = ({ group }: { group: PartnerLogo['group'] }) => {
 
 export const Footer = () => {
   const { t } = useTranslation();
+  const { openSurvey } = useSurvey();
+
+  const renderFooterLink = (link: FooterLink) => {
+    if (link.action === 'survey') {
+      return (
+        <Link
+          key={link.labelKey}
+          component="button"
+          type="button"
+          onClick={openSurvey}
+          underline="hover"
+          color="text.secondary"
+          variant="body2"
+          sx={{
+            border: 'none',
+            bgcolor: 'transparent',
+            cursor: 'pointer',
+            p: 0,
+            textAlign: 'start',
+            font: 'inherit',
+          }}
+        >
+          {t(link.labelKey)}
+        </Link>
+      );
+    }
+
+    if (link.external && link.href) {
+      return (
+        <Link
+          key={link.labelKey}
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          underline="hover"
+          color="text.secondary"
+          variant="body2"
+        >
+          {t(link.labelKey)}
+        </Link>
+      );
+    }
+
+    return (
+      <Link
+        key={link.labelKey}
+        component={RouterLink}
+        to={link.path ?? '/'}
+        underline="hover"
+        color="text.secondary"
+        variant="body2"
+      >
+        {t(link.labelKey)}
+      </Link>
+    );
+  };
 
   return (
     <Box
@@ -122,32 +179,7 @@ export const Footer = () => {
                 {t(group.titleKey)}
               </Typography>
               <Stack spacing={1}>
-                {group.links.map((link) =>
-                  link.external && link.href ? (
-                    <Link
-                      key={link.labelKey}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      underline="hover"
-                      color="text.secondary"
-                      variant="body2"
-                    >
-                      {t(link.labelKey)}
-                    </Link>
-                  ) : (
-                    <Link
-                      key={link.labelKey}
-                      component={RouterLink}
-                      to={link.path ?? '/'}
-                      underline="hover"
-                      color="text.secondary"
-                      variant="body2"
-                    >
-                      {t(link.labelKey)}
-                    </Link>
-                  ),
-                )}
+                {group.links.map((link) => renderFooterLink(link))}
               </Stack>
             </Grid>
           ))}

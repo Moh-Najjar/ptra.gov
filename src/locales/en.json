@@ -108,6 +108,7 @@
     "faq": "FAQ",
     "accessibility": "Accessibility",
     "privacy": "Privacy and Protection Policy",
+    "userEvaluation": "User Evaluation",
     "execution": "Execution:",
     "partnership": "In partnership with:",
     "funding": "Funded by:",
@@ -507,5 +508,34 @@
   "meta": {
     "title": "Trade and Logistics Performance Portal in Jordan",
     "description": "Trade and Logistics Performance Portal in Jordan - A digital, interactive, bilingual platform"
+  },
+  "survey": {
+    "title": "User Evaluation",
+    "promptTitle": "Help us improve the portal",
+    "promptDescription": "Share your feedback in a short 5-question survey. It takes less than a minute.",
+    "takeSurvey": "Take survey",
+    "notNow": "Not now",
+    "dontAskAgain": "Don't ask again",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "close": "Close",
+    "submitting": "Submitting...",
+    "submitSuccess": "Thank you for your feedback!",
+    "submitError": "Unable to submit your feedback. Please try again.",
+    "validationError": "Please answer all questions before submitting.",
+    "ratings": {
+      "verySatisfied": "Very Satisfied",
+      "satisfied": "Satisfied",
+      "neutral": "Neutral",
+      "dissatisfied": "Dissatisfied",
+      "veryDissatisfied": "Very Dissatisfied"
+    },
+    "questions": {
+      "dataAccess": "Ease of access to data and information",
+      "accuracyComprehensiveness": "Accuracy and comprehensiveness of the information and reports provided",
+      "dashboardEffectiveness": "Effectiveness of interactive dashboards in supporting the decision-making process",
+      "timeEffortSavings": "Time and effort savings in preparing studies and analyses using the platform",
+      "overallSatisfaction": "Overall level of satisfaction with the experience of using the platform"
+    }
   }
 }

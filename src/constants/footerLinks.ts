@@ -18,6 +18,7 @@ export const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
       },
       { labelKey: 'footer.about', path: ROUTES.ABOUT },
       { labelKey: 'footer.faq', path: ROUTES.FAQ },
+      { labelKey: 'footer.userEvaluation', action: 'survey' },
     ],
   },
   {
