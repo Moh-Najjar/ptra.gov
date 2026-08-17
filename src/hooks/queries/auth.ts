@@ -34,6 +34,7 @@ export const useLogoutMutation = () => {
   return useMutation({
     mutationFn: async () => authService.logout(),
     onSuccess: () => {
+      queryClient.clear();
       queryClient.setQueryData(authKeys.session, null);
     },
   });
