@@ -45,6 +45,7 @@ export const SURVEY_EXCLUDED_ROUTES: string[] = [
   ROUTES.POST,
   ROUTES.PAGES,
   ROUTES.USERS,
+  ROUTES.SURVEYS,
 ];
 
 export const SURVEY_QUESTION_IDS: SurveyQuestionId[] = [

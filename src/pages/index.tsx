@@ -11,6 +11,7 @@ export { FaqPage } from './FaqPage';
 export { PagesPage } from './PagesPage';
 export { PostPage } from './PostPage';
 export { UsersPage } from './UsersPage';
+export { SurveysPage } from './SurveysPage';
 
 export const ForeignTradePage = () => <PagePlaceholder titleKey="pages.foreignTrade.title" />;
 

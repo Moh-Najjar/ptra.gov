@@ -27,7 +27,8 @@
     "myAccount": "حسابي",
     "post": "المقالات",
     "pages": "الصفحات",
-    "users": "المستخدمون"
+    "users": "المستخدمون",
+    "surveys": "نتائج الاستبيان"
   },
   "utility": {
     "faq": "أسئلة متكررة",
@@ -357,6 +358,43 @@
         "author": "كاتب",
         "contributor": "مساهم",
         "subscriber": "مشترك"
+      }
+    },
+    "surveys": {
+      "title": "نتائج الاستبيان",
+      "description": "استعراض إجابات استبيان تقييم المستخدمين حسب النموذج.",
+      "loading": "جارٍ تحميل بيانات الاستبيان...",
+      "loadError": "تعذر تحميل بيانات الاستبيان. يرجى المحاولة مرة أخرى لاحقًا.",
+      "noForms": "لا توجد نماذج استبيان متاحة.",
+      "noSubmissions": "لا توجد إجابات لهذا النموذج.",
+      "notAvailable": "غير متوفر",
+      "selectedForm": "عرض الإجابات لـ: {{title}}",
+      "status": {
+        "read": "مقروء",
+        "unread": "غير مقروء"
+      },
+      "table": {
+        "serialNumber": "الرقم التسلسلي",
+        "status": "الحالة",
+        "createdAt": "تاريخ الإرسال",
+        "browser": "المتصفح",
+        "device": "الجهاز",
+        "ip": "عنوان IP",
+        "sourceUrl": "رابط المصدر",
+        "actions": "الإجراءات",
+        "viewDetails": "عرض التفاصيل"
+      },
+      "pagination": {
+        "rowsPerPage": "عدد الصفوف في الصفحة:",
+        "displayedRows": "{{from}}–{{to}} من {{count}}"
+      },
+      "details": {
+        "title": "الإجابة رقم {{serialNumber}}",
+        "metadata": "تفاصيل الإرسال",
+        "answers": "إجابات الاستبيان",
+        "question": "السؤال",
+        "answer": "الإجابة",
+        "close": "إغلاق"
       }
     },
     "crops": {

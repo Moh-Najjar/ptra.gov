@@ -27,7 +27,8 @@
     "myAccount": "My Account",
     "post": "Posts",
     "pages": "Pages",
-    "users": "Users"
+    "users": "Users",
+    "surveys": "Survey Submissions"
   },
   "utility": {
     "faq": "FAQ",
@@ -357,6 +358,43 @@
         "author": "Author",
         "contributor": "Contributor",
         "subscriber": "Subscriber"
+      }
+    },
+    "surveys": {
+      "title": "Survey Submissions",
+      "description": "Review user evaluation survey responses by form.",
+      "loading": "Loading survey data...",
+      "loadError": "Unable to load survey data. Please try again later.",
+      "noForms": "No survey forms are available.",
+      "noSubmissions": "No submissions found for this form.",
+      "notAvailable": "N/A",
+      "selectedForm": "Showing submissions for: {{title}}",
+      "status": {
+        "read": "Read",
+        "unread": "Unread"
+      },
+      "table": {
+        "serialNumber": "Serial #",
+        "status": "Status",
+        "createdAt": "Submitted at",
+        "browser": "Browser",
+        "device": "Device",
+        "ip": "IP address",
+        "sourceUrl": "Source URL",
+        "actions": "Actions",
+        "viewDetails": "View details"
+      },
+      "pagination": {
+        "rowsPerPage": "Rows per page:",
+        "displayedRows": "{{from}}–{{to}} of {{count}}"
+      },
+      "details": {
+        "title": "Submission #{{serialNumber}}",
+        "metadata": "Submission details",
+        "answers": "Survey answers",
+        "question": "Question",
+        "answer": "Answer",
+        "close": "Close"
       }
     },
     "crops": { "title": "Crops" },

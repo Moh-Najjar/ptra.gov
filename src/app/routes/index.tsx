@@ -26,6 +26,7 @@ import {
   ReleaseTimePage,
   StatisticsPage,
   UsersPage,
+  SurveysPage,
 } from '../../pages';
 import { ROUTES } from './paths';
 
@@ -61,6 +62,7 @@ export const router = createBrowserRouter([
             children: [
               { path: ROUTES.POST, element: <PostPage /> },
               { path: ROUTES.USERS, element: <UsersPage /> },
+              { path: ROUTES.SURVEYS, element: <SurveysPage /> },
             ],
           },
           {

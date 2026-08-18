@@ -1,4 +1,5 @@
 import { useMemo, useState, type MouseEvent } from 'react';
+import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
@@ -29,6 +30,7 @@ const ROUTE_ICONS: Partial<Record<RoleRouteItem['path'], typeof ArticleOutlinedI
   [ROUTES.POST]: ArticleOutlinedIcon,
   [ROUTES.PAGES]: DescriptionOutlinedIcon,
   [ROUTES.USERS]: GroupOutlinedIcon,
+  [ROUTES.SURVEYS]: RateReviewOutlinedIcon,
 };
 
 export const UserMenu = () => {
