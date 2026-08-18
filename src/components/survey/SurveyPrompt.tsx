@@ -57,9 +57,11 @@ export const SurveyPrompt = ({ open, onClose, onDismiss }: SurveyPromptProps) =>
         sx={{
           position: 'fixed',
           bottom: { xs: 16, sm: 24 },
+          // Logical inline-end mirrors by language: EN = bottom-right, AR = bottom-left.
           insetInlineEnd: { xs: 16, sm: 24 },
-          zIndex: (theme) => theme.zIndex.snackbar,
-          width: { xs: 'calc(100% - 32px)', sm: 380 },
+          insetInlineStart: { xs: 16, sm: 'auto' },
+          zIndex: (muiTheme) => muiTheme.zIndex.snackbar,
+          width: { xs: 'auto', sm: 380 },
           maxWidth: '100%',
           borderRadius: 3,
           overflow: 'hidden',
