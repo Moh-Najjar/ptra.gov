@@ -17,14 +17,11 @@ export interface SurveySubmissionAnswer {
   value: string;
 }
 
-export type SurveySubmissionStatus = 'read' | 'unread' | string;
-
 export interface SurveySubmission {
   id: number;
   formId: number;
   formTitle: string;
   serialNumber: number;
-  status: SurveySubmissionStatus;
   sourceUrl: string;
   browser: string | null;
   device: string | null;
