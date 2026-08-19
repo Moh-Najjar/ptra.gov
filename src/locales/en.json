@@ -10,7 +10,8 @@
       "invalidNumber": "Enter a valid number.",
       "invalidUrl": "Enter a valid URL (http:// or https://).",
       "invalidDate": "Enter a valid date.",
-      "invalidTime": "Enter a valid time."
+      "invalidTime": "Enter a valid time.",
+      "invalidImoNumber": "Enter a valid IMO number (7 digits)."
     }
   },
   "language": {
@@ -223,6 +224,7 @@
         "saveError": "Unable to save record. Please try again later.",
         "movementsLoadError": "Unable to load movement options. Please try again later.",
         "selectMovement": "Select movement",
+        "imoHint": "7 digits only",
         "table": {
           "actions": "Actions"
         },

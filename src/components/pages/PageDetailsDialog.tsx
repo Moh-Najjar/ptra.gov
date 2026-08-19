@@ -59,7 +59,9 @@ import {
   getPageDetailRecordKey,
   getPageDetailsTableLocale,
   isPageDetailFormValid,
+  isPageDetailImoField,
   mapPageDetailToFormValues,
+  sanitizePageDetailImoValue,
   validatePageDetailFormValues,
   type PageDetailFieldErrors,
 } from '../../utils/pageDetails';
@@ -197,24 +199,39 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
     }
 
     const inputType = getPageDetailInputType(key, value);
+    const isImoField = isPageDetailImoField(key);
 
     return (
       <TextField
         key={key}
         label={fieldLabel}
-        type={inputType}
+        type={isImoField ? 'text' : inputType}
         value={value}
-        onChange={(event) => updateFormValue(key, event.target.value)}
+        onChange={(event) => {
+          const nextValue = isImoField
+            ? sanitizePageDetailImoValue(event.target.value)
+            : event.target.value;
+          updateFormValue(key, nextValue);
+        }}
         fullWidth
         required
         error={hasError}
-        helperText={fieldError}
+        helperText={fieldError ?? (isImoField ? t('pages.pages.details.imoHint') : undefined)}
         disabled={isSaving}
-        slotProps={
-          inputType === 'date' || inputType === 'time'
+        slotProps={{
+          ...(inputType === 'date' || inputType === 'time'
             ? { inputLabel: { shrink: true } }
-            : undefined
-        }
+            : {}),
+          ...(isImoField
+            ? {
+                htmlInput: {
+                  inputMode: 'numeric',
+                  maxLength: 7,
+                  pattern: '\\d{7}',
+                },
+              }
+            : {}),
+        }}
       />
     );
   };

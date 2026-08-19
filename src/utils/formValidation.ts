@@ -5,6 +5,7 @@ export interface ValidationMessages {
   invalidUrl: string;
   invalidDate: string;
   invalidTime: string;
+  invalidImoNumber: string;
 }
 
 export const isNonEmptyTrimmed = (value: string): boolean => value.trim().length > 0;
@@ -49,6 +50,19 @@ export const isValidDateString = (value: string): boolean => /^\d{4}-\d{2}-\d{2}
 
 export const isValidTimeString = (value: string): boolean =>
   /^\d{2}:\d{2}(:\d{2})?$/.test(value.trim());
+
+export const isValidImoNumber = (value: string): boolean => /^\d{7}$/.test(value.trim());
+
+export const getImoNumberFieldError = (
+  value: string,
+  messages: ValidationMessages,
+): string | undefined => {
+  if (!isNonEmptyTrimmed(value)) {
+    return messages.required;
+  }
+
+  return isValidImoNumber(value) ? undefined : messages.invalidImoNumber;
+};
 
 export const hasValidationErrors = (errors: Record<string, string | undefined>): boolean =>
   Object.values(errors).some((error) => typeof error === 'string' && error.length > 0);

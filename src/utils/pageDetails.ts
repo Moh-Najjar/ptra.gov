@@ -7,6 +7,7 @@ import {
 } from '../types/pageDetails';
 import {
   getDateFieldError,
+  getImoNumberFieldError,
   getNumberFieldError,
   getRequiredFieldError,
   getTimeFieldError,
@@ -32,8 +33,14 @@ const isNumericFieldKey = (key: string): boolean => {
   return /(year|sequence|code|count|id)$/i.test(key) || key.endsWith('Sequence');
 };
 
+export const isPageDetailImoField = (key: string): boolean =>
+  key.toLowerCase() === 'imonumber';
+
+export const sanitizePageDetailImoValue = (value: string): string =>
+  value.replace(/\D/g, '').slice(0, 7);
+
 const isNumericTextFieldKey = (key: string): boolean =>
-  /imo/i.test(key) || /Number$/i.test(key);
+  /Number$/i.test(key) && !isPageDetailImoField(key);
 
 export type PageDetailFieldErrors = Record<string, string | undefined>;
 
@@ -309,6 +316,11 @@ export const validatePageDetailFormValues = (
 
     if (inputType === 'time') {
       errors[key] = getTimeFieldError(trimmedValue, messages);
+      return;
+    }
+
+    if (isPageDetailImoField(key)) {
+      errors[key] = getImoNumberFieldError(trimmedValue, messages);
       return;
     }
 

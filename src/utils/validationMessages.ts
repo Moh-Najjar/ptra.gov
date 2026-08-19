@@ -8,4 +8,5 @@ export const getValidationMessages = (t: TFunction): ValidationMessages => ({
   invalidUrl: t('common.validation.invalidUrl'),
   invalidDate: t('common.validation.invalidDate'),
   invalidTime: t('common.validation.invalidTime'),
+  invalidImoNumber: t('common.validation.invalidImoNumber'),
 });

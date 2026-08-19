@@ -10,7 +10,8 @@
       "invalidNumber": "يرجى إدخال رقم صالح.",
       "invalidUrl": "يرجى إدخال رابط صالح (http:// أو https://).",
       "invalidDate": "يرجى إدخال تاريخ صالح.",
-      "invalidTime": "يرجى إدخال وقت صالح."
+      "invalidTime": "يرجى إدخال وقت صالح.",
+      "invalidImoNumber": "يرجى إدخال رقم IMO صالح (7 أرقام)."
     }
   },
   "language": {
@@ -223,6 +224,7 @@
         "saveError": "تعذر حفظ السجل. يرجى المحاولة لاحقاً.",
         "movementsLoadError": "تعذر تحميل خيارات الحركة. يرجى المحاولة لاحقاً.",
         "selectMovement": "اختر الحركة",
+        "imoHint": "7 أرقام فقط",
         "table": {
           "actions": "الإجراءات"
         },
