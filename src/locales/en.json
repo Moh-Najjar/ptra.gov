@@ -59,7 +59,10 @@
     "username": "Username",
     "password": "Password",
     "cancel": "Cancel",
-    "loginError": "Login failed. Please check your credentials and try again."
+    "loginError": "Login failed. Please check your credentials and try again.",
+    "sessionExpiringTitle": "Session expiring",
+    "sessionExpiringMessage": "Your session will expire in {{count}} seconds. Please log in again. You will be signed out and returned to the home page.",
+    "sessionExpiringCountdown": "{{count}} seconds remaining"
   },
   "header": {
     "customsDept": "Jordan Customs Department",

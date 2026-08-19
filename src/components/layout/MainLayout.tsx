@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import { SurveyProvider } from '../../contexts/SurveyContext';
 import { SurveyManager } from '../survey/SurveyManager';
+import { SessionExpiryWatcher } from '../auth/SessionExpiryWatcher';
 import { Footer } from './Footer/Footer';
 import { Header } from './Header/Header';
 import { TopUtilityBar } from './TopUtilityBar';
@@ -17,6 +18,7 @@ export const MainLayout = () => {
         </Box>
         <Footer />
         <SurveyManager />
+        <SessionExpiryWatcher />
       </Box>
     </SurveyProvider>
   );

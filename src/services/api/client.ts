@@ -1,4 +1,5 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
+import { AUTH_UNAUTHORIZED_EVENT } from '../../constants/sessionExpiry';
 import { getStoredLanguage } from '../../i18n/types';
 
 const apiBaseUrl = import.meta.env.VITE_BASE_URL;
@@ -31,11 +32,20 @@ apiClient.interceptors.request.use(
   (error: AxiosError) => Promise.reject(error),
 );
 
+const isLoginRequest = (config: InternalAxiosRequestConfig | undefined): boolean => {
+  const requestUrl = config?.url ?? '';
+  return /\/auth\/login/i.test(requestUrl);
+};
+
 apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      // TODO: redirect to login or refresh token when auth is implemented
+    if (
+      error.response?.status === 401 &&
+      !isLoginRequest(error.config) &&
+      localStorage.getItem('auth_token')
+    ) {
+      window.dispatchEvent(new Event(AUTH_UNAUTHORIZED_EVENT));
     }
     return Promise.reject(error);
   },
