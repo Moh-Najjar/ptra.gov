@@ -201,7 +201,11 @@
         "modifiedDate": "تاريخ التعديل",
         "language": "اللغة",
         "records": "السجلات",
+        "authors": "الكتّاب",
+        "actions": "الإجراءات",
         "viewRecords": "عرض السجلات",
+        "manageAuthors": "إدارة الكتّاب",
+        "untitled": "بدون عنوان",
         "notAvailable": "—"
       },
       "status": {
@@ -210,6 +214,26 @@
         "draft": "مسودة",
         "pending": "قيد المراجعة",
         "private": "خاص"
+      },
+      "authors": {
+        "title": "كتّاب الصفحة",
+        "currentAuthors": "الكتّاب الحاليون",
+        "assignAuthor": "تعيين كاتب",
+        "searchLabel": "بحث عن كتّاب",
+        "searchPlaceholder": "اكتب حرفين على الأقل",
+        "searchHint": "اكتب حرفين على الأقل للبحث",
+        "noSearchResults": "لم يتم العثور على كتّاب",
+        "noAuthors": "لا يوجد كتّاب معيّنون بعد.",
+        "loading": "جاري تحميل الكتّاب...",
+        "loadError": "تعذر تحميل كتّاب الصفحة. يرجى المحاولة لاحقاً.",
+        "searchError": "تعذر البحث عن الكتّاب. يرجى المحاولة لاحقاً.",
+        "assignError": "تعذر تعيين الكاتب. يرجى المحاولة لاحقاً.",
+        "assignSuccess": "تم تعيين الكاتب \"{{name}}\" بنجاح.",
+        "removeError": "تعذر إزالة الكاتب. يرجى المحاولة لاحقاً.",
+        "removeSuccess": "تمت إزالة الكاتب \"{{name}}\" بنجاح.",
+        "assign": "تعيين كاتب",
+        "assigning": "جاري التعيين...",
+        "close": "إغلاق"
       },
       "details": {
         "title": "سجلات الصفحة",

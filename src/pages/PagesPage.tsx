@@ -1,3 +1,4 @@
+import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import TableRowsOutlinedIcon from '@mui/icons-material/TableRowsOutlined';
 import {
   Alert,
@@ -6,6 +7,7 @@ import {
   Chip,
   CircularProgress,
   Container,
+  IconButton,
   Link,
   Stack,
   Table,
@@ -13,6 +15,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
@@ -25,10 +28,14 @@ import {
   AdminTableHeadRow,
   getAdminTableInteractiveRowSx,
 } from '../components/common/AdminTable';
+import { PageAuthorsDialog } from '../components/pages/PageAuthorsDialog';
 import { PageDetailsDialog } from '../components/pages/PageDetailsDialog';
+import { USER_ROLES } from '../constants/userRoles';
+import { useAuth } from '../hooks/useAuth';
 import { getPagesTableLocale, usePages } from '../hooks/usePages';
 import { useLanguage } from '../hooks/useLanguage';
-import { pageHasDetails, type CmsPage } from '../types/cmsPage';
+import { formatPageAuthors, pageHasDetails, type CmsPage } from '../types/cmsPage';
+import { userHasAnyRole } from '../utils/roles';
 
 const formatDateTime = (value: string, locale: string): string => {
   const date = new Date(value);
@@ -67,9 +74,12 @@ const getStatusLabel = (status: string, t: (key: string) => string): string => {
 export const PagesPage = () => {
   const { t } = useTranslation();
   const { language } = useLanguage();
+  const { user } = useAuth();
   const { data, isLoading, isError } = usePages();
   const tableLocale = getPagesTableLocale(language);
   const [selectedPage, setSelectedPage] = useState<CmsPage | null>(null);
+  const [authorsPage, setAuthorsPage] = useState<CmsPage | null>(null);
+  const canManageAuthors = userHasAnyRole(user, [USER_ROLES.ADMINISTRATOR]);
 
   const renderLanguageCode = (languageCode: CmsPage['languageCode']): string => {
     if (languageCode === null || languageCode.trim().length === 0) {
@@ -77,6 +87,15 @@ export const PagesPage = () => {
     }
 
     return languageCode.toUpperCase();
+  };
+
+  const renderAuthorsSummary = (page: CmsPage): string => {
+    const authorsText = formatPageAuthors(page.authors);
+    if (authorsText.length === 0) {
+      return t('pages.pages.table.notAvailable');
+    }
+
+    return authorsText;
   };
 
   const openPageDetails = (page: CmsPage) => {
@@ -131,11 +150,15 @@ export const PagesPage = () => {
               <AdminTableHeadRow>
                 <AdminTableHeadCell>{t('pages.pages.table.id')}</AdminTableHeadCell>
                 <AdminTableHeadCell>{t('pages.pages.table.title')}</AdminTableHeadCell>
+                <AdminTableHeadCell>{t('pages.pages.table.authors')}</AdminTableHeadCell>
                 <AdminTableHeadCell>{t('pages.pages.table.status')}</AdminTableHeadCell>
                 <AdminTableHeadCell>{t('pages.pages.table.publishedDate')}</AdminTableHeadCell>
                 <AdminTableHeadCell>{t('pages.pages.table.modifiedDate')}</AdminTableHeadCell>
                 <AdminTableHeadCell>{t('pages.pages.table.language')}</AdminTableHeadCell>
                 <AdminTableHeadCell>{t('pages.pages.table.records')}</AdminTableHeadCell>
+                <AdminTableHeadCell align="center">
+                  {t('pages.pages.table.actions')}
+                </AdminTableHeadCell>
               </AdminTableHeadRow>
             </TableHead>
             <TableBody>
@@ -165,6 +188,24 @@ export const PagesPage = () => {
                           />
                         )}
                       </Stack>
+                    </TableCell>
+                    <TableCell sx={{ maxWidth: 320 }}>
+                      {page.authors.length > 0 ? (
+                        <Stack direction="row" spacing={0.75} useFlexGap sx={{ flexWrap: 'wrap' }}>
+                          {page.authors.map((author) => (
+                            <Chip
+                              key={author.id}
+                              label={author.name}
+                              size="small"
+                              variant="outlined"
+                            />
+                          ))}
+                        </Stack>
+                      ) : (
+                        <Typography variant="body2" color="text.secondary">
+                          {renderAuthorsSummary(page)}
+                        </Typography>
+                      )}
                     </TableCell>
                     <TableCell>
                       <Chip
@@ -197,6 +238,20 @@ export const PagesPage = () => {
                         </Typography>
                       )}
                     </TableCell>
+                    <TableCell align="center" onClick={(event) => event.stopPropagation()}>
+                      {canManageAuthors && (
+                        <Tooltip title={t('pages.pages.table.manageAuthors')}>
+                          <IconButton
+                            size="small"
+                            color="primary"
+                            aria-label={t('pages.pages.table.manageAuthors')}
+                            onClick={() => setAuthorsPage(page)}
+                          >
+                            <GroupOutlinedIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -209,6 +264,8 @@ export const PagesPage = () => {
         page={selectedPage !== null && pageHasDetails(selectedPage) ? selectedPage : null}
         onClose={closePageDetails}
       />
+
+      <PageAuthorsDialog page={authorsPage} onClose={() => setAuthorsPage(null)} />
     </Container>
   );
 };

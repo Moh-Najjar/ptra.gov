@@ -1,8 +1,12 @@
 import { useApmscoMovementsQuery } from './queries/apmscoBerthing';
 import {
+  useAssignPageAuthorMutation,
   useCreatePageDetailMutation,
+  usePageAuthorsQuery,
   usePageDetailsQuery,
   usePagesQuery,
+  useRemovePageAuthorMutation,
+  useSearchPageAuthorsQuery,
   useUpdatePageDetailMutation,
 } from './queries/pages';
 import { useAuth } from './useAuth';
@@ -34,6 +38,20 @@ export const usePageDetails = (
 export const useCreatePageDetail = () => useCreatePageDetailMutation();
 
 export const useUpdatePageDetail = () => useUpdatePageDetailMutation();
+
+export const usePageAuthors = (pageId: number | null, enabled: boolean) => {
+  const { isAuthenticated } = useAuth();
+  return usePageAuthorsQuery(pageId, isAuthenticated && enabled);
+};
+
+export const useSearchPageAuthors = (query: string, enabled: boolean) => {
+  const { isAuthenticated } = useAuth();
+  return useSearchPageAuthorsQuery(query, isAuthenticated && enabled);
+};
+
+export const useAssignPageAuthor = () => useAssignPageAuthorMutation();
+
+export const useRemovePageAuthor = () => useRemovePageAuthorMutation();
 
 export const useApmscoMovements = (enabled: boolean) => {
   const { isAuthenticated } = useAuth();

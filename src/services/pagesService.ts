@@ -1,5 +1,10 @@
 import type { ApiResponse } from '../types/api';
-import type { CmsPage } from '../types/cmsPage';
+import type {
+  AssignPageAuthorPayload,
+  CmsPage,
+  PageAuthor,
+  SearchablePageAuthor,
+} from '../types/cmsPage';
 import type { PageDetailRecord, PaginatedPageDetails } from '../types/pageDetails';
 import { normalizePageDetailItem, normalizePageDetailItems } from '../utils/pageDetails';
 import { apiClient } from './api/client';
@@ -13,6 +18,26 @@ interface RawCmsPage {
   languageCode: string | null;
   isPageDetailsEnabled?: boolean;
   IsPageDetailsEnabled?: boolean;
+  authors?: RawPageAuthor[];
+  Authors?: RawPageAuthor[];
+}
+
+interface RawPageAuthor {
+  id?: number;
+  Id?: number;
+  name?: string;
+  Name?: string;
+  slug?: string;
+  Slug?: string;
+}
+
+interface RawSearchablePageAuthor {
+  id?: number;
+  Id?: number;
+  name?: string;
+  Name?: string;
+  email?: string;
+  Email?: string;
 }
 
 interface RawPaginatedPageDetails {
@@ -23,6 +48,42 @@ interface RawPaginatedPageDetails {
   totalPages: number;
 }
 
+const normalizePageAuthor = (author: RawPageAuthor): PageAuthor | null => {
+  const id = author.id ?? author.Id;
+  const name = author.name ?? author.Name;
+  const slug = author.slug ?? author.Slug;
+
+  if (typeof id !== 'number' || typeof name !== 'string' || typeof slug !== 'string') {
+    return null;
+  }
+
+  return { id, name, slug };
+};
+
+const normalizeSearchablePageAuthor = (
+  author: RawSearchablePageAuthor,
+): SearchablePageAuthor | null => {
+  const id = author.id ?? author.Id;
+  const name = author.name ?? author.Name;
+  const email = author.email ?? author.Email;
+
+  if (typeof id !== 'number' || typeof name !== 'string' || typeof email !== 'string') {
+    return null;
+  }
+
+  return { id, name, email };
+};
+
+const normalizePageAuthors = (authors: RawPageAuthor[] | undefined): PageAuthor[] => {
+  if (!authors) {
+    return [];
+  }
+
+  return authors
+    .map((author) => normalizePageAuthor(author))
+    .filter((author): author is PageAuthor => author !== null);
+};
+
 const normalizeCmsPage = (page: RawCmsPage): CmsPage => ({
   id: page.id,
   title: page.title,
@@ -31,6 +92,7 @@ const normalizeCmsPage = (page: RawCmsPage): CmsPage => ({
   modifiedDate: page.modifiedDate,
   languageCode: page.languageCode,
   isPageDetailsEnabled: page.isPageDetailsEnabled ?? page.IsPageDetailsEnabled ?? false,
+  authors: normalizePageAuthors(page.authors ?? page.Authors),
 });
 
 export const pagesService = {
@@ -96,5 +158,44 @@ export const pagesService = {
     }
 
     return normalized;
+  },
+
+  getPageAuthors: async (pageId: number): Promise<PageAuthor[]> => {
+    const { data } = await apiClient.get<ApiResponse<RawPageAuthor[]>>(`/pages/${pageId}/authors`);
+
+    return data.data
+      .map((author) => normalizePageAuthor(author))
+      .filter((author): author is PageAuthor => author !== null);
+  },
+
+  searchPageAuthors: async (query: string): Promise<SearchablePageAuthor[]> => {
+    const { data } = await apiClient.get<ApiResponse<RawSearchablePageAuthor[]>>(
+      '/pages/authors/search',
+      {
+        params: { query },
+      },
+    );
+
+    return data.data
+      .map((author) => normalizeSearchablePageAuthor(author))
+      .filter((author): author is SearchablePageAuthor => author !== null);
+  },
+
+  assignPageAuthor: async (
+    pageId: number,
+    payload: AssignPageAuthorPayload,
+  ): Promise<PageAuthor[]> => {
+    const { data } = await apiClient.post<ApiResponse<RawPageAuthor[]>>(
+      `/pages/${pageId}/authors`,
+      payload,
+    );
+
+    return data.data
+      .map((author) => normalizePageAuthor(author))
+      .filter((author): author is PageAuthor => author !== null);
+  },
+
+  removePageAuthor: async (pageId: number, userId: number): Promise<void> => {
+    await apiClient.delete(`/pages/${pageId}/authors/${userId}`);
   },
 };

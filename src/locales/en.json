@@ -201,7 +201,11 @@
         "modifiedDate": "Modified",
         "language": "Language",
         "records": "Records",
+        "authors": "Authors",
+        "actions": "Actions",
         "viewRecords": "View records",
+        "manageAuthors": "Manage authors",
+        "untitled": "Untitled",
         "notAvailable": "—"
       },
       "status": {
@@ -210,6 +214,26 @@
         "draft": "Draft",
         "pending": "Pending",
         "private": "Private"
+      },
+      "authors": {
+        "title": "Page authors",
+        "currentAuthors": "Current authors",
+        "assignAuthor": "Assign author",
+        "searchLabel": "Search authors",
+        "searchPlaceholder": "Type at least 2 characters",
+        "searchHint": "Type at least 2 characters to search",
+        "noSearchResults": "No authors found",
+        "noAuthors": "No authors assigned yet.",
+        "loading": "Loading authors...",
+        "loadError": "Unable to load page authors. Please try again later.",
+        "searchError": "Unable to search authors. Please try again later.",
+        "assignError": "Unable to assign author. Please try again later.",
+        "assignSuccess": "Author \"{{name}}\" assigned successfully.",
+        "removeError": "Unable to remove author. Please try again later.",
+        "removeSuccess": "Author \"{{name}}\" removed successfully.",
+        "assign": "Assign author",
+        "assigning": "Assigning...",
+        "close": "Close"
       },
       "details": {
         "title": "Page records",
