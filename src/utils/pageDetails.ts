@@ -42,6 +42,30 @@ export const sanitizePageDetailImoValue = (value: string): string =>
 const isNumericTextFieldKey = (key: string): boolean =>
   /Number$/i.test(key) && !isPageDetailImoField(key);
 
+const OPTIONAL_DECLARATION_ORDINALS_BY_PAGE_ID: Record<number, readonly string[]> = {
+  881: ['second', 'third', 'fourth', 'fifth', 'sixth'],
+  876: ['second', 'third'],
+  874: ['second', 'third'],
+};
+
+/**
+ * Extra declaration slots are optional only on specific pages:
+ * 881 (phosphate) — 2nd through 6th; 876/874 (import/export) — 2nd and 3rd.
+ */
+export const isOptionalPageDetailField = (key: string, pageId: number | null): boolean => {
+  if (pageId === null) {
+    return false;
+  }
+
+  const ordinals = OPTIONAL_DECLARATION_ORDINALS_BY_PAGE_ID[pageId];
+  if (!ordinals) {
+    return false;
+  }
+
+  const optionalFieldPattern = new RegExp(`^(${ordinals.join('|')})(Declaration|Customs)`, 'i');
+  return optionalFieldPattern.test(key);
+};
+
 export type PageDetailFieldErrors = Record<string, string | undefined>;
 
 const isDateOnlyValue = (value: string): boolean => /^\d{4}-\d{2}-\d{2}$/.test(value);
@@ -295,12 +319,19 @@ export const validatePageDetailFormValues = (
   formValues: Record<string, string>,
   fieldKeys: readonly string[],
   messages: ValidationMessages,
+  pageId: number | null,
 ): PageDetailFieldErrors => {
   const errors: PageDetailFieldErrors = {};
 
   fieldKeys.forEach((key) => {
     const rawValue = formValues[key] ?? '';
     const trimmedValue = rawValue.trim();
+    const isOptional = isOptionalPageDetailField(key, pageId);
+
+    if (isOptional && trimmedValue.length === 0) {
+      errors[key] = undefined;
+      return;
+    }
 
     if (isPageDetailMovementField(key)) {
       errors[key] = getRequiredFieldError(trimmedValue, messages);
@@ -325,7 +356,7 @@ export const validatePageDetailFormValues = (
     }
 
     if (inputType === 'number' || isNumericTextFieldKey(key)) {
-      errors[key] = getNumberFieldError(trimmedValue, messages);
+      errors[key] = getNumberFieldError(trimmedValue, messages, { required: !isOptional });
       return;
     }
 

@@ -58,6 +58,7 @@ import {
   getPageDetailRecordId,
   getPageDetailRecordKey,
   getPageDetailsTableLocale,
+  isOptionalPageDetailField,
   isPageDetailFormValid,
   isPageDetailImoField,
   mapPageDetailToFormValues,
@@ -147,6 +148,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
     const fieldLabel = getPageDetailFieldLabel(key, t);
     const fieldError = fieldErrors[key];
     const hasError = typeof fieldError === 'string' && fieldError.length > 0;
+    const isRequired = !isOptionalPageDetailField(key, pageId);
 
     if (isPageDetailMovementField(key)) {
       const hasUnknownValue =
@@ -160,7 +162,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
           value={value}
           onChange={(event) => updateFormValue(key, event.target.value)}
           fullWidth
-          required
+          required={isRequired}
           error={hasError}
           helperText={fieldError}
           disabled={isSaving || isMovementsLoading}
@@ -214,7 +216,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
           updateFormValue(key, nextValue);
         }}
         fullWidth
-        required
+        required={isRequired}
         error={hasError}
         helperText={fieldError ?? (isImoField ? t('pages.pages.details.imoHint') : undefined)}
         disabled={isSaving}
@@ -295,6 +297,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
       formValues,
       editableFieldKeys,
       validationMessages,
+      pageId,
     );
 
     if (!isPageDetailFormValid(nextFieldErrors)) {

@@ -86,9 +86,12 @@ export const getEmailFieldError = (
 export const getNumberFieldError = (
   value: string,
   messages: ValidationMessages,
+  options: { required?: boolean } = {},
 ): string | undefined => {
+  const isRequired = options.required !== false;
+
   if (!isNonEmptyTrimmed(value)) {
-    return messages.required;
+    return isRequired ? messages.required : undefined;
   }
 
   return isValidNumberString(value) ? undefined : messages.invalidNumber;
