@@ -1,9 +1,18 @@
 import type { AppLanguage } from '../i18n/types';
 import {
   PAGE_DETAIL_AUDIT_FIELDS,
+  isPageDetailMovementField,
   type PageDetailRecord,
   type PageDetailValue,
 } from '../types/pageDetails';
+import {
+  getDateFieldError,
+  getNumberFieldError,
+  getRequiredFieldError,
+  getTimeFieldError,
+  hasValidationErrors,
+  type ValidationMessages,
+} from './formValidation';
 
 const auditFieldSet = new Set<string>(PAGE_DETAIL_AUDIT_FIELDS);
 
@@ -22,6 +31,11 @@ const isNumericFieldKey = (key: string): boolean => {
 
   return /(year|sequence|code|count|id)$/i.test(key) || key.endsWith('Sequence');
 };
+
+const isNumericTextFieldKey = (key: string): boolean =>
+  /imo/i.test(key) || /Number$/i.test(key);
+
+export type PageDetailFieldErrors = Record<string, string | undefined>;
 
 const isDateOnlyValue = (value: string): boolean => /^\d{4}-\d{2}-\d{2}$/.test(value);
 
@@ -269,6 +283,48 @@ export const getPageDetailInputType = (key: string, value: string): string => {
 
   return 'text';
 };
+
+export const validatePageDetailFormValues = (
+  formValues: Record<string, string>,
+  fieldKeys: readonly string[],
+  messages: ValidationMessages,
+): PageDetailFieldErrors => {
+  const errors: PageDetailFieldErrors = {};
+
+  fieldKeys.forEach((key) => {
+    const rawValue = formValues[key] ?? '';
+    const trimmedValue = rawValue.trim();
+
+    if (isPageDetailMovementField(key)) {
+      errors[key] = getRequiredFieldError(trimmedValue, messages);
+      return;
+    }
+
+    const inputType = getPageDetailInputType(key, trimmedValue);
+
+    if (inputType === 'date') {
+      errors[key] = getDateFieldError(trimmedValue, messages);
+      return;
+    }
+
+    if (inputType === 'time') {
+      errors[key] = getTimeFieldError(trimmedValue, messages);
+      return;
+    }
+
+    if (inputType === 'number' || isNumericTextFieldKey(key)) {
+      errors[key] = getNumberFieldError(trimmedValue, messages);
+      return;
+    }
+
+    errors[key] = getRequiredFieldError(trimmedValue, messages);
+  });
+
+  return errors;
+};
+
+export const isPageDetailFormValid = (errors: PageDetailFieldErrors): boolean =>
+  !hasValidationErrors(errors);
 
 /** Converts form values to API payload — all values are sent as strings. */
 export const buildPageDetailPayload = (

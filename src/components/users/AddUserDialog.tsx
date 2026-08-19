@@ -34,6 +34,12 @@ import {
   getPasswordStrengthColor,
   type PasswordStrengthLevel,
 } from '../../utils/password';
+import {
+  isAddUserFormValidWithErrors,
+  validateAddUserForm,
+  type AddUserFieldErrors,
+} from '../../utils/userFormValidation';
+import { getValidationMessages } from '../../utils/validationMessages';
 
 interface AddUserDialogProps {
   open: boolean;
@@ -62,6 +68,7 @@ export const AddUserDialog = ({
 }: AddUserDialogProps) => {
   const { t } = useTranslation();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<AddUserFieldErrors>({});
 
   const passwordStrength = useMemo(
     () => getPasswordStrength(formValues.password),
@@ -88,6 +95,34 @@ export const AddUserDialog = ({
     return t(`pages.users.form.languages.${languageCode}`);
   };
 
+  const clearFieldError = <K extends keyof AddUserFormValues>(field: K) => {
+    setFieldErrors((currentErrors) => ({
+      ...currentErrors,
+      [field]: undefined,
+    }));
+  };
+
+  const handleFieldChange = <K extends keyof AddUserFormValues>(
+    field: K,
+    value: AddUserFormValues[K],
+  ) => {
+    clearFieldError(field);
+    onChange(field, value);
+  };
+
+  const handleSaveClick = () => {
+    const validationMessages = getValidationMessages(t);
+    const nextFieldErrors = validateAddUserForm(formValues, validationMessages);
+
+    if (!isAddUserFormValidWithErrors(nextFieldErrors)) {
+      setFieldErrors(nextFieldErrors);
+      return;
+    }
+
+    setFieldErrors({});
+    onSave();
+  };
+
   return (
     <AdminDialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <AdminDialogHeader
@@ -104,40 +139,53 @@ export const AddUserDialog = ({
             <TextField
               label={t('pages.users.form.usernameRequired')}
               value={formValues.username}
-              onChange={(event) => onChange('username', event.target.value)}
+              onChange={(event) => handleFieldChange('username', event.target.value)}
               fullWidth
               required
+              error={Boolean(fieldErrors.username)}
+              helperText={fieldErrors.username}
               autoComplete="username"
             />
             <TextField
               label={t('pages.users.form.emailRequired')}
               type="email"
               value={formValues.email}
-              onChange={(event) => onChange('email', event.target.value)}
+              onChange={(event) => handleFieldChange('email', event.target.value)}
               fullWidth
               required
+              error={Boolean(fieldErrors.email)}
+              helperText={fieldErrors.email}
               autoComplete="email"
             />
             <TextField
               label={t('pages.users.form.firstName')}
               value={formValues.firstName}
-              onChange={(event) => onChange('firstName', event.target.value)}
+              onChange={(event) => handleFieldChange('firstName', event.target.value)}
               fullWidth
+              required
+              error={Boolean(fieldErrors.firstName)}
+              helperText={fieldErrors.firstName}
               autoComplete="given-name"
             />
             <TextField
               label={t('pages.users.form.lastName')}
               value={formValues.lastName}
-              onChange={(event) => onChange('lastName', event.target.value)}
+              onChange={(event) => handleFieldChange('lastName', event.target.value)}
               fullWidth
+              required
+              error={Boolean(fieldErrors.lastName)}
+              helperText={fieldErrors.lastName}
               autoComplete="family-name"
             />
             <TextField
               label={t('pages.users.form.website')}
               type="url"
               value={formValues.website}
-              onChange={(event) => onChange('website', event.target.value)}
+              onChange={(event) => handleFieldChange('website', event.target.value)}
               fullWidth
+              required
+              error={Boolean(fieldErrors.website)}
+              helperText={fieldErrors.website}
               autoComplete="url"
             />
             <FormControl fullWidth>
@@ -146,7 +194,7 @@ export const AddUserDialog = ({
                 labelId="add-user-language-label"
                 label={t('pages.users.form.language')}
                 value={formValues.language}
-                onChange={(event) => onChange('language', event.target.value)}
+                onChange={(event) => handleFieldChange('language', event.target.value)}
               >
                 {LANGUAGE_OPTIONS.map((languageCode) => (
                   <MenuItem key={languageCode || 'default'} value={languageCode}>
@@ -171,9 +219,12 @@ export const AddUserDialog = ({
               </Stack>
               <TextField
                 value={formValues.password}
-                onChange={(event) => onChange('password', event.target.value)}
+                onChange={(event) => handleFieldChange('password', event.target.value)}
                 type={isPasswordVisible ? 'text' : 'password'}
                 fullWidth
+                required
+                error={Boolean(fieldErrors.password)}
+                helperText={fieldErrors.password}
                 autoComplete="new-password"
                 slotProps={{
                   input: {
@@ -220,13 +271,13 @@ export const AddUserDialog = ({
               )}
             </Box>
 
-            <FormControl fullWidth error={isRolesError}>
+            <FormControl fullWidth required error={Boolean(fieldErrors.role) || isRolesError}>
               <InputLabel id="add-user-role-label">{t('pages.users.form.role')}</InputLabel>
               <Select
                 labelId="add-user-role-label"
                 label={t('pages.users.form.role')}
                 value={formValues.role}
-                onChange={(event) => onChange('role', event.target.value)}
+                onChange={(event) => handleFieldChange('role', event.target.value)}
                 disabled={isRolesLoading || roles.length === 0}
               >
                 {roles.map((role) => (
@@ -235,6 +286,11 @@ export const AddUserDialog = ({
                   </MenuItem>
                 ))}
               </Select>
+              {fieldErrors.role && (
+                <Typography variant="caption" color="error" sx={{ mt: 0.5, mx: 1.75 }}>
+                  {fieldErrors.role}
+                </Typography>
+              )}
             </FormControl>
 
             {isRolesLoading && (
@@ -252,7 +308,7 @@ export const AddUserDialog = ({
           {t('pages.users.form.cancel')}
         </AdminDialogCancelButton>
         <AdminDialogPrimaryButton
-          onClick={onSave}
+          onClick={handleSaveClick}
           disabled={isRolesLoading || roles.length === 0 || isSaving}
         >
           {isSaving ? t('pages.users.form.saving') : t('pages.users.form.save')}

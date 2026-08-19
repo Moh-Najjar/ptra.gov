@@ -58,8 +58,12 @@ import {
   getPageDetailRecordId,
   getPageDetailRecordKey,
   getPageDetailsTableLocale,
+  isPageDetailFormValid,
   mapPageDetailToFormValues,
+  validatePageDetailFormValues,
+  type PageDetailFieldErrors,
 } from '../../utils/pageDetails';
+import { getValidationMessages } from '../../utils/validationMessages';
 
 type PageDetailDialogMode = 'add' | 'edit';
 
@@ -84,6 +88,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
   const [editingRecordId, setEditingRecordId] = useState<number | null>(null);
   const [formValues, setFormValues] = useState<Record<string, string>>({});
+  const [fieldErrors, setFieldErrors] = useState<PageDetailFieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [notice, setNotice] = useState<PageDetailNotice | null>(null);
 
@@ -138,6 +143,8 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
   const renderFormField = (key: string) => {
     const value = formValues[key] ?? '';
     const fieldLabel = getPageDetailFieldLabel(key, t);
+    const fieldError = fieldErrors[key];
+    const hasError = typeof fieldError === 'string' && fieldError.length > 0;
 
     if (isPageDetailMovementField(key)) {
       const hasUnknownValue =
@@ -151,6 +158,9 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
           value={value}
           onChange={(event) => updateFormValue(key, event.target.value)}
           fullWidth
+          required
+          error={hasError}
+          helperText={fieldError}
           disabled={isSaving || isMovementsLoading}
           slotProps={{
             inputLabel: { shrink: true },
@@ -196,6 +206,9 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
         value={value}
         onChange={(event) => updateFormValue(key, event.target.value)}
         fullWidth
+        required
+        error={hasError}
+        helperText={fieldError}
         disabled={isSaving}
         slotProps={
           inputType === 'date' || inputType === 'time'
@@ -222,6 +235,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
     setDialogMode('add');
     setEditingRecordId(null);
     setFormError(null);
+    setFieldErrors({});
     setFormValues(createEmptyPageDetailFormValues(editableFieldKeys));
     setIsFormDialogOpen(true);
   };
@@ -239,6 +253,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
     setDialogMode('edit');
     setEditingRecordId(recordId);
     setFormError(null);
+    setFieldErrors({});
     setFormValues(mapPageDetailToFormValues(record, editableFieldKeys));
     setIsFormDialogOpen(true);
   };
@@ -247,6 +262,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
     setIsFormDialogOpen(false);
     setEditingRecordId(null);
     setFormValues({});
+    setFieldErrors({});
     setFormError(null);
   };
 
@@ -257,6 +273,20 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
 
     setFormError(null);
 
+    const validationMessages = getValidationMessages(t);
+    const nextFieldErrors = validatePageDetailFormValues(
+      formValues,
+      editableFieldKeys,
+      validationMessages,
+    );
+
+    if (!isPageDetailFormValid(nextFieldErrors)) {
+      setFieldErrors(nextFieldErrors);
+      setFormError(t('pages.users.validationError'));
+      return;
+    }
+
+    setFieldErrors({});
     const payload = buildPageDetailPayload(formValues, editableFieldKeys);
 
     try {
@@ -299,6 +329,10 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
       ...currentValues,
       [field]: value,
     }));
+    setFieldErrors((currentErrors) => ({
+      ...currentErrors,
+      [field]: undefined,
+    }));
     setFormError(null);
   };
 
@@ -337,6 +371,8 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
                 bgcolor: 'background.paper',
                 color: 'primary.main',
                 fontWeight: 700,
+                px: 1.5,
+                fontSize: '0.8125rem',
                 '&:hover': {
                   bgcolor: 'background.paper',
                   opacity: 0.92,

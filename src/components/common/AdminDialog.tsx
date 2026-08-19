@@ -115,60 +115,71 @@ export const AdminDialogHeader = ({
       }}
     >
       {onClose && (
-        <IconButton
-          aria-label={closeLabel}
-          onClick={onClose}
-          disabled={closeDisabled}
+        <Stack
+          spacing={1}
           sx={{
             position: 'absolute',
             top: 8,
             insetInlineEnd: 8,
-            color: 'inherit',
-            bgcolor: alpha('#FFFFFF', 0.12),
-            '&:hover': {
-              bgcolor: alpha('#FFFFFF', 0.22),
-            },
+            alignItems: 'stretch',
+            zIndex: 1,
           }}
         >
-          <CloseOutlinedIcon fontSize="small" />
-        </IconButton>
+          <IconButton
+            aria-label={closeLabel}
+            onClick={onClose}
+            disabled={closeDisabled}
+            sx={{
+              alignSelf: 'flex-end',
+              color: 'inherit',
+              bgcolor: alpha('#FFFFFF', 0.12),
+              '&:hover': {
+                bgcolor: alpha('#FFFFFF', 0.22),
+              },
+            }}
+          >
+            <CloseOutlinedIcon fontSize="small" />
+          </IconButton>
+          {action}
+        </Stack>
       )}
 
       <Stack
-        direction={{ xs: 'column', sm: 'row' }}
-        spacing={2}
-        sx={{ alignItems: { sm: 'center' }, justifyContent: 'space-between', pe: onClose ? 5 : 0 }}
+        direction="row"
+        spacing={1.5}
+        sx={{
+          alignItems: 'center',
+          minWidth: 0,
+          flex: 1,
+          pe: onClose || action ? { xs: 2, sm: 18 } : 0,
+        }}
       >
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center', minWidth: 0, flex: 1 }}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 44,
-              height: 44,
-              borderRadius: 2,
-              flexShrink: 0,
-              bgcolor: alpha('#FFFFFF', 0.16),
-              border: '1px solid',
-              borderColor: alpha('#FFFFFF', 0.28),
-            }}
-          >
-            <HeaderIcon />
-          </Box>
-          <Box sx={{ minWidth: 0 }}>
-            <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.3 }}>
-              {title}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 44,
+            height: 44,
+            borderRadius: 2,
+            flexShrink: 0,
+            bgcolor: alpha('#FFFFFF', 0.16),
+            border: '1px solid',
+            borderColor: alpha('#FFFFFF', 0.28),
+          }}
+        >
+          <HeaderIcon />
+        </Box>
+        <Box sx={{ minWidth: 0 }}>
+          <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.3 }}>
+            {title}
+          </Typography>
+          {subtitle && (
+            <Typography variant="body2" sx={{ opacity: 0.92, mt: 0.25 }} noWrap>
+              {subtitle}
             </Typography>
-            {subtitle && (
-              <Typography variant="body2" sx={{ opacity: 0.92, mt: 0.25 }} noWrap>
-                {subtitle}
-              </Typography>
-            )}
-          </Box>
-        </Stack>
-
-        {action}
+          )}
+        </Box>
       </Stack>
     </Box>
   );

@@ -4,7 +4,7 @@ import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
 import PublicOutlinedIcon from '@mui/icons-material/PublicOutlined';
 import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
 import WebOutlinedIcon from '@mui/icons-material/WebOutlined';
-import { Box, Chip, Grid, Link, Stack, Typography } from '@mui/material';
+import { Box, Grid, Link, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import type { SurveySubmission } from '../../types/surveyAdmin';
@@ -17,6 +17,11 @@ import {
   AdminDialogSection,
   adminDialogSectionSx,
 } from '../common/AdminDialog';
+import {
+  AdminTableContainer,
+  AdminTableHeadCell,
+  AdminTableHeadRow,
+} from '../common/AdminTable';
 
 interface SurveySubmissionDetailsDialogProps {
   open: boolean;
@@ -155,51 +160,45 @@ export const SurveySubmissionDetailsDialog = ({
           </AdminDialogSection>
 
           <AdminDialogSection title={t('pages.surveys.details.answers')}>
-            <Stack spacing={1.5}>
-              {submission.answers.map((answer, index) => {
-                const answerValue =
-                  answer.value.trim().length > 0 ? answer.value : t('pages.surveys.notAvailable');
-                const hasAnswer = answer.value.trim().length > 0;
+            <AdminTableContainer>
+              <Table size="small" aria-label={t('pages.surveys.details.answers')}>
+                <TableHead>
+                  <AdminTableHeadRow>
+                    <AdminTableHeadCell>#</AdminTableHeadCell>
+                    <AdminTableHeadCell>{t('pages.surveys.details.question')}</AdminTableHeadCell>
+                    <AdminTableHeadCell>{t('pages.surveys.details.answer')}</AdminTableHeadCell>
+                  </AdminTableHeadRow>
+                </TableHead>
+                <TableBody>
+                  {submission.answers.map((answer, index) => {
+                    const answerValue =
+                      answer.value.trim().length > 0
+                        ? answer.value
+                        : t('pages.surveys.notAvailable');
+                    const hasAnswer = answer.value.trim().length > 0;
 
-                return (
-                  <Box
-                    key={`${submission.id}-${answer.key}`}
-                    sx={{
-                      ...adminDialogSectionSx,
-                      display: 'flex',
-                      flexDirection: { xs: 'column', sm: 'row' },
-                      alignItems: { xs: 'flex-start', sm: 'center' },
-                      justifyContent: 'space-between',
-                      gap: 1.5,
-                    }}
-                  >
-                    <Box sx={{ flex: 1, minWidth: 0 }}>
-                      <Typography variant="caption" color="primary.main" sx={{ fontWeight: 700 }}>
-                        {`${t('pages.surveys.details.question')} ${index + 1}`}
-                      </Typography>
-                      <Typography variant="body2" sx={{ mt: 0.5, lineHeight: 1.7 }}>
-                        {answer.label}
-                      </Typography>
-                    </Box>
-                    <Chip
-                      label={answerValue}
-                      color={hasAnswer ? 'primary' : 'default'}
-                      variant={hasAnswer ? 'filled' : 'outlined'}
-                      sx={{
-                        fontWeight: 700,
-                        maxWidth: { xs: '100%', sm: 220 },
-                        height: 'auto',
-                        '& .MuiChip-label': {
-                          whiteSpace: 'normal',
-                          py: 0.75,
-                          lineHeight: 1.4,
-                        },
-                      }}
-                    />
-                  </Box>
-                );
-              })}
-            </Stack>
+                    return (
+                      <TableRow key={`${submission.id}-${answer.key}`} hover>
+                        <TableCell sx={{ fontWeight: 700, color: 'primary.main' }}>
+                          {index + 1}
+                        </TableCell>
+                        <TableCell sx={{ lineHeight: 1.7 }}>{answer.label}</TableCell>
+                        <TableCell
+                          sx={{
+                            fontWeight: hasAnswer ? 600 : undefined,
+                            color: hasAnswer ? 'text.primary' : 'text.secondary',
+                            whiteSpace: 'pre-wrap',
+                            wordBreak: 'break-word',
+                          }}
+                        >
+                          {answerValue}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </AdminTableContainer>
           </AdminDialogSection>
         </Stack>
       </AdminDialogContent>

@@ -3,7 +3,15 @@
     "home": "Home",
     "comingSoon": "This page content will be added soon.",
     "loginComingSoon": "The login form will be added soon.",
-    "menu": "Menu"
+    "menu": "Menu",
+    "validation": {
+      "required": "This field is required.",
+      "invalidEmail": "Enter a valid email address.",
+      "invalidNumber": "Enter a valid number.",
+      "invalidUrl": "Enter a valid URL (http:// or https://).",
+      "invalidDate": "Enter a valid date.",
+      "invalidTime": "Enter a valid time."
+    }
   },
   "language": {
     "switchToEnglish": "English",

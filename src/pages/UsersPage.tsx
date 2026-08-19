@@ -56,7 +56,6 @@ import {
   createEmptyAddUserFormValues,
   createEmptyUserFormValues,
   isAddUserFormValid,
-  isUserFormValid,
   mapAdminUserToFormValues,
   type AddUserFormValues,
   type AdminUser,
@@ -70,6 +69,12 @@ import {
   isAdministratorRole,
 } from '../utils/roleLabels';
 import { generateSecurePassword } from '../utils/password';
+import {
+  isEditUserFormValidWithErrors,
+  validateEditUserForm,
+  type EditUserFieldErrors,
+} from '../utils/userFormValidation';
+import { getValidationMessages } from '../utils/validationMessages';
 
 type UserNoticeSeverity = 'success' | 'error' | 'info';
 
@@ -98,6 +103,7 @@ export const UsersPage = () => {
     createEmptyAddUserFormValues(),
   );
   const [editFormValues, setEditFormValues] = useState<UserFormValues>(createEmptyUserFormValues());
+  const [editFieldErrors, setEditFieldErrors] = useState<EditUserFieldErrors>({});
   const [notice, setNotice] = useState<UserNotice | null>(null);
 
   const sortedUsers = useMemo(
@@ -122,6 +128,7 @@ export const UsersPage = () => {
   const openEditDialog = (user: AdminUser) => {
     setSelectedUser(user);
     setEditFormValues(mapAdminUserToFormValues(user));
+    setEditFieldErrors({});
     setIsEditDialogOpen(true);
   };
 
@@ -133,6 +140,7 @@ export const UsersPage = () => {
   const closeEditDialog = () => {
     setIsEditDialogOpen(false);
     setSelectedUser(null);
+    setEditFieldErrors({});
     setEditFormValues(createEmptyUserFormValues(getDefaultRoleKey(roles)));
   };
 
@@ -165,10 +173,20 @@ export const UsersPage = () => {
   };
 
   const handleSaveEdit = async () => {
-    if (!selectedUser || !isUserFormValid(editFormValues)) {
+    if (!selectedUser) {
+      return;
+    }
+
+    const validationMessages = getValidationMessages(t);
+    const nextFieldErrors = validateEditUserForm(editFormValues, validationMessages);
+
+    if (!isEditUserFormValidWithErrors(nextFieldErrors)) {
+      setEditFieldErrors(nextFieldErrors);
       setNotice({ severity: 'error', message: t('pages.users.validationError') });
       return;
     }
+
+    setEditFieldErrors({});
 
     try {
       await updateUserMutation.mutateAsync({
@@ -219,6 +237,10 @@ export const UsersPage = () => {
     setEditFormValues((currentValues) => ({
       ...currentValues,
       [field]: value,
+    }));
+    setEditFieldErrors((currentErrors) => ({
+      ...currentErrors,
+      [field]: undefined,
     }));
   };
 
@@ -375,6 +397,8 @@ export const UsersPage = () => {
               onChange={(event) => updateEditFormValue('fullName', event.target.value)}
               fullWidth
               required
+              error={Boolean(editFieldErrors.fullName)}
+              helperText={editFieldErrors.fullName}
             />
             <TextField
               label={t('pages.users.form.email')}
@@ -383,6 +407,8 @@ export const UsersPage = () => {
               onChange={(event) => updateEditFormValue('email', event.target.value)}
               fullWidth
               required
+              error={Boolean(editFieldErrors.email)}
+              helperText={editFieldErrors.email}
             />
             <TextField
               label={t('pages.users.form.newPassword')}
@@ -393,7 +419,7 @@ export const UsersPage = () => {
               autoComplete="new-password"
               helperText={t('pages.users.form.newPasswordHint')}
             />
-            <FormControl fullWidth error={isRolesError}>
+            <FormControl fullWidth required error={Boolean(editFieldErrors.role) || isRolesError}>
               <InputLabel id="user-role-label">{t('pages.users.form.role')}</InputLabel>
               <Select
                 labelId="user-role-label"
@@ -408,6 +434,11 @@ export const UsersPage = () => {
                   </MenuItem>
                 ))}
               </Select>
+              {editFieldErrors.role && (
+                <Typography variant="caption" color="error" sx={{ mt: 0.5, mx: 1.75 }}>
+                  {editFieldErrors.role}
+                </Typography>
+              )}
             </FormControl>
             {isRolesLoading && (
               <Typography variant="body2" color="text.secondary">

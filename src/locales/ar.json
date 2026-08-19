@@ -3,7 +3,15 @@
     "home": "الرئيسية",
     "comingSoon": "سيتم إضافة محتوى هذه الصفحة قريباً.",
     "loginComingSoon": "سيتم إضافة نموذج تسجيل الدخول قريباً.",
-    "menu": "القائمة"
+    "menu": "القائمة",
+    "validation": {
+      "required": "هذا الحقل مطلوب.",
+      "invalidEmail": "يرجى إدخال بريد إلكتروني صالح.",
+      "invalidNumber": "يرجى إدخال رقم صالح.",
+      "invalidUrl": "يرجى إدخال رابط صالح (http:// أو https://).",
+      "invalidDate": "يرجى إدخال تاريخ صالح.",
+      "invalidTime": "يرجى إدخال وقت صالح."
+    }
   },
   "language": {
     "switchToEnglish": "English",
