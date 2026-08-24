@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { useReducedMotion } from 'motion/react';
-import CountUp from 'react-countup';
+import { useId } from 'react';
+import { useCountUp } from 'react-countup';
 import { formatSystemNumber } from '../../utils/formatNumber';
 
 export type StatCircleSize = 'sm' | 'md' | 'lg' | 'xl';
@@ -53,6 +54,38 @@ interface StatCircleProps {
   overlap?: boolean;
   zIndex?: number;
 }
+
+/** Animated English-numeral value using react-countup's named hook (Vite-safe). */
+const StatCountUpValue = ({
+  numericValue,
+  fractionDigits,
+}: {
+  numericValue: number;
+  fractionDigits: number;
+}) => {
+  // react-countup accepts a DOM id string; avoids React 19 RefObject<T | null> mismatch.
+  const countUpId = `stat-countup-${useId().replaceAll(':', '')}`;
+
+  useCountUp({
+    ref: countUpId,
+    start: 0,
+    end: numericValue,
+    duration: COUNT_UP_DURATION_SECONDS,
+    decimals: fractionDigits,
+    useEasing: true,
+    // Keep Western digits while the rest of the UI may be Arabic.
+    formattingFn: (animatedValue) =>
+      formatSystemNumber(animatedValue, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: fractionDigits,
+      }),
+    enableScrollSpy: true,
+    scrollSpyOnce: true,
+    scrollSpyDelay: 120,
+  });
+
+  return <span id={countUpId} />;
+};
 
 export const StatCircle = ({
   numericValue,
@@ -113,7 +146,6 @@ export const StatCircle = ({
           lineHeight: 1.1,
           fontSize: config.valueFontSize,
           letterSpacing: '-0.02em',
-          // Force Latin digits even when the document direction is RTL/Arabic.
           fontVariantNumeric: 'lining-nums tabular-nums',
           unicodeBidi: 'isolate',
         }}
@@ -121,22 +153,7 @@ export const StatCircle = ({
         {shouldReduceMotion ? (
           value
         ) : (
-          <CountUp
-            start={0}
-            end={numericValue}
-            duration={COUNT_UP_DURATION_SECONDS}
-            decimals={fractionDigits}
-            useEasing
-            formattingFn={(animatedValue) =>
-              formatSystemNumber(animatedValue, {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: fractionDigits,
-              })
-            }
-            enableScrollSpy
-            scrollSpyOnce
-            scrollSpyDelay={120}
-          />
+          <StatCountUpValue numericValue={numericValue} fractionDigits={fractionDigits} />
         )}
       </Typography>
       <Typography
