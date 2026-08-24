@@ -450,7 +450,9 @@
         "averageByQuestion": "متوسط التقييم حسب السؤال",
         "ratingDistribution": "توزيع التقييمات حسب السؤال",
         "averageScore": "متوسط التقييم",
-        "count": "إجابة"
+        "count": "إجابة",
+        "answers": "الإجابات",
+        "percent": "النسبة"
       }
     },
     "crops": {

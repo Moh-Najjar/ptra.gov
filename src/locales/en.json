@@ -450,7 +450,9 @@
         "averageByQuestion": "Average score by question",
         "ratingDistribution": "Rating distribution by question",
         "averageScore": "Average score",
-        "count": "responses"
+        "count": "responses",
+        "answers": "Answers",
+        "percent": "share"
       }
     },
     "crops": { "title": "Crops" },
