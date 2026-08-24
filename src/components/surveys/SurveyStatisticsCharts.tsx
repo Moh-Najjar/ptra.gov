@@ -19,6 +19,7 @@ import { useMemo, type ElementType } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSurveyStatistics } from '../../hooks/queries/surveyAdmin';
 import type { SurveyQuestionStat, SurveyStatistics } from '../../types/surveyAdmin';
+import { formatSystemNumber } from '../../utils/formatNumber';
 
 interface SurveyStatisticsChartsProps {
   formId: number;
@@ -28,22 +29,19 @@ interface SurveyStatisticsChartsProps {
 const RATING_COLORS = ['#E74C3C', '#F39C12', '#F1C40F', '#5DADE2', '#1B75BC'] as const;
 
 /** Always Western digits (1, 2, 3) regardless of UI language. */
-const formatInteger = (value: number): string =>
-  new Intl.NumberFormat('en-US', { numberingSystem: 'latn' }).format(value);
+const formatInteger = (value: number): string => formatSystemNumber(value);
 
 const formatScore = (value: number): string =>
-  new Intl.NumberFormat('en-US', {
-    numberingSystem: 'latn',
+  formatSystemNumber(value, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(value);
+  });
 
 const formatPercent = (value: number): string =>
-  new Intl.NumberFormat('en-US', {
-    numberingSystem: 'latn',
+  formatSystemNumber(value, {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
-  }).format(value);
+  });
 
 const truncateLabel = (label: string, maxLength: number): string => {
   if (label.length <= maxLength) {

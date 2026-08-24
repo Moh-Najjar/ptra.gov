@@ -38,6 +38,7 @@ import {
 } from '../common/AdminDialog';
 import { useCreatePageDetail, useApmscoMovements, usePageDetails, useUpdatePageDetail } from '../../hooks/usePages';
 import { useLanguage } from '../../hooks/useLanguage';
+import { formatSystemNumber } from '../../utils/formatNumber';
 import { buildApmscoMovementValueMap, getApmscoMovementLabel } from '../../types/apmscoBerthing';
 import type { CmsPage } from '../../types/cmsPage';
 import {
@@ -482,7 +483,11 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
                 onRowsPerPageChange={handleRowsPerPageChange}
                 labelRowsPerPage={t('pages.pages.details.pagination.rowsPerPage')}
                 labelDisplayedRows={({ from, to, count }) =>
-                  t('pages.pages.details.pagination.displayedRows', { from, to, count })
+                  t('pages.pages.details.pagination.displayedRows', {
+                    from: formatSystemNumber(from),
+                    to: formatSystemNumber(to),
+                    count: count === -1 ? formatSystemNumber(to) : formatSystemNumber(count),
+                  })
                 }
               />
             </AdminTableContainer>

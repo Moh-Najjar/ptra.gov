@@ -32,7 +32,7 @@ import { SURVEY_API_IDS } from '../constants/survey';
 import { useSurveySubmissions } from '../hooks/queries/surveyAdmin';
 import type { AppLanguage } from '../i18n/types';
 import type { SurveySubmission } from '../types/surveyAdmin';
-
+import { formatSystemNumber } from '../utils/formatNumber';
 const DEFAULT_PAGE_SIZE = 20;
 
 const formatSubmissionDateTime = (value: string, locale: string): string => {
@@ -211,7 +211,11 @@ export const SurveysPage = () => {
             onRowsPerPageChange={handleRowsPerPageChange}
             labelRowsPerPage={t('pages.surveys.pagination.rowsPerPage')}
             labelDisplayedRows={({ from, to, count }) =>
-              t('pages.surveys.pagination.displayedRows', { from, to, count })
+              t('pages.surveys.pagination.displayedRows', {
+                from: formatSystemNumber(from),
+                to: formatSystemNumber(to),
+                count: count === -1 ? formatSystemNumber(to) : formatSystemNumber(count),
+              })
             }
           />
         </AdminTableContainer>

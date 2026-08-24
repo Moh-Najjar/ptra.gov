@@ -202,7 +202,13 @@ export const Footer = () => {
           spacing={1}
           sx={{ alignItems: 'center', justifyContent: 'space-between' }}
         >
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            lang="en"
+            dir="ltr"
+            sx={{ unicodeBidi: 'isolate' }}
+          >
             {visitorCount !== undefined
               ? t('stats.visitorCount', { count: visitorCount })
               : null}

@@ -1,19 +1,12 @@
 import { Box, Typography } from '@mui/material';
 import { useReducedMotion } from 'motion/react';
 import CountUp from 'react-countup';
+import { formatSystemNumber } from '../../utils/formatNumber';
 
 export type StatCircleSize = 'sm' | 'md' | 'lg' | 'xl';
 
 /** Slow count-up so the value reads clearly as it rises. */
 const COUNT_UP_DURATION_SECONDS = 3.2;
-
-/** Always render Western Arabic (English) digits, even in ar/RTL UI. */
-const formatEnglishNumber = (value: number, fractionDigits: number): string =>
-  new Intl.NumberFormat('en-US', {
-    numberingSystem: 'latn',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: fractionDigits,
-  }).format(value);
 
 interface StatCircleSizeConfig {
   width: { xs: number; sm: number; md: number };
@@ -135,7 +128,10 @@ export const StatCircle = ({
             decimals={fractionDigits}
             useEasing
             formattingFn={(animatedValue) =>
-              formatEnglishNumber(animatedValue, fractionDigits)
+              formatSystemNumber(animatedValue, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: fractionDigits,
+              })
             }
             enableScrollSpy
             scrollSpyOnce

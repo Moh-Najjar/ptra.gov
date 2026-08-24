@@ -1,10 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import type { AppLanguage } from '../../i18n/types';
 import { statisticsService } from '../../services/statisticsService';
-import {
-  getGeneralStatsLocale,
-  mapGeneralCountersToDisplayItems,
-} from '../../utils/generalStats';
+import { formatSystemNumber } from '../../utils/formatNumber';
+import { mapGeneralCountersToDisplayItems } from '../../utils/generalStats';
 
 export const statsKeys = {
   general: ['generalStats'] as const,
@@ -19,14 +17,11 @@ export const useGeneralStatsQuery = (language: AppLanguage) =>
     select: (data) => mapGeneralCountersToDisplayItems(data, language),
   });
 
-export const useWebsiteVisitorsQuery = (language: AppLanguage) =>
+export const useWebsiteVisitorsQuery = () =>
   useQuery({
-    queryKey: [...statsKeys.websiteVisitors, language] as const,
+    queryKey: statsKeys.websiteVisitors,
     queryFn: statisticsService.getWebsiteVisitors,
     staleTime: 5 * 60 * 1000,
-    // Format the raw count for the active locale (e.g. Arabic digits when ar).
-    select: (data) =>
-      new Intl.NumberFormat(getGeneralStatsLocale(language), {
-        maximumFractionDigits: 0,
-      }).format(data.value),
+    // Always English/Latin digits, regardless of UI language.
+    select: (data) => formatSystemNumber(data.value),
   });

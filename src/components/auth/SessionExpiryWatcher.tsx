@@ -10,6 +10,7 @@ import {
 } from '../../constants/sessionExpiry';
 import { useAuth } from '../../hooks/useAuth';
 import { getDirection } from '../../i18n/types';
+import { formatSystemNumber } from '../../utils/formatNumber';
 import { getExpiryCountdownSeconds, getMillisecondsUntilExpiryWarning } from '../../utils/sessionExpiry';
 
 export const SessionExpiryWatcher = () => {
@@ -128,7 +129,9 @@ export const SessionExpiryWatcher = () => {
           {t('auth.sessionExpiringTitle')}
         </Typography>
         <Typography variant="body2" sx={{ lineHeight: 1.6 }}>
-          {t('auth.sessionExpiringMessage', { count: secondsLeft ?? 0 })}
+          {t('auth.sessionExpiringMessage', {
+            count: formatSystemNumber(secondsLeft ?? 0),
+          })}
         </Typography>
         <Box sx={{ mt: 1.5 }}>
           <LinearProgress
@@ -138,7 +141,9 @@ export const SessionExpiryWatcher = () => {
             sx={{ height: 6, borderRadius: 999 }}
           />
           <Typography variant="caption" sx={{ display: 'block', mt: 0.75, fontWeight: 700 }}>
-            {t('auth.sessionExpiringCountdown', { count: secondsLeft ?? 0 })}
+            {t('auth.sessionExpiringCountdown', {
+              count: formatSystemNumber(secondsLeft ?? 0),
+            })}
           </Typography>
         </Box>
       </Alert>
