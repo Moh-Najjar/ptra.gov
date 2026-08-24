@@ -50,9 +50,10 @@ const isCompletePayload = (answers: SurveyAnswers): answers is SurveySubmissionP
 
 interface SurveyDialogProps {
   onSubmitted?: () => void;
+  onClosedWithoutSubmit?: () => void;
 }
 
-export const SurveyDialog = ({ onSubmitted }: SurveyDialogProps) => {
+export const SurveyDialog = ({ onSubmitted, onClosedWithoutSubmit }: SurveyDialogProps) => {
   const { t } = useTranslation();
   const { isDialogOpen, closeSurvey } = useSurvey();
   const submitSurvey = useSubmitSurvey();
@@ -68,9 +69,14 @@ export const SurveyDialog = ({ onSubmitted }: SurveyDialogProps) => {
   }, [submitSurvey]);
 
   const handleClose = useCallback(() => {
+    const wasSubmitted = submitSuccess;
     closeSurvey();
     resetForm();
-  }, [closeSurvey, resetForm]);
+
+    if (!wasSubmitted) {
+      onClosedWithoutSubmit?.();
+    }
+  }, [closeSurvey, onClosedWithoutSubmit, resetForm, submitSuccess]);
 
   const handleAnswerChange = useCallback(
     (questionId: SurveyQuestionId, value: string) => {

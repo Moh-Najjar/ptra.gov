@@ -28,4 +28,4 @@ export interface SurveyApiPayload {
   answers: SurveyApiAnswer[];
 }
 
-export type SurveyDismissReason = 'notNow' | 'never';
+export type SurveyDismissReason = 'notNow' | 'never' | 'close';

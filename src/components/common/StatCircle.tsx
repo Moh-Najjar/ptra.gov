@@ -1,4 +1,6 @@
 import { Box, Typography } from '@mui/material';
+import { useReducedMotion } from 'motion/react';
+import CountUp from 'react-countup';
 
 export type StatCircleSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -37,6 +39,9 @@ const SIZE_CONFIG: Record<StatCircleSize, StatCircleSizeConfig> = {
 };
 
 interface StatCircleProps {
+  numericValue: number;
+  fractionDigits?: number;
+  /** English-formatted fallback when count-up is disabled. */
   value: string;
   label: string;
   background: string;
@@ -46,6 +51,8 @@ interface StatCircleProps {
 }
 
 export const StatCircle = ({
+  numericValue,
+  fractionDigits = 0,
   value,
   label,
   background,
@@ -54,6 +61,7 @@ export const StatCircle = ({
   zIndex = 1,
 }: StatCircleProps) => {
   const config = SIZE_CONFIG[size];
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <Box
@@ -99,9 +107,25 @@ export const StatCircle = ({
           lineHeight: 1.1,
           fontSize: config.valueFontSize,
           letterSpacing: '-0.02em',
+          // Force Latin digits even when the document direction is RTL/Arabic.
+          fontVariantNumeric: 'lining-nums tabular-nums',
+          unicodeBidi: 'isolate',
         }}
       >
-        {value}
+        {shouldReduceMotion ? (
+          value
+        ) : (
+          <CountUp
+            start={0}
+            end={numericValue}
+            duration={1.6}
+            decimals={fractionDigits}
+            decimal="."
+            separator=","
+            enableScrollSpy
+            scrollSpyOnce
+          />
+        )}
       </Typography>
       <Typography
         variant="body2"

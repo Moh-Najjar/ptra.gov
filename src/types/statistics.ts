@@ -16,6 +16,11 @@ export interface WebsiteVisitorCounter {
 
 export interface TranslatedStatisticItem {
   id: number;
+  /** Raw numeric value used for count-up animation. */
+  numericValue: number;
+  /** Digits after the decimal for English formatting / count-up. */
+  fractionDigits: number;
+  /** English-numeral formatted fallback (e.g. "1,234.5"). */
   value: string;
   label: string;
   background: string;

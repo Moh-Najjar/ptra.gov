@@ -1,39 +1,11 @@
-import {
-  SURVEY_NEVER_DAYS,
-  SURVEY_NOT_NOW_DAYS,
-  SURVEY_STORAGE_KEYS,
-} from '../constants/survey';
-import type { SurveyDismissReason } from '../types/survey';
-
-const getDismissDays = (reason: SurveyDismissReason): number =>
-  reason === 'never' ? SURVEY_NEVER_DAYS : SURVEY_NOT_NOW_DAYS;
-
-const addDays = (days: number): number => Date.now() + days * 24 * 60 * 60 * 1000;
+import { SURVEY_STORAGE_KEYS } from '../constants/survey';
 
 export const isSurveySubmitted = (): boolean =>
   localStorage.getItem(SURVEY_STORAGE_KEYS.submitted) === 'true';
 
 export const markSurveySubmitted = (): void => {
   localStorage.setItem(SURVEY_STORAGE_KEYS.submitted, 'true');
-};
-
-export const isSurveyDismissed = (): boolean => {
-  const dismissedUntil = localStorage.getItem(SURVEY_STORAGE_KEYS.dismissedUntil);
-  if (!dismissedUntil) {
-    return false;
-  }
-
-  const dismissedUntilMs = Number(dismissedUntil);
-  if (Number.isNaN(dismissedUntilMs)) {
-    return false;
-  }
-
-  return Date.now() < dismissedUntilMs;
-};
-
-export const dismissSurvey = (reason: SurveyDismissReason): void => {
-  const days = getDismissDays(reason);
-  localStorage.setItem(SURVEY_STORAGE_KEYS.dismissedUntil, String(addDays(days)));
+  clearSoftCloseState();
 };
 
 export const getSessionPageViews = (): number => {
@@ -46,10 +18,8 @@ export const getSessionPageViews = (): number => {
   return Number.isNaN(parsed) ? 0 : parsed;
 };
 
-export const incrementSessionPageViews = (): number => {
-  const nextCount = getSessionPageViews() + 1;
-  sessionStorage.setItem(SURVEY_STORAGE_KEYS.sessionPageViews, String(nextCount));
-  return nextCount;
+const setSessionPageViews = (count: number): void => {
+  sessionStorage.setItem(SURVEY_STORAGE_KEYS.sessionPageViews, String(count));
 };
 
 export const getSessionStartedAt = (): number => {
@@ -66,18 +36,74 @@ export const getSessionStartedAt = (): number => {
   return startedAt;
 };
 
-export const wasPromptShownThisSession = (): boolean =>
-  sessionStorage.getItem(SURVEY_STORAGE_KEYS.promptShown) === 'true';
+export const getSoftClosedAt = (): number | null => {
+  const stored = localStorage.getItem(SURVEY_STORAGE_KEYS.softClosedAt);
+  if (!stored) {
+    return null;
+  }
 
-export const markPromptShownThisSession = (): void => {
-  sessionStorage.setItem(SURVEY_STORAGE_KEYS.promptShown, 'true');
+  const parsed = Number(stored);
+  return Number.isNaN(parsed) ? null : parsed;
 };
+
+export const getPagesSinceClose = (): number => {
+  const value = localStorage.getItem(SURVEY_STORAGE_KEYS.pagesSinceClose);
+  if (!value) {
+    return 0;
+  }
+
+  const parsed = Number(value);
+  return Number.isNaN(parsed) ? 0 : parsed;
+};
+
+const setPagesSinceClose = (count: number): void => {
+  localStorage.setItem(SURVEY_STORAGE_KEYS.pagesSinceClose, String(count));
+};
+
+const getLastCountedPathname = (): string | null =>
+  sessionStorage.getItem(SURVEY_STORAGE_KEYS.lastCountedPathname);
+
+const setLastCountedPathname = (pathname: string): void => {
+  sessionStorage.setItem(SURVEY_STORAGE_KEYS.lastCountedPathname, pathname);
+};
+
+/**
+ * Counts a page view only when the pathname actually changes.
+ * Skips refresh / Strict Mode remounts of the same route.
+ */
+export const trackSurveyPageView = (pathname: string): void => {
+  const lastPathname = getLastCountedPathname();
+  if (lastPathname === pathname) {
+    return;
+  }
+
+  setLastCountedPathname(pathname);
+  setSessionPageViews(getSessionPageViews() + 1);
+  getSessionStartedAt();
+
+  if (hasSoftClosePending()) {
+    setPagesSinceClose(getPagesSinceClose() + 1);
+  }
+};
+
+/** Marks a non-submit close so the prompt can reappear after the re-show delay or page views. */
+export const markSurveySoftClosed = (): void => {
+  localStorage.setItem(SURVEY_STORAGE_KEYS.softClosedAt, String(Date.now()));
+  localStorage.setItem(SURVEY_STORAGE_KEYS.pagesSinceClose, '0');
+};
+
+export const clearSoftCloseState = (): void => {
+  localStorage.removeItem(SURVEY_STORAGE_KEYS.softClosedAt);
+  localStorage.removeItem(SURVEY_STORAGE_KEYS.pagesSinceClose);
+};
+
+export const hasSoftClosePending = (): boolean => getSoftClosedAt() !== null;
 
 /** Clears survey prompt state so you can test the flow again. */
 export const resetSurveyState = (): void => {
   localStorage.removeItem(SURVEY_STORAGE_KEYS.submitted);
-  localStorage.removeItem(SURVEY_STORAGE_KEYS.dismissedUntil);
   sessionStorage.removeItem(SURVEY_STORAGE_KEYS.sessionPageViews);
   sessionStorage.removeItem(SURVEY_STORAGE_KEYS.sessionStartedAt);
-  sessionStorage.removeItem(SURVEY_STORAGE_KEYS.promptShown);
+  sessionStorage.removeItem(SURVEY_STORAGE_KEYS.lastCountedPathname);
+  clearSoftCloseState();
 };

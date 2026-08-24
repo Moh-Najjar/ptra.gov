@@ -4,6 +4,9 @@ import type { GeneralCounterItem, TranslatedStatisticItem } from '../types/stati
 
 const BILLION_COUNTER_CODES = new Set<string>(['Imports', 'Exports', 'Trade']);
 
+/** Stats numbers always use Western Arabic digits, regardless of UI language. */
+const STATS_NUMBER_LOCALE = 'en-US';
+
 const STAT_BACKGROUND_BY_CODE: Record<string, string> = {
   Imports: statBackgrounds.imports,
   Exports: statBackgrounds.exports,
@@ -21,20 +24,16 @@ export const getStatBackgroundByCode = (code: string): string => {
   return background ?? statBackgrounds.imports;
 };
 
-export const formatGeneralCounterValue = (
-  value: number,
-  code: string,
-  locale: string,
-): string => {
-  if (BILLION_COUNTER_CODES.has(code)) {
-    return new Intl.NumberFormat(locale, {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-    }).format(value);
-  }
+/** Fraction digits for billion-scale counters vs whole-number counters. */
+export const getGeneralCounterFractionDigits = (code: string): number =>
+  BILLION_COUNTER_CODES.has(code) ? 2 : 0;
 
-  return new Intl.NumberFormat(locale, {
-    maximumFractionDigits: 0,
+export const formatGeneralCounterValue = (value: number, code: string): string => {
+  const fractionDigits = getGeneralCounterFractionDigits(code);
+
+  return new Intl.NumberFormat(STATS_NUMBER_LOCALE, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: fractionDigits,
   }).format(value);
 };
 
@@ -47,13 +46,12 @@ export const getGeneralCounterTitle = (
 export const mapGeneralCountersToDisplayItems = (
   counters: GeneralCounterItem[],
   language: AppLanguage,
-): TranslatedStatisticItem[] => {
-  const locale = getGeneralStatsLocale(language);
-
-  return counters.map((counter) => ({
+): TranslatedStatisticItem[] =>
+  counters.map((counter) => ({
     id: counter.id,
-    value: formatGeneralCounterValue(counter.value, counter.code, locale),
+    numericValue: counter.value,
+    fractionDigits: getGeneralCounterFractionDigits(counter.code),
+    value: formatGeneralCounterValue(counter.value, counter.code),
     background: getStatBackgroundByCode(counter.code),
     label: getGeneralCounterTitle(counter.titleAr, counter.titleEn, language),
   }));
-};

@@ -120,6 +120,8 @@ export const GeneralStatsSection = () => {
                   sx={{ display: 'flex' }}
                 >
                   <StatCircle
+                    numericValue={stat.numericValue}
+                    fractionDigits={stat.fractionDigits}
                     value={stat.value}
                     label={stat.label}
                     background={stat.background}

@@ -28,7 +28,7 @@ export const DASHBOARD_CARDS: DashboardCardItem[] = [
     id: 'foreign-trade-logistics',
     labelKey: 'dashboardCards.foreignTradeLogistics',
     descriptionKey: 'dashboardCards.foreignTradeLogisticsDescription',
-    path: ROUTES.FOREIGN_TRADE_LOGISTICS,
+    path: ROUTES.CONTAINER_FLOW_STATISTICS,
     background: cardBackgrounds.foreignTradeLogistics,
   },
   {

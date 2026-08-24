@@ -19,24 +19,25 @@ export const SURVEY_API_FIELD_KEYS: Record<SurveyQuestionId, string> = {
   overallSatisfaction: 'input_radio_1',
 };
 
-/** Minimum time on site (ms) before the prompt can appear. */
-export const SURVEY_MIN_TIME_MS = 45_000;
+/** Minimum time on site (ms) before the prompt can appear the first time. */
+export const SURVEY_MIN_TIME_MS = 60_000;
 
-/** Minimum page views in the current session before the prompt can appear. */
+/** Minimum page views before the prompt can appear the first time. */
 export const SURVEY_MIN_PAGE_VIEWS = 2;
 
-/** Days to hide the prompt after "Not now". */
-export const SURVEY_NOT_NOW_DAYS = 7;
+/** After any close (without submit), re-show after this delay. */
+export const SURVEY_RESHOW_AFTER_CLOSE_MS = 180_000;
 
-/** Days to hide the prompt after "Don't ask again". */
-export const SURVEY_NEVER_DAYS = 90;
+/** After any close (without submit), re-show after this many page views. */
+export const SURVEY_RESHOW_PAGE_VIEWS = 3;
 
 export const SURVEY_STORAGE_KEYS = {
   submitted: `ptra_survey_${SURVEY_ID}_submitted`,
-  dismissedUntil: `ptra_survey_${SURVEY_ID}_dismissed_until`,
   sessionPageViews: `ptra_survey_${SURVEY_ID}_page_views`,
   sessionStartedAt: `ptra_survey_${SURVEY_ID}_session_started`,
-  promptShown: `ptra_survey_${SURVEY_ID}_prompt_shown`,
+  softClosedAt: `ptra_survey_${SURVEY_ID}_soft_closed_at`,
+  pagesSinceClose: `ptra_survey_${SURVEY_ID}_pages_since_close`,
+  lastCountedPathname: `ptra_survey_${SURVEY_ID}_last_counted_pathname`,
 } as const;
 
 /** Public routes only — surveys are not shown on admin/account pages. */

@@ -1,61 +1,79 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   SURVEY_EXCLUDED_ROUTES,
   SURVEY_MIN_PAGE_VIEWS,
   SURVEY_MIN_TIME_MS,
+  SURVEY_RESHOW_AFTER_CLOSE_MS,
+  SURVEY_RESHOW_PAGE_VIEWS,
 } from '../constants/survey';
 import {
+  clearSoftCloseState,
+  getPagesSinceClose,
   getSessionPageViews,
   getSessionStartedAt,
-  incrementSessionPageViews,
-  isSurveyDismissed,
+  getSoftClosedAt,
+  hasSoftClosePending,
   isSurveySubmitted,
-  markPromptShownThisSession,
-  wasPromptShownThisSession,
+  trackSurveyPageView,
 } from '../utils/surveyStorage';
 
 const isExcludedRoute = (pathname: string): boolean =>
   SURVEY_EXCLUDED_ROUTES.some((route) => pathname.startsWith(route));
+
+const meetsFirstShowRules = (): boolean => {
+  const pageViews = getSessionPageViews();
+  const sessionStartedAt = getSessionStartedAt();
+  const timeOnSite = Date.now() - sessionStartedAt;
+
+  return pageViews >= SURVEY_MIN_PAGE_VIEWS && timeOnSite >= SURVEY_MIN_TIME_MS;
+};
+
+const meetsReshowAfterCloseRules = (): boolean => {
+  const softClosedAt = getSoftClosedAt();
+  if (softClosedAt === null) {
+    return false;
+  }
+
+  const timeSinceClose = Date.now() - softClosedAt;
+  const pagesSinceClose = getPagesSinceClose();
+
+  return (
+    timeSinceClose >= SURVEY_RESHOW_AFTER_CLOSE_MS || pagesSinceClose >= SURVEY_RESHOW_PAGE_VIEWS
+  );
+};
 
 export const useSurveyEligibility = (): boolean => {
   const { pathname } = useLocation();
   const [isEligible, setIsEligible] = useState(false);
 
   useEffect(() => {
-    if (isExcludedRoute(pathname)) {
+    if (isExcludedRoute(pathname) || isSurveySubmitted()) {
       setIsEligible(false);
       return;
     }
 
-    if (isSurveySubmitted() || isSurveyDismissed() || wasPromptShownThisSession()) {
-      setIsEligible(false);
-      return;
-    }
-
-    incrementSessionPageViews();
-    getSessionStartedAt();
+    trackSurveyPageView(pathname);
   }, [pathname]);
 
   useEffect(() => {
-    if (isExcludedRoute(pathname)) {
-      setIsEligible(false);
-      return;
-    }
-
-    if (isSurveySubmitted() || isSurveyDismissed() || wasPromptShownThisSession()) {
+    if (isExcludedRoute(pathname) || isSurveySubmitted()) {
       setIsEligible(false);
       return;
     }
 
     const checkEligibility = (): void => {
-      const pageViews = getSessionPageViews();
-      const sessionStartedAt = getSessionStartedAt();
-      const timeOnSite = Date.now() - sessionStartedAt;
-      const meetsEngagementRules =
-        pageViews >= SURVEY_MIN_PAGE_VIEWS && timeOnSite >= SURVEY_MIN_TIME_MS;
+      if (isSurveySubmitted()) {
+        setIsEligible(false);
+        return;
+      }
 
-      setIsEligible(meetsEngagementRules);
+      if (hasSoftClosePending()) {
+        setIsEligible(meetsReshowAfterCloseRules());
+        return;
+      }
+
+      setIsEligible(meetsFirstShowRules());
     };
 
     checkEligibility();
@@ -69,7 +87,7 @@ export const useSurveyEligibility = (): boolean => {
   return isEligible;
 };
 
-export const useMarkSurveyPromptShown = (): (() => void) =>
-  useCallback(() => {
-    markPromptShownThisSession();
-  }, []);
+/** Clears soft-close state when the prompt is shown again. */
+export const clearSurveySoftCloseOnShow = (): void => {
+  clearSoftCloseState();
+};

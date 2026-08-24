@@ -1,26 +1,36 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useSurveyEligibility, useMarkSurveyPromptShown } from '../../hooks/useSurveyEligibility';
-import { isSurveySubmitted } from '../../utils/surveyStorage';
+import { useSurvey } from '../../contexts/SurveyContext';
+import {
+  clearSurveySoftCloseOnShow,
+  useSurveyEligibility,
+} from '../../hooks/useSurveyEligibility';
+import { isSurveySubmitted, markSurveySoftClosed } from '../../utils/surveyStorage';
 import { SurveyDialog } from './SurveyDialog';
 import { SurveyPrompt } from './SurveyPrompt';
 
 export const SurveyManager = () => {
   const isEligible = useSurveyEligibility();
-  const markPromptShown = useMarkSurveyPromptShown();
+  const { isDialogOpen } = useSurvey();
   const [isPromptOpen, setIsPromptOpen] = useState(false);
 
   useEffect(() => {
-    if (isEligible && !isSurveySubmitted()) {
+    if (isEligible && !isSurveySubmitted() && !isDialogOpen) {
+      clearSurveySoftCloseOnShow();
       setIsPromptOpen(true);
-      markPromptShown();
     }
-  }, [isEligible, markPromptShown]);
+  }, [isDialogOpen, isEligible]);
 
-  const handlePromptClose = useCallback(() => {
+  const handleDismiss = useCallback(() => {
+    markSurveySoftClosed();
     setIsPromptOpen(false);
   }, []);
 
-  const handlePromptDismiss = useCallback(() => {
+  const handleHidePrompt = useCallback(() => {
+    setIsPromptOpen(false);
+  }, []);
+
+  const handleDialogClosedWithoutSubmit = useCallback(() => {
+    markSurveySoftClosed();
     setIsPromptOpen(false);
   }, []);
 
@@ -32,10 +42,13 @@ export const SurveyManager = () => {
     <>
       <SurveyPrompt
         open={isPromptOpen}
-        onClose={handlePromptClose}
-        onDismiss={handlePromptDismiss}
+        onDismiss={handleDismiss}
+        onHide={handleHidePrompt}
       />
-      <SurveyDialog onSubmitted={handleSurveySubmitted} />
+      <SurveyDialog
+        onSubmitted={handleSurveySubmitted}
+        onClosedWithoutSubmit={handleDialogClosedWithoutSubmit}
+      />
     </>
   );
 };

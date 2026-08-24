@@ -12,39 +12,22 @@ import {
 import { alpha } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { useSurvey } from '../../contexts/SurveyContext';
-import type { SurveyDismissReason } from '../../types/survey';
-import { dismissSurvey } from '../../utils/surveyStorage';
 
 interface SurveyPromptProps {
   open: boolean;
-  onClose: () => void;
-  onDismiss: (reason: SurveyDismissReason) => void;
+  /** Soft-dismiss: re-show after 1 minute or 2 page views. */
+  onDismiss: () => void;
+  /** Hide prompt only (e.g. opening the survey dialog). */
+  onHide: () => void;
 }
 
-export const SurveyPrompt = ({ open, onClose, onDismiss }: SurveyPromptProps) => {
+export const SurveyPrompt = ({ open, onDismiss, onHide }: SurveyPromptProps) => {
   const { t } = useTranslation();
   const { openSurvey } = useSurvey();
 
   const handleTakeSurvey = (): void => {
-    onClose();
+    onHide();
     openSurvey();
-  };
-
-  /** X only hides the slide-in for this session; it does not long-term dismiss. */
-  const handleClosePrompt = (): void => {
-    onClose();
-  };
-
-  const handleNotNow = (): void => {
-    dismissSurvey('notNow');
-    onDismiss('notNow');
-    onClose();
-  };
-
-  const handleNever = (): void => {
-    dismissSurvey('never');
-    onDismiss('never');
-    onClose();
   };
 
   return (
@@ -87,7 +70,7 @@ export const SurveyPrompt = ({ open, onClose, onDismiss }: SurveyPromptProps) =>
           <IconButton
             size="small"
             aria-label={t('survey.close')}
-            onClick={handleClosePrompt}
+            onClick={onDismiss}
             sx={{
               color: 'inherit',
               bgcolor: alpha('#FFFFFF', 0.12),
@@ -108,10 +91,10 @@ export const SurveyPrompt = ({ open, onClose, onDismiss }: SurveyPromptProps) =>
           </Button>
 
           <Stack direction="row" spacing={1} sx={{ justifyContent: 'space-between' }}>
-            <Button size="small" onClick={handleNotNow} sx={{ color: 'text.secondary' }}>
+            <Button size="small" onClick={onDismiss} sx={{ color: 'text.secondary' }}>
               {t('survey.notNow')}
             </Button>
-            <Button size="small" onClick={handleNever} sx={{ color: 'text.secondary' }}>
+            <Button size="small" onClick={onDismiss} sx={{ color: 'text.secondary' }}>
               {t('survey.dontAskAgain')}
             </Button>
           </Stack>
