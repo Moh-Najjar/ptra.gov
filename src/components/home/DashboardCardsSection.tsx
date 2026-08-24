@@ -178,7 +178,7 @@ export const DashboardCardsSection = () => {
 
   return (
     <Box sx={{ py: { xs: 4, md: 6 }, bgcolor: 'background.default' }}>
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Typography
           variant="h3"
           component="h2"

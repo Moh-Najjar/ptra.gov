@@ -4,6 +4,17 @@ import CountUp from 'react-countup';
 
 export type StatCircleSize = 'sm' | 'md' | 'lg' | 'xl';
 
+/** Slow count-up so the value reads clearly as it rises. */
+const COUNT_UP_DURATION_SECONDS = 3.2;
+
+/** Always render Western Arabic (English) digits, even in ar/RTL UI. */
+const formatEnglishNumber = (value: number, fractionDigits: number): string =>
+  new Intl.NumberFormat('en-US', {
+    numberingSystem: 'latn',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: fractionDigits,
+  }).format(value);
+
 interface StatCircleSizeConfig {
   width: { xs: number; sm: number; md: number };
   valueFontSize: { xs: string; sm: string; md: string };
@@ -13,28 +24,28 @@ interface StatCircleSizeConfig {
 
 const SIZE_CONFIG: Record<StatCircleSize, StatCircleSizeConfig> = {
   sm: {
-    width: { xs: 108, sm: 122, md: 138 },
-    valueFontSize: { xs: '1.35rem', sm: '1.5rem', md: '1.65rem' },
-    labelFontSize: { xs: '0.62rem', md: '0.72rem' },
-    overlapPx: { xs: 18, md: 28 },
-  },
-  md: {
-    width: { xs: 132, sm: 152, md: 172 },
-    valueFontSize: { xs: '1.6rem', sm: '1.85rem', md: '2rem' },
-    labelFontSize: { xs: '0.68rem', md: '0.78rem' },
+    width: { xs: 128, sm: 146, md: 168 },
+    valueFontSize: { xs: '1.5rem', sm: '1.7rem', md: '1.9rem' },
+    labelFontSize: { xs: '0.68rem', md: '0.8rem' },
     overlapPx: { xs: 22, md: 34 },
   },
+  md: {
+    width: { xs: 156, sm: 180, md: 206 },
+    valueFontSize: { xs: '1.8rem', sm: '2.1rem', md: '2.3rem' },
+    labelFontSize: { xs: '0.74rem', md: '0.88rem' },
+    overlapPx: { xs: 26, md: 40 },
+  },
   lg: {
-    width: { xs: 158, sm: 178, md: 204 },
-    valueFontSize: { xs: '1.85rem', sm: '2.1rem', md: '2.35rem' },
-    labelFontSize: { xs: '0.72rem', md: '0.85rem' },
-    overlapPx: { xs: 26, md: 38 },
+    width: { xs: 188, sm: 212, md: 244 },
+    valueFontSize: { xs: '2.1rem', sm: '2.4rem', md: '2.7rem' },
+    labelFontSize: { xs: '0.8rem', md: '0.95rem' },
+    overlapPx: { xs: 30, md: 46 },
   },
   xl: {
-    width: { xs: 182, sm: 202, md: 228 },
-    valueFontSize: { xs: '2.1rem', sm: '2.35rem', md: '2.6rem' },
-    labelFontSize: { xs: '0.85rem', md: '0.95rem' },
-    overlapPx: { xs: 28, md: 42 },
+    width: { xs: 216, sm: 242, md: 276 },
+    valueFontSize: { xs: '2.4rem', sm: '2.7rem', md: '3rem' },
+    labelFontSize: { xs: '0.95rem', md: '1.05rem' },
+    overlapPx: { xs: 34, md: 50 },
   },
 };
 
@@ -100,6 +111,8 @@ export const StatCircle = ({
     >
       <Typography
         component="span"
+        lang="en"
+        dir="ltr"
         sx={{
           position: 'relative',
           zIndex: 1,
@@ -118,12 +131,15 @@ export const StatCircle = ({
           <CountUp
             start={0}
             end={numericValue}
-            duration={1.6}
+            duration={COUNT_UP_DURATION_SECONDS}
             decimals={fractionDigits}
-            decimal="."
-            separator=","
+            useEasing
+            formattingFn={(animatedValue) =>
+              formatEnglishNumber(animatedValue, fractionDigits)
+            }
             enableScrollSpy
             scrollSpyOnce
+            scrollSpyDelay={120}
           />
         )}
       </Typography>

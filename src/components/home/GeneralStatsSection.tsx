@@ -96,7 +96,7 @@ export const GeneralStatsSection = () => {
               overflow: 'hidden',
               py: { xs: 2, md: 3 },
               px: { xs: 1, md: 0 },
-              minHeight: { xs: 180, md: 260 },
+              minHeight: { xs: 230, md: 310 },
             }}
           >
             <Box

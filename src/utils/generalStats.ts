@@ -32,6 +32,7 @@ export const formatGeneralCounterValue = (value: number, code: string): string =
   const fractionDigits = getGeneralCounterFractionDigits(code);
 
   return new Intl.NumberFormat(STATS_NUMBER_LOCALE, {
+    numberingSystem: 'latn',
     minimumFractionDigits: 0,
     maximumFractionDigits: fractionDigits,
   }).format(value);
