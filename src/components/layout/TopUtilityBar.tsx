@@ -6,15 +6,16 @@ import {
   Stack,
   Tooltip,
 } from '@mui/material';
+import type { ReactElement } from 'react';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
-import InstagramIcon from '@mui/icons-material/Instagram';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import PrintIcon from '@mui/icons-material/Print';
 import SearchIcon from '@mui/icons-material/Search';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import XIcon from '@mui/icons-material/X';
+import YouTubeIcon from '@mui/icons-material/YouTube';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { UTILITY_LINKS } from '../../constants/navigation';
@@ -46,6 +47,40 @@ const fontSizeControlSx = {
     cursor: 'not-allowed',
   },
 };
+
+type SocialLink = {
+  id: 'youtube' | 'whatsapp' | 'x' | 'facebook';
+  label: string;
+  href: string;
+  icon: ReactElement;
+};
+
+const SOCIAL_LINKS: SocialLink[] = [
+  {
+    id: 'youtube',
+    label: 'YouTube',
+    href: 'https://www.youtube.com/channel/UC4x80a6SbSG7IzCC-IRT0FA',
+    icon: <YouTubeIcon fontSize="small" />,
+  },
+  {
+    id: 'whatsapp',
+    label: 'WhatsApp',
+    href: 'https://api.whatsapp.com/send/?phone=962780349516&text&type=phone_number&app_absent=0',
+    icon: <WhatsAppIcon fontSize="small" />,
+  },
+  {
+    id: 'x',
+    label: 'X',
+    href: 'https://x.com/JC_Department',
+    icon: <XIcon fontSize="small" />,
+  },
+  {
+    id: 'facebook',
+    label: 'Facebook',
+    href: 'https://web.facebook.com/JordanCustomsOfficial#',
+    icon: <FacebookIcon fontSize="small" />,
+  },
+];
 
 export const TopUtilityBar = () => {
   const { t } = useTranslation();
@@ -107,26 +142,21 @@ export const TopUtilityBar = () => {
           </Stack>
 
           <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center' }}>
-            <Tooltip title="Instagram">
-              <IconButton size="small" sx={iconButtonSx} aria-label="Instagram">
-                <InstagramIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="WhatsApp">
-              <IconButton size="small" sx={iconButtonSx} aria-label="WhatsApp">
-                <WhatsAppIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="X">
-              <IconButton size="small" sx={iconButtonSx} aria-label="X">
-                <XIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Facebook">
-              <IconButton size="small" sx={iconButtonSx} aria-label="Facebook">
-                <FacebookIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
+            {SOCIAL_LINKS.map((socialLink) => (
+              <Tooltip key={socialLink.id} title={socialLink.label}>
+                <IconButton
+                  size="small"
+                  sx={iconButtonSx}
+                  aria-label={socialLink.label}
+                  component="a"
+                  href={socialLink.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {socialLink.icon}
+                </IconButton>
+              </Tooltip>
+            ))}
           </Stack>
 
           <Stack direction="row" spacing={0.25} sx={{ alignItems: 'center' }}>

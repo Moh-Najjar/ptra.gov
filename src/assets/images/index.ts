@@ -33,13 +33,13 @@ export const cardBackgrounds = {
   logisticsPerformance: `url(${logisticsPerformanceCardImage})`,
   aqabaSez: `url(${aqabaSezCardImage})`,
   foreignTradeLogistics: `url(${foreignTradeLogisticsCardImage})`,
-  statistics: `url(${statisticsCardImage})`,
+  crops: `url(${statisticsCardImage})`,
 
   // foreignTrade: `linear-gradient(rgba(26, 82, 118, 0.56), rgba(46, 134, 193, 0.62)), url(${foreignTradeCardImage})`,
   // logisticsPerformance: `linear-gradient(rgba(14, 90, 150, 0.55), rgba(27, 117, 188, 0.64)), url(${logisticsPerformanceCardImage})`,
   // aqabaSez: `linear-gradient(rgba(17, 122, 101, 0.52), rgba(26, 188, 156, 0.62)), url(${aqabaSezCardImage})`,
   // foreignTradeLogistics: `linear-gradient(rgba(27, 79, 114, 0.56), rgba(40, 116, 166, 0.62)), url(${foreignTradeLogisticsCardImage})`,
-  // statistics: `linear-gradient(rgba(36, 113, 163, 0.54), rgba(93, 173, 226, 0.62)), url(${statisticsCardImage})`,
+  // crops: `linear-gradient(rgba(36, 113, 163, 0.54), rgba(93, 173, 226, 0.62)), url(${statisticsCardImage})`,
 
 } as const;
 

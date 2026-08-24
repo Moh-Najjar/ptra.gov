@@ -12,7 +12,6 @@ export const ROUTES = {
   AQABA_SEZ: '/aqaba-sez',
   FOREIGN_TRADE_LOGISTICS: '/foreign-trade-logistics',
   CONTAINER_FLOW_STATISTICS: '/foreign-trade-logistics/container-flow-statistics',
-  STATISTICS: '/statistics',
   FAQ: '/faq',
   ABOUT: '/about',
   CONTACT: '/contact',

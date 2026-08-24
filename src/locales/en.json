@@ -97,10 +97,16 @@
   },
   "dashboardCards": {
     "foreignTrade": "Foreign Trade",
+    "foreignTradeDescription": "A comprehensive statistical platform for foreign trade indicators including exports, imports, and transit. It presents trade data in aggregated or detailed views by period, harmonized system classification, customs centers and border points, countries, economic groups, trade agreements, and the international trade balance.",
     "logisticsPerformance": "Logistics Performance",
+    "logisticsPerformanceDescription": "A platform for measuring the time required from the arrival of goods at customs until final release, including the period from unloading at the port or airport until exit through the main gate under the consignee's control, together with the procedures of all authorities related to customs data.",
     "aqabaSez": "Aqaba Special Economic Zone",
+    "aqabaSezDescription": "A statistical data platform dedicated to goods entering and leaving the Aqaba Special Economic Zone.",
     "foreignTradeLogistics": "Foreign Trade Logistics",
-    "statistics": "Statistics"
+    "foreignTradeLogisticsDescription": "A platform for foreign trade logistics indicators covering containers, vessels, trucks, and cars, with views across multiple filters such as trade type, declaration type, nationality, and customs ports and centers.",
+    "crops": "Crops",
+    "cropsDescription": "A customs revenue data platform that presents aggregated or detailed views by account type, including revenue details from customs duties and fees, sales tax, and other taxes and charges.",
+    "readMore": "Read more →"
   },
   "stats": {
     "loadError": "Unable to load statistics. Please try again later.",
@@ -449,7 +455,6 @@
     "aqabaSez": { "title": "Aqaba Special Economic Zone" },
     "foreignTradeLogistics": { "title": "Foreign Trade Logistics" },
     "containerFlowStatistics": { "title": "Container Flow Statistics" },
-    "statistics": { "title": "Statistics" },
     "faq": { "title": "FAQ" },
     "about": { "title": "About the Portal" },
     "contact": { "title": "Contact Us" },

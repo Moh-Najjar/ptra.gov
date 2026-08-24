@@ -24,6 +24,7 @@ export interface TranslatedStatisticItem {
 export interface DashboardCardItem {
   id: string;
   labelKey: string;
+  descriptionKey: string;
   path: string;
   background: string;
 }

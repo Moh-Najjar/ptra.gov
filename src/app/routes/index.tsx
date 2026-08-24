@@ -24,7 +24,6 @@ import {
   PostPage,
   PrivacyPage,
   ReleaseTimePage,
-  StatisticsPage,
   UsersPage,
   SurveysPage,
 } from '../../pages';
@@ -47,7 +46,6 @@ export const router = createBrowserRouter([
       { path: ROUTES.AQABA_SEZ, element: <AqabaSezPage /> },
       { path: ROUTES.FOREIGN_TRADE_LOGISTICS, element: <ForeignTradeLogisticsPage /> },
       { path: ROUTES.CONTAINER_FLOW_STATISTICS, element: <ContainerFlowStatisticsPage /> },
-      { path: ROUTES.STATISTICS, element: <StatisticsPage /> },
       { path: ROUTES.FAQ, element: <FaqPage /> },
       { path: ROUTES.ABOUT, element: <AboutPage /> },
       { path: ROUTES.CONTACT, element: <ContactPage /> },

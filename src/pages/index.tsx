@@ -17,8 +17,6 @@ export const ForeignTradePage = () => <PagePlaceholder titleKey="pages.foreignTr
 
 export const ContainerDwellTimePage = () => <PowerBiPage reportId="containerDwellTime" />;
 
-export const StatisticsPage = () => <PagePlaceholder titleKey="pages.statistics.title" />;
-
 export const TradeBalancePage = () => <PowerBiPage reportId="tradeBalance" />;
 
 export const ReleaseTimePage = () => <PowerBiPage reportId="releaseTime" />;
