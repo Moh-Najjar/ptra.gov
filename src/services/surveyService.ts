@@ -2,7 +2,7 @@ import { SURVEY_API_IDS } from '../constants/survey';
 import type { AppLanguage } from '../i18n/types';
 import type { ApiResponse } from '../types/api';
 import type { SurveySubmissionPayload } from '../types/survey';
-import type { PaginatedSurveySubmissions, SurveyForm } from '../types/surveyAdmin';
+import type { PaginatedSurveySubmissions, SurveyForm, SurveyStatistics } from '../types/surveyAdmin';
 import { buildSurveyApiPayload } from '../utils/surveyPayload';
 import { apiClient } from './api/client';
 
@@ -35,6 +35,14 @@ export const surveyService = {
           pageSize,
         },
       },
+    );
+
+    return data.data;
+  },
+
+  getStatistics: async (formId: number): Promise<SurveyStatistics> => {
+    const { data } = await apiClient.get<ApiResponse<SurveyStatistics>>(
+      `/surveys/${formId}/statistics`,
     );
 
     return data.data;

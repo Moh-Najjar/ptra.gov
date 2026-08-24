@@ -37,3 +37,26 @@ export interface PaginatedSurveySubmissions {
   totalCount: number;
   totalPages: number;
 }
+
+export interface SurveyRatingStat {
+  value: string;
+  score: number;
+  count: number;
+  percentage: number;
+}
+
+export interface SurveyQuestionStat {
+  key: string;
+  label: string;
+  totalAnswers: number;
+  averageScore: number;
+  ratings: SurveyRatingStat[];
+}
+
+export interface SurveyStatistics {
+  formId: number;
+  formTitle: string;
+  totalSubmissions: number;
+  overallAverageScore: number;
+  questions: SurveyQuestionStat[];
+}

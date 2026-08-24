@@ -26,6 +26,7 @@ import {
   AdminTableHeadRow,
   getAdminTableInteractiveRowSx,
 } from '../components/common/AdminTable';
+import { SurveyStatisticsCharts } from '../components/surveys/SurveyStatisticsCharts';
 import { SurveySubmissionDetailsDialog } from '../components/surveys/SurveySubmissionDetailsDialog';
 import { SURVEY_API_IDS } from '../constants/survey';
 import { useSurveySubmissions } from '../hooks/queries/surveyAdmin';
@@ -113,9 +114,11 @@ export const SurveysPage = () => {
         {t('pages.surveys.description')}
       </Typography>
 
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
         {t('pages.surveys.selectedForm', { title: formTitle })}
       </Typography>
+
+      <SurveyStatisticsCharts formId={formId} />
 
       {isLoading && (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>

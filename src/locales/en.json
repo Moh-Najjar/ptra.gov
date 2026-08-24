@@ -438,6 +438,19 @@
         "question": "Question",
         "answer": "Answer",
         "close": "Close"
+      },
+      "statistics": {
+        "title": "Survey statistics",
+        "loading": "Loading survey statistics...",
+        "loadError": "Unable to load survey statistics. Please try again later.",
+        "noData": "No statistics are available for this survey yet.",
+        "totalSubmissions": "Total submissions",
+        "overallAverage": "Overall average score",
+        "questionsCount": "Questions",
+        "averageByQuestion": "Average score by question",
+        "ratingDistribution": "Rating distribution by question",
+        "averageScore": "Average score",
+        "count": "responses"
       }
     },
     "crops": { "title": "Crops" },

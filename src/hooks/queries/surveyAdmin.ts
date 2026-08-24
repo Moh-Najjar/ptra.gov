@@ -18,3 +18,10 @@ export const useSurveySubmissions = (
     queryFn: () => surveyService.getSubmissions(formId as number, pageNumber, pageSize),
     enabled: formId !== null,
   });
+
+export const useSurveyStatistics = (formId: number | null) =>
+  useQuery({
+    queryKey: surveyAdminKeys.statistics(formId ?? 0),
+    queryFn: () => surveyService.getStatistics(formId as number),
+    enabled: formId !== null,
+  });
