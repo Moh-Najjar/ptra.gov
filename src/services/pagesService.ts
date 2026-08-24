@@ -2,8 +2,10 @@ import type { ApiResponse } from '../types/api';
 import type {
   AssignPageAuthorPayload,
   CmsPage,
+  CreatePagePayload,
   PageAuthor,
   SearchablePageAuthor,
+  UpdatePagePayload,
 } from '../types/cmsPage';
 import type { PageDetailRecord, PaginatedPageDetails } from '../types/pageDetails';
 import { normalizePageDetailItem, normalizePageDetailItems } from '../utils/pageDetails';
@@ -16,6 +18,8 @@ interface RawCmsPage {
   publishedDate: string;
   modifiedDate: string;
   languageCode: string | null;
+  content?: string | null;
+  Content?: string | null;
   isPageDetailsEnabled?: boolean;
   IsPageDetailsEnabled?: boolean;
   authors?: RawPageAuthor[];
@@ -91,6 +95,7 @@ const normalizeCmsPage = (page: RawCmsPage): CmsPage => ({
   publishedDate: page.publishedDate,
   modifiedDate: page.modifiedDate,
   languageCode: page.languageCode,
+  content: page.content ?? page.Content ?? null,
   isPageDetailsEnabled: page.isPageDetailsEnabled ?? page.IsPageDetailsEnabled ?? false,
   authors: normalizePageAuthors(page.authors ?? page.Authors),
 });
@@ -99,6 +104,20 @@ export const pagesService = {
   getPages: async (): Promise<CmsPage[]> => {
     const { data } = await apiClient.get<ApiResponse<RawCmsPage[]>>('/Pages');
     return data.data.map(normalizeCmsPage);
+  },
+
+  createPage: async (payload: CreatePagePayload): Promise<CmsPage> => {
+    const { data } = await apiClient.post<ApiResponse<RawCmsPage>>('/Pages', payload);
+    return normalizeCmsPage(data.data);
+  },
+
+  updatePage: async (pageId: number, payload: UpdatePagePayload): Promise<CmsPage> => {
+    const { data } = await apiClient.put<ApiResponse<RawCmsPage>>(`/Pages/${pageId}`, payload);
+    return normalizeCmsPage(data.data);
+  },
+
+  deletePage: async (pageId: number): Promise<void> => {
+    await apiClient.delete(`/Pages/${pageId}`);
   },
 
   getPageDetails: async (

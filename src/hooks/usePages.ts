@@ -2,12 +2,15 @@ import { useApmscoMovementsQuery } from './queries/apmscoBerthing';
 import {
   useAssignPageAuthorMutation,
   useCreatePageDetailMutation,
+  useCreatePageMutation,
+  useDeletePageMutation,
   usePageAuthorsQuery,
   usePageDetailsQuery,
   usePagesQuery,
   useRemovePageAuthorMutation,
   useSearchPageAuthorsQuery,
   useUpdatePageDetailMutation,
+  useUpdatePageMutation,
 } from './queries/pages';
 import { useAuth } from './useAuth';
 import { useLanguage } from './useLanguage';
@@ -19,6 +22,12 @@ export const usePages = () => {
   const { language } = useLanguage();
   return usePagesQuery(isAuthenticated, language);
 };
+
+export const useCreatePage = () => useCreatePageMutation();
+
+export const useUpdatePage = () => useUpdatePageMutation();
+
+export const useDeletePage = () => useDeletePageMutation();
 
 export const usePageDetails = (
   pageId: number | null,

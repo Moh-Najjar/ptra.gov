@@ -1,7 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppLanguage } from '../../i18n/types';
 import { pagesService } from '../../services/pagesService';
-import type { AssignPageAuthorPayload } from '../../types/cmsPage';
+import type {
+  AssignPageAuthorPayload,
+  CreatePagePayload,
+  UpdatePagePayload,
+} from '../../types/cmsPage';
 import type { PageDetailRecord } from '../../types/pageDetails';
 
 export const pagesKeys = {
@@ -18,6 +22,45 @@ export const usePagesQuery = (enabled: boolean, language: AppLanguage) =>
     queryFn: pagesService.getPages,
     enabled,
   });
+
+export const useCreatePageMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: CreatePagePayload) => pagesService.createPage(payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: pagesKeys.list });
+    },
+  });
+};
+
+interface UpdatePageVariables {
+  pageId: number;
+  payload: UpdatePagePayload;
+}
+
+export const useUpdatePageMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ pageId, payload }: UpdatePageVariables) =>
+      pagesService.updatePage(pageId, payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: pagesKeys.list });
+    },
+  });
+};
+
+export const useDeletePageMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (pageId: number) => pagesService.deletePage(pageId),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: pagesKeys.list });
+    },
+  });
+};
 
 export const usePageDetailsQuery = (
   enabled: boolean,
