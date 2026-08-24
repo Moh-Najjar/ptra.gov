@@ -6,6 +6,14 @@ export interface GeneralCounterItem {
   titleEn: string;
 }
 
+/** Normalized website visitor counter from `/Counters/website-visitors`. */
+export interface WebsiteVisitorCounter {
+  key: string;
+  value: number;
+  displayNameEn: string;
+  displayNameAr: string;
+}
+
 export interface TranslatedStatisticItem {
   id: number;
   value: string;

@@ -16,8 +16,8 @@ import {
   PARTNER_LOGOS,
   POWERED_BY_URL,
 } from '../../../constants/footerLinks';
-import { VISITOR_COUNT } from '../../../constants/statistics';
 import { useSurvey } from '../../../contexts/SurveyContext';
+import { useWebsiteVisitors } from '../../../hooks/useWebsiteVisitors';
 import type { FooterLink, PartnerLogo } from '../../../types/navigation';
 
 const PartnerLogoImage = ({ logo }: { logo: PartnerLogo }) => {
@@ -99,6 +99,8 @@ const PartnerGroup = ({ group }: { group: PartnerLogo['group'] }) => {
 export const Footer = () => {
   const { t } = useTranslation();
   const { openSurvey } = useSurvey();
+  // Load live visitor count from `/Counters/website-visitors`.
+  const { data: visitorCount } = useWebsiteVisitors();
 
   const renderFooterLink = (link: FooterLink) => {
     if (link.action === 'survey') {
@@ -201,7 +203,9 @@ export const Footer = () => {
           sx={{ alignItems: 'center', justifyContent: 'space-between' }}
         >
           <Typography variant="body2" color="text.secondary">
-            {t('stats.visitorCount', { count: VISITOR_COUNT })}
+            {visitorCount !== undefined
+              ? t('stats.visitorCount', { count: visitorCount })
+              : null}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
             {t('footer.copyright')}

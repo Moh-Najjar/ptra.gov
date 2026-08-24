@@ -16,6 +16,7 @@ export const apiClient = axios.create({
   timeout: 30000,
 });
 
+// Request interceptor
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem('auth_token');
@@ -37,6 +38,7 @@ const isLoginRequest = (config: InternalAxiosRequestConfig | undefined): boolean
   return /\/auth\/login/i.test(requestUrl);
 };
 
+// Response interceptor
 apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
