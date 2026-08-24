@@ -61,7 +61,7 @@ const HeroSlide = ({ slide }: HeroSlideProps) => {
         position: 'relative',
         background: slide.background,
         overflow: 'hidden',
-        minHeight: { xs: 320, md: 600 },
+        minHeight: { xs: 320, md: 480 },
         backgroundSize: 'cover',
       }}
     >
@@ -71,9 +71,13 @@ const HeroSlide = ({ slide }: HeroSlideProps) => {
         maxWidth="lg"
         sx={{
           position: 'relative',
-          py: { xs: 6, md: 10 },
+          minHeight: { xs: 320, md: 480 },
           display: 'flex',
+          alignItems: 'flex-end',
           justifyContent: 'start',
+          // Keep text above the carousel dots.
+          pb: { xs: 7, md: 9 },
+          pt: { xs: 4, md: 6 },
         }}
       >
         <Box sx={{ maxWidth: 640, width: '100%', textAlign: 'start' }}>
