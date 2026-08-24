@@ -160,6 +160,32 @@
       "loading": "Loading posts...",
       "loadError": "Unable to load posts. Please try again later.",
       "noData": "No posts found.",
+      "addPost": "Add post",
+      "editPost": "Edit post",
+      "deletePost": "Delete post",
+      "deleteConfirm": "Are you sure you want to delete \"{{name}}\"?",
+      "createSuccess": "Post created successfully.",
+      "updateSuccess": "Post updated successfully.",
+      "deleteSuccess": "Post deleted successfully.",
+      "createError": "Unable to create post. Please try again later.",
+      "updateError": "Unable to update post. Please try again later.",
+      "deleteError": "Unable to delete post. Please try again later.",
+      "validationError": "Please fill in all required fields.",
+      "status": {
+        "publish": "Published",
+        "draft": "Draft"
+      },
+      "form": {
+        "title": "Title",
+        "content": "Content",
+        "contentHint": "Paste HTML content or a Power BI iframe embed.",
+        "status": "Status",
+        "save": "Save",
+        "saving": "Saving...",
+        "delete": "Delete",
+        "deleting": "Deleting...",
+        "cancel": "Cancel"
+      },
       "table": {
         "id": "ID",
         "title": "Title",

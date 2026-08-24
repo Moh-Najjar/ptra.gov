@@ -25,7 +25,52 @@ export interface AdminPost {
   title: string;
   authors: PostAuthor[];
   iframeUrl: string | null;
+  postUrl?: string | null;
 }
+
+export const POST_STATUSES = ['publish', 'draft'] as const;
+
+export type PostStatus = (typeof POST_STATUSES)[number];
+
+export interface PostFormValues {
+  title: string;
+  content: string;
+  status: PostStatus;
+}
+
+export interface CreatePostPayload {
+  title: string;
+  content: string;
+  status: PostStatus;
+}
+
+export type UpdatePostPayload = CreatePostPayload;
+
+export const createEmptyPostFormValues = (): PostFormValues => ({
+  title: '',
+  content: '',
+  status: 'publish',
+});
+
+export const mapAdminPostToFormValues = (post: AdminPost): PostFormValues => ({
+  title: post.title,
+  content:
+    typeof post.iframeUrl === 'string' && post.iframeUrl.trim().length > 0
+      ? `<iframe title="${post.title}" width="800" height="836" src="${post.iframeUrl}" frameborder="0" allowFullScreen="true"></iframe>`
+      : '',
+  status: 'publish',
+});
+
+export const buildPostPayload = (values: PostFormValues): CreatePostPayload => ({
+  title: values.title.trim(),
+  content: values.content.trim(),
+  status: values.status,
+});
+
+export const isPostFormValid = (values: PostFormValues): boolean =>
+  values.title.trim().length > 0 &&
+  values.content.trim().length > 0 &&
+  POST_STATUSES.includes(values.status);
 
 export const hasPostIframe = (
   post: AdminPost | AuthoredPost,

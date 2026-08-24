@@ -1,7 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppLanguage } from '../../i18n/types';
 import { postsService } from '../../services/postsService';
-import type { AssignPostAuthorPayload } from '../../types/posts';
+import type {
+  AssignPostAuthorPayload,
+  CreatePostPayload,
+  UpdatePostPayload,
+} from '../../types/posts';
 
 export const postsKeys = {
   authored: ['posts', 'authored'] as const,
@@ -37,6 +41,48 @@ export const useSearchPostAuthorsQuery = (query: string, enabled: boolean) =>
     queryFn: () => postsService.searchAuthors(query),
     enabled: enabled && query.trim().length >= 2,
   });
+
+export const useCreatePostMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: CreatePostPayload) => postsService.createPost(payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: postsKeys.list });
+      await queryClient.invalidateQueries({ queryKey: postsKeys.authored });
+    },
+  });
+};
+
+interface UpdatePostVariables {
+  postId: number;
+  payload: UpdatePostPayload;
+}
+
+export const useUpdatePostMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ postId, payload }: UpdatePostVariables) =>
+      postsService.updatePost(postId, payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: postsKeys.list });
+      await queryClient.invalidateQueries({ queryKey: postsKeys.authored });
+    },
+  });
+};
+
+export const useDeletePostMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (postId: number) => postsService.deletePost(postId),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: postsKeys.list });
+      await queryClient.invalidateQueries({ queryKey: postsKeys.authored });
+    },
+  });
+};
 
 interface AssignPostAuthorVariables {
   postId: number;

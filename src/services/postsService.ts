@@ -3,8 +3,10 @@ import type {
   AdminPost,
   AssignPostAuthorPayload,
   AuthoredPost,
+  CreatePostPayload,
   PostAuthor,
   SearchablePostAuthor,
+  UpdatePostPayload,
 } from '../types/posts';
 import { apiClient } from './api/client';
 
@@ -61,6 +63,20 @@ export const postsService = {
   getPosts: async (): Promise<AdminPost[]> => {
     const { data } = await apiClient.get<ApiResponse<AdminPost[]>>('/posts');
     return data.data;
+  },
+
+  createPost: async (payload: CreatePostPayload): Promise<AdminPost> => {
+    const { data } = await apiClient.post<ApiResponse<AdminPost>>('/Posts', payload);
+    return data.data;
+  },
+
+  updatePost: async (postId: number, payload: UpdatePostPayload): Promise<AdminPost> => {
+    const { data } = await apiClient.put<ApiResponse<AdminPost>>(`/Posts/${postId}`, payload);
+    return data.data;
+  },
+
+  deletePost: async (postId: number): Promise<void> => {
+    await apiClient.delete(`/Posts/${postId}`);
   },
 
   getPostAuthors: async (postId: number): Promise<PostAuthor[]> => {

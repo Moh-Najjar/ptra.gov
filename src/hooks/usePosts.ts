@@ -2,9 +2,12 @@ import {
   useAdminPostsQuery,
   useAssignPostAuthorMutation,
   useAuthoredPostsQuery,
+  useCreatePostMutation,
+  useDeletePostMutation,
   usePostAuthorsQuery,
   useRemovePostAuthorMutation,
   useSearchPostAuthorsQuery,
+  useUpdatePostMutation,
 } from './queries/posts';
 import { useAuth } from './useAuth';
 import { useLanguage } from './useLanguage';
@@ -19,6 +22,12 @@ export const useAdminPosts = () => {
   const { language } = useLanguage();
   return useAdminPostsQuery(isAuthenticated, language);
 };
+
+export const useCreatePost = () => useCreatePostMutation();
+
+export const useUpdatePost = () => useUpdatePostMutation();
+
+export const useDeletePost = () => useDeletePostMutation();
 
 export const usePostAuthors = (postId: number | null, enabled: boolean) => {
   const { isAuthenticated } = useAuth();
