@@ -3,6 +3,7 @@ import { useReducedMotion } from 'motion/react';
 import { useId } from 'react';
 import { useCountUp } from 'react-countup';
 import { formatSystemNumber } from '../../utils/formatNumber';
+import { rem } from '../../theme/rem';
 
 export type StatCircleSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -10,36 +11,36 @@ export type StatCircleSize = 'sm' | 'md' | 'lg' | 'xl';
 const COUNT_UP_DURATION_SECONDS = 3.2;
 
 interface StatCircleSizeConfig {
-  width: { xs: number; sm: number; md: number };
+  width: { xs: string; sm: string; md: string };
   valueFontSize: { xs: string; sm: string; md: string };
   labelFontSize: { xs: string; md: string };
-  overlapPx: { xs: number; md: number };
+  overlap: { xs: string; md: string };
 }
 
 const SIZE_CONFIG: Record<StatCircleSize, StatCircleSizeConfig> = {
   sm: {
-    width: { xs: 128, sm: 146, md: 168 },
+    width: { xs: rem(128), sm: rem(146), md: rem(168) },
     valueFontSize: { xs: '1.5rem', sm: '1.7rem', md: '1.9rem' },
     labelFontSize: { xs: '0.68rem', md: '0.8rem' },
-    overlapPx: { xs: 22, md: 34 },
+    overlap: { xs: rem(22), md: rem(34) },
   },
   md: {
-    width: { xs: 156, sm: 180, md: 206 },
+    width: { xs: rem(156), sm: rem(180), md: rem(206) },
     valueFontSize: { xs: '1.8rem', sm: '2.1rem', md: '2.3rem' },
     labelFontSize: { xs: '0.74rem', md: '0.88rem' },
-    overlapPx: { xs: 26, md: 40 },
+    overlap: { xs: rem(26), md: rem(40) },
   },
   lg: {
-    width: { xs: 188, sm: 212, md: 244 },
+    width: { xs: rem(188), sm: rem(212), md: rem(244) },
     valueFontSize: { xs: '2.1rem', sm: '2.4rem', md: '2.7rem' },
     labelFontSize: { xs: '0.8rem', md: '0.95rem' },
-    overlapPx: { xs: 30, md: 46 },
+    overlap: { xs: rem(30), md: rem(46) },
   },
   xl: {
-    width: { xs: 216, sm: 242, md: 276 },
+    width: { xs: rem(216), sm: rem(242), md: rem(276) },
     valueFontSize: { xs: '2.4rem', sm: '2.7rem', md: '3rem' },
     labelFontSize: { xs: '0.95rem', md: '1.05rem' },
-    overlapPx: { xs: 34, md: 50 },
+    overlap: { xs: rem(34), md: rem(50) },
   },
 };
 
@@ -120,10 +121,10 @@ export const StatCircle = ({
         color: '#FFFFFF',
         px: 2,
         marginInlineStart: overlap
-          ? { xs: `-${config.overlapPx.xs}px`, md: `-${config.overlapPx.md}px` }
+          ? { xs: `-${config.overlap.xs}`, md: `-${config.overlap.md}` }
           : 0,
-        border: '3px solid #FFFFFF',
-        boxShadow: '0 6px 20px rgba(0, 0, 0, 0.15)',
+        border: '0.1875rem solid #FFFFFF',
+        boxShadow: '0 0.375rem 1.25rem rgba(0, 0, 0, 0.15)',
         zIndex,
         cursor: 'default',
         '&::before': {

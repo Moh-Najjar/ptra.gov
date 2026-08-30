@@ -11,7 +11,7 @@ import type { ReactNode } from 'react';
 
 export const adminTableContainerSx: SxProps<Theme> = {
   borderRadius: 2,
-  border: '1px solid',
+  border: '0.0625rem solid',
   borderColor: 'divider',
   overflow: 'hidden',
 };
@@ -24,7 +24,7 @@ export const adminTableHeadCellSx: SxProps<Theme> = {
   fontWeight: 700,
   color: 'primary.main',
   whiteSpace: 'nowrap',
-  borderBottom: '2px solid',
+  borderBottom: '0.125rem solid',
   borderColor: 'primary.light',
 };
 

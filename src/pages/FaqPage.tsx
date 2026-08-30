@@ -38,9 +38,9 @@ export const FaqPage = () => {
             disableGutters
             elevation={0}
             sx={{
-              border: '1px solid',
+              border: '0.0625rem solid',
               borderColor: 'divider',
-              borderRadius: '12px !important',
+              borderRadius: '0.75rem !important',
               overflow: 'hidden',
               '&::before': { display: 'none' },
             }}

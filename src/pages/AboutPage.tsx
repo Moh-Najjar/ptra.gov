@@ -32,7 +32,7 @@ export const AboutPage = () => {
 
       <Box
         sx={{
-          border: '1px solid',
+          border: '0.0625rem solid',
           borderColor: 'divider',
           borderRadius: 2,
           bgcolor: 'background.paper',

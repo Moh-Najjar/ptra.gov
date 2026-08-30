@@ -8,6 +8,7 @@ import { Box, Grid, Link, Stack, Table, TableBody, TableCell, TableHead, TableRo
 import { alpha } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import type { SurveySubmission } from '../../types/surveyAdmin';
+import { rem } from '../../theme/rem';
 import {
   AdminDialog,
   AdminDialogCancelButton,
@@ -65,8 +66,8 @@ const MetadataItem = ({ icon: Icon, label, value, isLink = false, href }: Metada
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          width: 36,
-          height: 36,
+          width: rem(36),
+          height: rem(36),
           borderRadius: 1.5,
           flexShrink: 0,
           bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),

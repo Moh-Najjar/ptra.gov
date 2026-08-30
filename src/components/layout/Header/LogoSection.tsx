@@ -5,6 +5,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { ROUTES } from '../../../app/routes/paths';
 import { portalLogoAr, portalLogoEn } from '../../../assets/images';
 import { useLanguage } from '../../../hooks/useLanguage';
+import { rem } from '../../../theme/rem';
 
 export const LogoSection = () => {
   const { t } = useTranslation();
@@ -31,9 +32,9 @@ export const LogoSection = () => {
         src={portalLogo}
         alt={t('hero.title')}
         sx={{
-          height: { xs: 48, md: 64 },
+          height: { xs: rem(42), md: rem(52), lg: rem(64) },
           width: 'auto',
-          maxWidth: { xs: 220, sm: 320, lg: 480 },
+          maxWidth: { xs: rem(200), sm: rem(280), md: rem(240), lg: rem(360), xl: rem(480) },
           objectFit: 'contain',
           display: 'block',
         }}

@@ -19,27 +19,46 @@ import {
 import { useSurvey } from '../../../contexts/SurveyContext';
 import { useWebsiteVisitors } from '../../../hooks/useWebsiteVisitors';
 import type { FooterLink, PartnerLogo } from '../../../types/navigation';
+import { rem } from '../../../theme/rem';
 
 const PartnerLogoImage = ({ logo }: { logo: PartnerLogo }) => {
   const { t } = useTranslation();
+  const partnerName = t(logo.labelKey);
 
   return (
     <Box
+      component="a"
+      href={logo.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={partnerName}
       sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         px: { xs: 0.75, sm: 1 },
         py: 0.5,
+        textDecoration: 'none',
+        borderRadius: 1,
+        transition: 'opacity 0.2s ease, transform 0.2s ease',
+        '&:hover': {
+          opacity: 0.82,
+          transform: 'translateY(-0.0625rem)',
+        },
+        '&:focus-visible': {
+          outline: '0.125rem solid',
+          outlineColor: 'primary.main',
+          outlineOffset: rem(3),
+        },
       }}
     >
       <Box
         component="img"
         src={logo.src}
-        alt={t(logo.labelKey)}
+        alt={partnerName}
         sx={{
-          height: { xs: 40, sm: 44 },
-          maxWidth: { xs: 100, sm: 120 },
+          height: { xs: rem(40), sm: rem(44) },
+          maxWidth: { xs: rem(100), sm: rem(120) },
           width: 'auto',
           objectFit: 'contain',
           display: 'block',
@@ -70,7 +89,7 @@ const PartnerGroup = ({ group }: { group: PartnerLogo['group'] }) => {
         sx={{
           fontWeight: 600,
           flexShrink: 0,
-          minWidth: { xs: 88, sm: isRtl ? 112 : 148 },
+          minWidth: { xs: rem(88), sm: isRtl ? rem(112) : rem(148) },
           whiteSpace: 'nowrap',
         }}
       >
@@ -170,8 +189,9 @@ export const Footer = () => {
       component="footer"
       sx={{
         bgcolor: 'footer.main',
-        borderTop: '3px solid',
-        borderColor: 'primary.main',
+        borderTop: '0.4375rem solid',
+        borderBottom: '0.4375rem solid',
+        borderColor: 'utilityBar.main',
         mt: 'auto',
       }}
     >

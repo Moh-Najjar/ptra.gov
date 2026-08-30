@@ -12,6 +12,7 @@ import {
 import { alpha } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { useSurvey } from '../../contexts/SurveyContext';
+import { rem } from '../../theme/rem';
 
 interface SurveyPromptProps {
   open: boolean;
@@ -39,16 +40,16 @@ export const SurveyPrompt = ({ open, onDismiss, onHide }: SurveyPromptProps) => 
         aria-describedby="survey-prompt-description"
         sx={{
           position: 'fixed',
-          bottom: { xs: 16, sm: 24 },
+          bottom: { xs: rem(16), sm: rem(24) },
           // Logical inline-end mirrors by language: EN = bottom-right, AR = bottom-left.
-          insetInlineEnd: { xs: 16, sm: 24 },
-          insetInlineStart: { xs: 16, sm: 'auto' },
+          insetInlineEnd: { xs: rem(16), sm: rem(24) },
+          insetInlineStart: { xs: rem(16), sm: 'auto' },
           zIndex: (muiTheme) => muiTheme.zIndex.snackbar,
-          width: { xs: 'auto', sm: 380 },
+          width: { xs: 'auto', sm: rem(380) },
           maxWidth: '100%',
           borderRadius: 3,
           overflow: 'hidden',
-          border: '1px solid',
+          border: '0.0625rem solid',
           borderColor: (theme) => alpha(theme.palette.primary.main, 0.2),
         }}
       >

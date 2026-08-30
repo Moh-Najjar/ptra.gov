@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { useSurveyStatistics } from '../../hooks/queries/surveyAdmin';
 import type { SurveyQuestionStat, SurveyStatistics } from '../../types/surveyAdmin';
 import { formatSystemNumber } from '../../utils/formatNumber';
+import { rem } from '../../theme/rem';
 
 interface SurveyStatisticsChartsProps {
   formId: number;
@@ -104,7 +105,7 @@ const buildAverageScoreOption = (
           typeof firstItem.value === 'number' ? formatScore(firstItem.value) : formatScore(0);
 
         return [
-          `<div style="font-weight:700;margin-bottom:6px;max-width:280px;white-space:normal">${question.label}</div>`,
+          `<div style="font-weight:700;margin-bottom:0.375rem;max-width:17.5rem;white-space:normal">${question.label}</div>`,
           `${averageLabel}: <b>${score}</b> / 5`,
           `${answersLabel}: <b>${formatInteger(question.totalAnswers)}</b>`,
         ].join('<br/>');
@@ -287,7 +288,7 @@ const buildDistributionOption = (
         }
 
         const lines = [
-          `<div style="font-weight:700;margin-bottom:8px;max-width:300px;white-space:normal">${question.label}</div>`,
+          `<div style="font-weight:700;margin-bottom:0.5rem;max-width:18.75rem;white-space:normal">${question.label}</div>`,
         ];
 
         for (const param of params) {
@@ -366,22 +367,22 @@ const StatSummaryCard = ({ label, value, icon: Icon }: StatSummaryCardProps) => 
       p: 2.5,
       height: '100%',
       borderRadius: 2.5,
-      border: '1px solid',
+      border: '0.0625rem solid',
       borderColor: 'divider',
       background: (theme) =>
         `linear-gradient(145deg, ${alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.16 : 0.06)} 0%, ${theme.palette.background.paper} 55%)`,
       transition: 'transform 0.2s ease, box-shadow 0.2s ease',
       '&:hover': {
-        transform: 'translateY(-2px)',
-        boxShadow: (theme) => `0 10px 24px ${alpha(theme.palette.primary.main, 0.12)}`,
+        transform: 'translateY(-0.125rem)',
+        boxShadow: (theme) => `0 0.625rem 1.5rem ${alpha(theme.palette.primary.main, 0.12)}`,
       },
     }}
   >
     <Stack direction="row" spacing={1.5} sx={{ alignItems: 'flex-start' }}>
       <Box
         sx={{
-          width: 42,
-          height: 42,
+          width: rem(42),
+          height: rem(42),
           borderRadius: 2,
           display: 'flex',
           alignItems: 'center',
@@ -402,7 +403,7 @@ const StatSummaryCard = ({ label, value, icon: Icon }: StatSummaryCardProps) => 
           sx={{
             fontWeight: 800,
             color: 'primary.main',
-            letterSpacing: 0.3,
+            letterSpacing: rem(0.3),
             fontVariantNumeric: 'lining-nums',
           }}
         >
@@ -413,8 +414,8 @@ const StatSummaryCard = ({ label, value, icon: Icon }: StatSummaryCardProps) => 
   </Paper>
 );
 
-const getChartHeight = (data: SurveyStatistics): number =>
-  Math.max(340, data.questions.length * 58 + 130);
+const getChartHeight = (data: SurveyStatistics): string =>
+  rem(Math.max(340, data.questions.length * 58 + 130));
 
 export const SurveyStatisticsCharts = ({ formId }: SurveyStatisticsChartsProps) => {
   const { t } = useTranslation();
@@ -525,7 +526,7 @@ export const SurveyStatisticsCharts = ({ formId }: SurveyStatisticsChartsProps) 
             sx={{
               p: { xs: 1.5, md: 2 },
               borderRadius: 2.5,
-              border: '1px solid',
+              border: '0.0625rem solid',
               borderColor: 'divider',
               bgcolor: 'background.paper',
             }}
@@ -546,7 +547,7 @@ export const SurveyStatisticsCharts = ({ formId }: SurveyStatisticsChartsProps) 
             sx={{
               p: { xs: 1.5, md: 2 },
               borderRadius: 2.5,
-              border: '1px solid',
+              border: '0.0625rem solid',
               borderColor: 'divider',
               bgcolor: 'background.paper',
             }}

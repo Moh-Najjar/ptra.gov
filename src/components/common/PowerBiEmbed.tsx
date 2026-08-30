@@ -2,6 +2,8 @@ import { Box, CircularProgress, Typography } from '@mui/material';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { rem } from '../../theme/rem';
+
 interface PowerBiEmbedProps {
   /** Accessible title passed to the iframe element. */
   title: string;
@@ -10,7 +12,7 @@ interface PowerBiEmbedProps {
 }
 
 /** Minimum iframe height so reports remain usable on smaller screens. */
-const MIN_EMBED_HEIGHT = 560;
+const MIN_EMBED_HEIGHT = rem(560);
 
 export const PowerBiEmbed = ({ title, embedUrl }: PowerBiEmbedProps) => {
   const { t } = useTranslation();
@@ -36,7 +38,7 @@ export const PowerBiEmbed = ({ title, embedUrl }: PowerBiEmbedProps) => {
         minHeight: MIN_EMBED_HEIGHT,
         borderRadius: 2,
         overflow: 'hidden',
-        border: '1px solid',
+        border: '0.0625rem solid',
         borderColor: 'divider',
         bgcolor: 'background.paper',
       }}

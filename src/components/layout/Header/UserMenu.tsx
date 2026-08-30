@@ -25,6 +25,7 @@ import { AUTHENTICATED_MENU_ROUTES } from '../../../constants/authenticatedMenuR
 import { useAuth } from '../../../hooks/useAuth';
 import { getAccessibleRoutes, getUserDisplayName, getUserInitials } from '../../../utils/roles';
 import type { RoleRouteItem } from '../../../types/roles';
+import { rem } from '../../../theme/rem';
 
 const ROUTE_ICONS: Partial<Record<RoleRouteItem['path'], typeof ArticleOutlinedIcon>> = {
   [ROUTES.POST]: ArticleOutlinedIcon,
@@ -83,9 +84,9 @@ export const UserMenu = () => {
         <Avatar
           alt={user.username}
           sx={{
-            width: 44,
-            height: 44,
-            border: '2px solid',
+            width: { xs: rem(40), md: rem(44) },
+            height: { xs: rem(40), md: rem(44) },
+            border: '0.125rem solid',
             borderColor: 'primary.main',
             bgcolor: 'primary.main',
             fontWeight: 700,
@@ -112,10 +113,10 @@ export const UserMenu = () => {
           paper: {
             sx: {
               mt: 1,
-              minWidth: 280,
+              minWidth: rem(280),
               borderRadius: 2,
               overflow: 'hidden',
-              boxShadow: '0 12px 32px rgba(27, 117, 188, 0.18)',
+              boxShadow: '0 0.75rem 2rem rgba(27, 117, 188, 0.18)',
             },
           },
           list: {
@@ -137,9 +138,9 @@ export const UserMenu = () => {
           <Avatar
             alt={user.username}
             sx={{
-              width: 40,
-              height: 40,
-              border: '2px solid',
+              width: rem(40),
+              height: rem(40),
+              border: '0.125rem solid',
               borderColor: alpha('#FFFFFF', 0.6),
               bgcolor: alpha('#FFFFFF', 0.15),
               fontWeight: 700,
@@ -171,7 +172,7 @@ export const UserMenu = () => {
                 fontWeight: 600,
               }}
             >
-              <ListItemIcon sx={{ minWidth: 36, color: 'primary.main' }}>
+              <ListItemIcon sx={{ minWidth: rem(36), color: 'primary.main' }}>
                 <PersonOutlineOutlinedIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary={t(route.labelKey)} />
@@ -194,7 +195,7 @@ export const UserMenu = () => {
                   fontWeight: 600,
                 }}
               >
-                <ListItemIcon sx={{ minWidth: 36, color: 'primary.main' }}>
+                <ListItemIcon sx={{ minWidth: rem(36), color: 'primary.main' }}>
                   <RouteIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText primary={t(route.labelKey)} />
@@ -217,7 +218,7 @@ export const UserMenu = () => {
             bgcolor: (muiTheme) => alpha(muiTheme.palette.action.hover, 0.04),
           }}
         >
-          <ListItemIcon sx={{ minWidth: 36, color: 'error.main' }}>
+          <ListItemIcon sx={{ minWidth: rem(36), color: 'error.main' }}>
             <LogoutOutlinedIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary={t('auth.logout')} />

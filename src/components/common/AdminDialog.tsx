@@ -14,13 +14,14 @@ import {
 } from '@mui/material';
 import { alpha, type Theme } from '@mui/material/styles';
 import type { ElementType, ReactNode } from 'react';
+import { rem } from '../../theme/rem';
 
 type AdminDialogHeaderTone = 'primary' | 'error';
 
 const getAdminDialogPaperSx = (theme: Theme) => ({
   borderRadius: 3,
   overflow: 'hidden',
-  boxShadow: `0 16px 40px ${alpha(theme.palette.primary.main, 0.18)}`,
+  boxShadow: `0 1rem 2.5rem ${alpha(theme.palette.primary.main, 0.18)}`,
 });
 
 const getAdminDialogContentSx = (theme: Theme) => ({
@@ -39,7 +40,7 @@ const getAdminDialogFooterSx = (theme: Theme) => ({
 export const adminDialogSectionSx = {
   p: 2,
   borderRadius: 2,
-  border: '1px solid',
+  border: '0.0625rem solid',
   borderColor: 'divider',
   bgcolor: (theme: Theme) =>
     alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.05 : 0.02),
@@ -53,13 +54,13 @@ export const adminDialogCancelButtonSx = {
 export const adminDialogPrimaryButtonSx = {
   px: 2.5,
   fontWeight: 700,
-  boxShadow: (theme: Theme) => `0 8px 20px ${alpha(theme.palette.primary.main, 0.28)}`,
+  boxShadow: (theme: Theme) => `0 0.5rem 1.25rem ${alpha(theme.palette.primary.main, 0.28)}`,
 } as const;
 
 export const adminDialogDangerButtonSx = {
   px: 2.5,
   fontWeight: 700,
-  boxShadow: (theme: Theme) => `0 8px 20px ${alpha(theme.palette.error.main, 0.24)}`,
+  boxShadow: (theme: Theme) => `0 0.5rem 1.25rem ${alpha(theme.palette.error.main, 0.24)}`,
 } as const;
 
 interface AdminDialogProps extends DialogProps {
@@ -119,8 +120,8 @@ export const AdminDialogHeader = ({
           spacing={1}
           sx={{
             position: 'absolute',
-            top: 8,
-            insetInlineEnd: 8,
+            top: rem(8),
+            insetInlineEnd: rem(8),
             alignItems: 'stretch',
             zIndex: 1,
           }}
@@ -159,12 +160,12 @@ export const AdminDialogHeader = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: 44,
-            height: 44,
+            width: rem(44),
+            height: rem(44),
             borderRadius: 2,
             flexShrink: 0,
             bgcolor: alpha('#FFFFFF', 0.16),
-            border: '1px solid',
+            border: '0.0625rem solid',
             borderColor: alpha('#FFFFFF', 0.28),
           }}
         >

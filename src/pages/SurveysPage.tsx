@@ -33,6 +33,7 @@ import { useSurveySubmissions } from '../hooks/queries/surveyAdmin';
 import type { AppLanguage } from '../i18n/types';
 import type { SurveySubmission } from '../types/surveyAdmin';
 import { formatSystemNumber } from '../utils/formatNumber';
+import { rem } from '../theme/rem';
 const DEFAULT_PAGE_SIZE = 20;
 
 const formatSubmissionDateTime = (value: string, locale: string): string => {
@@ -171,7 +172,7 @@ export const SurveysPage = () => {
                     {renderOptionalValue(submission.device, t('pages.surveys.notAvailable'))}
                   </TableCell>
                   <TableCell>{submission.ip}</TableCell>
-                  <TableCell sx={{ maxWidth: 220 }}>
+                  <TableCell sx={{ maxWidth: rem(220) }}>
                     <Link
                       href={submission.sourceUrl}
                       target="_blank"

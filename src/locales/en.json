@@ -4,6 +4,7 @@
     "comingSoon": "This page content will be added soon.",
     "loginComingSoon": "The login form will be added soon.",
     "menu": "Menu",
+    "close": "Close",
     "validation": {
       "required": "This field is required.",
       "invalidEmail": "Enter a valid email address.",
@@ -50,7 +51,9 @@
     "switchToDarkMode": "Dark mode",
     "switchToLightMode": "Light mode",
     "decreaseFontSize": "Decrease font size",
-    "increaseFontSize": "Increase font size"
+    "increaseFontSize": "Increase font size",
+    "quickLinks": "Quick links",
+    "followUs": "Follow us"
   },
   "auth": {
     "login": "Login",

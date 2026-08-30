@@ -1,0 +1,31 @@
+/**
+ * Root rem scale for the portal.
+ *
+ * 1rem = 16px on desktop. Tablet and phone shrink the root so type and rem-based
+ * layout stay readable without overflowing small viewports.
+ *
+ * --user-font-scale is set by the A+/A- control (FontSizeProvider). It multiplies
+ * the viewport scale so accessibility steps still work on every breakpoint.
+ */
+:root {
+  --app-font-scale: 1;
+  --user-font-scale: 1;
+}
+
+html {
+  font-size: calc(16px * var(--app-font-scale) * var(--user-font-scale));
+}
+
+/* MUI md: slightly smaller type on tablets. */
+@media (max-width: 899.98px) {
+  :root {
+    --app-font-scale: 0.9375; /* 15px */
+  }
+}
+
+/* MUI sm: compact type on phones. */
+@media (max-width: 599.98px) {
+  :root {
+    --app-font-scale: 0.875; /* 14px */
+  }
+}

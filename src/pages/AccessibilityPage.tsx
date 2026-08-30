@@ -33,7 +33,7 @@ export const AccessibilityPage = () => {
 
       <Box
         sx={{
-          border: '1px solid',
+          border: '0.0625rem solid',
           borderColor: (theme) =>
             theme.palette.mode === 'dark'
               ? alpha(theme.palette.primary.main, 0.28)

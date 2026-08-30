@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import { rem } from '../../theme/rem';
 
 interface DashboardCardProps {
   label: string;
@@ -16,8 +17,8 @@ export const DashboardCard = ({ label, path, background }: DashboardCardProps) =
         position: 'relative',
         display: 'block',
         flex: 1,
-        minWidth: { xs: 140, sm: 160, md: 180 },
-        height: { xs: 280, md: 450 },
+        minWidth: { xs: rem(140), sm: rem(160), md: rem(180) },
+        height: { xs: rem(280), md: rem(450) },
         borderRadius: 10,
         overflow: 'hidden',
         textDecoration: 'none',
@@ -26,7 +27,7 @@ export const DashboardCard = ({ label, path, background }: DashboardCardProps) =
         backgroundPosition: 'center',
         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
         '&:hover': {
-          transform: 'translateY(-4px)',
+          transform: 'translateY(-0.25rem)',
           boxShadow: 6,
         },
         '&::before': {
@@ -41,14 +42,14 @@ export const DashboardCard = ({ label, path, background }: DashboardCardProps) =
         variant="h3"
         sx={{
           position: 'absolute',
-          bottom: 24,
-          insetInlineEnd: 16,
+          bottom: rem(24),
+          insetInlineEnd: rem(16),
           color: '#FFFFFF',
           fontWeight: 700,
           writingMode: 'vertical-rl',
           textOrientation: 'mixed',
           transform: 'rotate(180deg)',
-          letterSpacing: 1,
+          letterSpacing: rem(1),
           zIndex: 1,
           p: 1
         }}

@@ -27,6 +27,7 @@ export interface PartnerLogo {
   labelKey: string;
   group: 'execution' | 'partnership' | 'funding';
   src: string;
+  href: string;
 }
 
 export interface UtilityLink {

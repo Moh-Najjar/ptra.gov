@@ -30,6 +30,7 @@ import {
 } from '../../hooks/usePosts';
 import type { AdminPost, PostAuthor, SearchablePostAuthor } from '../../types/posts';
 import { getApiErrorMessage } from '../../utils/apiErrors';
+import { rem } from '../../theme/rem';
 
 const SEARCH_DEBOUNCE_MS = 300;
 const MIN_SEARCH_LENGTH = 2;
@@ -179,14 +180,14 @@ export const PostAuthorsDialog = ({ post, onClose }: PostAuthorsDialogProps) => 
                     label={authors.length}
                     size="small"
                     color="primary"
-                    sx={{ height: 22, fontWeight: 700 }}
+                    sx={{ height: rem(22), fontWeight: 700 }}
                   />
                 ) : undefined
               }
             >
               {isAuthorsLoading && (
                 <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
-                  <CircularProgress size={24} aria-label={t('pages.post.authors.loading')} />
+                  <CircularProgress size={rem(24)} aria-label={t('pages.post.authors.loading')} />
                 </Box>
               )}
 

@@ -11,6 +11,7 @@ import {
 import { useAuth } from '../../hooks/useAuth';
 import { getDirection } from '../../i18n/types';
 import { formatSystemNumber } from '../../utils/formatNumber';
+import { rem } from '../../theme/rem';
 import { getExpiryCountdownSeconds, getMillisecondsUntilExpiryWarning } from '../../utils/sessionExpiry';
 
 export const SessionExpiryWatcher = () => {
@@ -120,7 +121,7 @@ export const SessionExpiryWatcher = () => {
         severity="warning"
         variant="filled"
         sx={{
-          width: { xs: '100%', sm: 360 },
+          width: { xs: '100%', sm: rem(360) },
           alignItems: 'flex-start',
           boxShadow: 4,
         }}
@@ -138,7 +139,7 @@ export const SessionExpiryWatcher = () => {
             variant="determinate"
             value={progress}
             color="inherit"
-            sx={{ height: 6, borderRadius: 999 }}
+            sx={{ height: rem(6), borderRadius: 999 }}
           />
           <Typography variant="caption" sx={{ display: 'block', mt: 0.75, fontWeight: 700 }}>
             {t('auth.sessionExpiringCountdown', {

@@ -1,6 +1,7 @@
 import { createTheme, type Direction } from '@mui/material/styles';
 import type { ColorMode } from '../constants/colorMode';
 import { getPalette } from './palette';
+import { rem } from './rem';
 import { typography } from './typography';
 
 export const createAppTheme = (direction: Direction, mode: ColorMode) =>
@@ -12,7 +13,7 @@ export const createAppTheme = (direction: Direction, mode: ColorMode) =>
       MuiButton: {
         styleOverrides: {
           root: {
-            borderRadius: 8,
+            borderRadius: rem(8),
           },
         },
       },

@@ -3,6 +3,7 @@ import { motion, useReducedMotion, type Variants } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { useGeneralStats } from '../../hooks/useGeneralStats';
 import { StatCircle, type StatCircleSize } from '../common/StatCircle';
+import { rem } from '../../theme/rem';
 
 const SIZE_PATTERN: StatCircleSize[] = ['xl', 'md', 'sm', 'md', 'sm', 'xl'];
 
@@ -11,10 +12,11 @@ const Z_INDEX_PATTERN = [6, 3, 2, 2, 3, 6];
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
+/** IntersectionObserver rootMargin only accepts px or %. */
 const VIEWPORT = { once: true, amount: 0.25, margin: '0px 0px -40px 0px' } as const;
 
 const titleVariants: Variants = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: rem(16) },
   visible: {
     opacity: 1,
     y: 0,
@@ -33,7 +35,7 @@ const statsContainerVariants: Variants = {
 };
 
 const statCircleVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.9, y: 20 },
+  hidden: { opacity: 0, scale: 0.9, y: rem(20) },
   visible: {
     opacity: 1,
     scale: 1,
@@ -96,7 +98,7 @@ export const GeneralStatsSection = () => {
               overflow: 'hidden',
               py: { xs: 2, md: 3 },
               px: { xs: 1, md: 0 },
-              minHeight: { xs: 230, md: 310 },
+              minHeight: { xs: rem(230), md: rem(310) },
             }}
           >
             <Box

@@ -152,7 +152,7 @@ export const SurveyDialog = ({ onSubmitted, onClosedWithoutSubmit }: SurveyDialo
                 key={questionId}
                 sx={{
                   pb: 2.5,
-                  borderBottom: '1px solid',
+                  borderBottom: '0.0625rem solid',
                   borderColor: 'divider',
                   '&:last-of-type': {
                     borderBottom: 'none',

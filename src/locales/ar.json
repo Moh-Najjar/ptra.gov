@@ -4,6 +4,7 @@
     "comingSoon": "سيتم إضافة محتوى هذه الصفحة قريباً.",
     "loginComingSoon": "سيتم إضافة نموذج تسجيل الدخول قريباً.",
     "menu": "القائمة",
+    "close": "إغلاق",
     "validation": {
       "required": "هذا الحقل مطلوب.",
       "invalidEmail": "يرجى إدخال بريد إلكتروني صالح.",
@@ -50,7 +51,9 @@
     "switchToDarkMode": "الوضع الداكن",
     "switchToLightMode": "الوضع الفاتح",
     "decreaseFontSize": "تصغير الخط",
-    "increaseFontSize": "تكبير الخط"
+    "increaseFontSize": "تكبير الخط",
+    "quickLinks": "روابط سريعة",
+    "followUs": "تابعنا"
   },
   "auth": {
     "login": "تسجيل الدخول",

@@ -64,6 +64,7 @@ import {
 } from '../types/posts';
 import { getApiErrorMessage } from '../utils/apiErrors';
 import { userHasAnyRole } from '../utils/roles';
+import { rem } from '../theme/rem';
 
 type PostDialogMode = 'add' | 'edit';
 
@@ -279,12 +280,12 @@ export const PostPage = () => {
                 return (
                   <TableRow key={post.id} hover>
                     <TableCell>{post.id}</TableCell>
-                    <TableCell sx={{ fontWeight: 600, maxWidth: 320 }}>
+                    <TableCell sx={{ fontWeight: 600, maxWidth: rem(320) }}>
                       <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>
                         {postTitle}
                       </Typography>
                     </TableCell>
-                    <TableCell sx={{ maxWidth: 420 }}>
+                    <TableCell sx={{ maxWidth: rem(420) }}>
                       {post.authors.length > 0 ? (
                         <Stack direction="row" spacing={0.75} useFlexGap sx={{ flexWrap: 'wrap' }}>
                           {post.authors.map((author) => (

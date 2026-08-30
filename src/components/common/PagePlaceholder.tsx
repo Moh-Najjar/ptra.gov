@@ -22,7 +22,7 @@ export const PagePlaceholder = ({ titleKey, descriptionKey }: PagePlaceholderPro
 
       <Box
         sx={{
-          border: '1px dashed',
+          border: '0.0625rem dashed',
           borderColor: 'divider',
           borderRadius: 2,
           p: { xs: 4, md: 8 },

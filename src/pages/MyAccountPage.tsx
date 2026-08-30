@@ -18,6 +18,7 @@ import { ROUTES } from '../app/routes/paths';
 import { PowerBiEmbed } from '../components/common/PowerBiEmbed';
 import { useAuthoredPosts } from '../hooks/usePosts';
 import type { AuthoredPost } from '../types/posts';
+import { rem } from '../theme/rem';
 
 const hasIframeUrl = (post: AuthoredPost): post is AuthoredPost & { iframeUrl: string } =>
   typeof post.iframeUrl === 'string' && post.iframeUrl.trim().length > 0;
@@ -99,7 +100,7 @@ export const MyAccountPage = () => {
           <Paper
             variant="outlined"
             sx={{
-              width: { xs: '100%', lg: 320 },
+              width: { xs: '100%', lg: rem(320) },
               flexShrink: 0,
               borderRadius: 2,
               overflow: 'hidden',
@@ -121,7 +122,7 @@ export const MyAccountPage = () => {
                     onClick={() => setSelectedPostId(post.id)}
                     sx={{
                       py: 1.5,
-                      borderBottom: '1px solid',
+                      borderBottom: '0.0625rem solid',
                       borderColor: 'divider',
                     }}
                   >

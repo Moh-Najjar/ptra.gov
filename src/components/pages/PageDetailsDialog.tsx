@@ -48,6 +48,7 @@ import {
   type PageDetailValue,
 } from '../../types/pageDetails';
 import { getApiErrorMessage } from '../../utils/apiErrors';
+import { rem } from '../../theme/rem';
 import {
   buildPageDetailPayload,
   createEmptyPageDetailFormValues,
@@ -517,7 +518,7 @@ export const PageDetailsDialog = ({ page, onClose }: PageDetailsDialogProps) => 
 
               {isMovementsLoading && needsMovementOptions && (
                 <Box sx={{ display: 'flex', justifyContent: 'center', py: 1 }}>
-                  <CircularProgress size={24} aria-label={t('pages.pages.details.loading')} />
+                  <CircularProgress size={rem(24)} aria-label={t('pages.pages.details.loading')} />
                 </Box>
               )}
 

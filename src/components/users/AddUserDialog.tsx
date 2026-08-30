@@ -40,6 +40,7 @@ import {
   type AddUserFieldErrors,
 } from '../../utils/userFormValidation';
 import { getValidationMessages } from '../../utils/validationMessages';
+import { rem } from '../../theme/rem';
 
 interface AddUserDialogProps {
   open: boolean;
@@ -258,7 +259,7 @@ export const AddUserDialog = ({
                     variant="determinate"
                     value={passwordStrength.progress}
                     color={getPasswordStrengthColor(passwordStrength.level)}
-                    sx={{ height: 6, borderRadius: 999 }}
+                    sx={{ height: rem(6), borderRadius: 999 }}
                   />
                   <Typography
                     variant="caption"

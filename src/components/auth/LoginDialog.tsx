@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useMemo, useState, type FormEvent } from 'react';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -24,8 +24,11 @@ import { alpha, keyframes } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { useLanguage } from '../../hooks/useLanguage';
+import { portalLogoAr, portalLogoEn } from '../../assets/images';
 import { getDefaultAuthenticatedRoute } from '../../utils/roles';
 import { getLoginErrorMessage } from '../../utils/authErrors';
+import { rem } from '../../theme/rem';
 
 interface LoginDialogProps {
   open: boolean;
@@ -35,7 +38,7 @@ interface LoginDialogProps {
 const panelReveal = keyframes`
   from {
     opacity: 0;
-    transform: translateY(28px) scale(0.98);
+    transform: translateY(1.75rem) scale(0.98);
   }
   to {
     opacity: 1;
@@ -45,7 +48,7 @@ const panelReveal = keyframes`
 
 const orbFloat = keyframes`
   0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(12px, -18px); }
+  50% { transform: translate(0.75rem, -1.125rem); }
 `;
 
 const underlineFieldSx = {
@@ -56,7 +59,7 @@ const underlineFieldSx = {
     transition: 'background-color 0.2s ease, box-shadow 0.2s ease',
     '& fieldset': {
       borderColor: 'transparent',
-      borderWidth: 1,
+      borderWidth: rem(1),
     },
     '&:hover fieldset': {
       borderColor: (theme: { palette: { primary: { main: string } } }) =>
@@ -66,10 +69,10 @@ const underlineFieldSx = {
       bgcolor: (theme: { palette: { mode: string } }) =>
         theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.06)' : '#FFFFFF',
       boxShadow: (theme: { palette: { primary: { main: string } } }) =>
-        `0 8px 24px ${alpha(theme.palette.primary.main, 0.12)}`,
+        `0 0.5rem 1.5rem ${alpha(theme.palette.primary.main, 0.12)}`,
       '& fieldset': {
         borderColor: 'primary.main',
-        borderWidth: 1.5,
+        borderWidth: rem(1.5),
       },
     },
   },
@@ -77,6 +80,32 @@ const underlineFieldSx = {
     color: 'primary.main',
     fontWeight: 600,
   },
+};
+
+/** Language-aware portal lockup (crest + wordmark). Dark artwork — keep on a light surface. */
+const LoginBrandLogo = ({ height }: { height: string }) => {
+  const { t } = useTranslation();
+  const { direction } = useLanguage();
+  // Match the header: English lockup in LTR, Arabic lockup in RTL.
+  const portalLogo = useMemo(
+    () => (direction === 'ltr' ? portalLogoEn : portalLogoAr),
+    [direction],
+  );
+
+  return (
+    <Box
+      component="img"
+      src={portalLogo}
+      alt={t('hero.title')}
+      sx={{
+        height,
+        width: 'auto',
+        maxWidth: '100%',
+        objectFit: 'contain',
+        display: 'block',
+      }}
+    />
+  );
 };
 
 export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
@@ -132,11 +161,13 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
       onClose={handleClose}
       closeAfterTransition
       aria-labelledby="login-access-title"
+      // Sit above header tooltips (MUI tooltip z-index is 1500, modal is 1300).
+      sx={{ zIndex: (muiTheme) => muiTheme.zIndex.tooltip + 1 }}
       slotProps={{
         backdrop: {
           sx: {
             bgcolor: isDarkMode ? 'rgba(0, 0, 0, 0.78)' : 'rgba(47, 56, 63, 0.32)',
-            backdropFilter: 'blur(10px)',
+            backdropFilter: 'blur(0.625rem)',
           },
         },
       }}
@@ -160,16 +191,27 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
             sx={{
               position: 'relative',
               width: '100%',
-              maxWidth: 1080,
-              minHeight: { xs: '100dvh', sm: 560 },
+              maxWidth: rem(1080),
+              minHeight: { xs: '100dvh', sm: rem(560) },
               maxHeight: { xs: '100dvh', sm: '92dvh' },
               display: 'grid',
               gridTemplateColumns: { xs: '1fr', md: '1.05fr 0.95fr' },
               borderRadius: { xs: 0, sm: 4 },
               overflow: 'hidden',
+              // Thin brand accent on phones where the gradient panel is hidden.
+              '&::before': {
+                content: '""',
+                display: { xs: 'block', md: 'none' },
+                position: 'absolute',
+                top: 0,
+                insetInline: 0,
+                height: rem(4),
+                bgcolor: 'primary.main',
+                zIndex: 2,
+              },
               boxShadow: isDarkMode
-                ? '0 32px 80px rgba(0, 0, 0, 0.55)'
-                : '0 32px 80px rgba(27, 117, 188, 0.22)',
+                ? '0 2rem 5rem rgba(0, 0, 0, 0.55)'
+                : '0 2rem 5rem rgba(27, 117, 188, 0.22)',
               animation: `${panelReveal} 0.45s cubic-bezier(0.22, 1, 0.36, 1)`,
               '@media (prefers-reduced-motion: reduce)': {
                 animation: 'none',
@@ -201,10 +243,10 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
               <Box
                 sx={{
                   position: 'absolute',
-                  width: 220,
-                  height: 220,
+                  width: rem(220),
+                  height: rem(220),
                   borderRadius: '50%',
-                  border: '2px dashed rgba(255,255,255,0.28)',
+                  border: '0.125rem dashed rgba(255,255,255,0.28)',
                   insetInlineStart: '-8%',
                   top: '18%',
                   animation: `${orbFloat} 9s ease-in-out infinite`,
@@ -215,8 +257,8 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
               <Box
                 sx={{
                   position: 'absolute',
-                  width: 140,
-                  height: 140,
+                  width: rem(140),
+                  height: rem(140),
                   borderRadius: '50%',
                   bgcolor: 'rgba(255,255,255,0.08)',
                   insetInlineEnd: '8%',
@@ -228,8 +270,8 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
               />
 
               <Stack direction="row" spacing={1} sx={{ position: 'relative', zIndex: 1, alignItems: 'center' }}>
-                <ShieldOutlinedIcon sx={{ fontSize: 20, opacity: 0.9 }} />
-                <Typography variant="body2" sx={{ fontWeight: 600, letterSpacing: 0.4, opacity: 0.92 }}>
+                <ShieldOutlinedIcon sx={{ fontSize: rem(20), opacity: 0.9 }} />
+                <Typography variant="body2" sx={{ fontWeight: 600, letterSpacing: rem(0.4), opacity: 0.92 }}>
                   {t('header.customsDept')}
                 </Typography>
               </Stack>
@@ -238,11 +280,11 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
                 <Typography
                   variant="h4"
                   component="p"
-                  sx={{ fontWeight: 800, lineHeight: 1.35, maxWidth: 420, mb: 2 }}
+                  sx={{ fontWeight: 800, lineHeight: 1.35, maxWidth: rem(420), mb: 2 }}
                 >
                   {t('hero.title')}
                 </Typography>
-                <Typography variant="body1" sx={{ opacity: 0.9, lineHeight: 1.8, maxWidth: 400 }}>
+                <Typography variant="body1" sx={{ opacity: 0.9, lineHeight: 1.8, maxWidth: rem(400) }}>
                   {t('hero.description')}
                 </Typography>
               </Box>
@@ -262,17 +304,20 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
                 display: 'flex',
                 flexDirection: 'column',
                 bgcolor: 'background.paper',
-                p: { xs: 3, sm: 4, md: 5 },
+                overflowY: 'auto',
+                // Extra top padding on phones so the close control does not overlap the logo.
+                p: { xs: 2.5, sm: 4, md: 5 },
+                pt: { xs: 7, sm: 4, md: 5 },
               }}
             >
               <IconButton
                 onClick={handleClose}
                 disabled={loginMutation.isPending}
-                aria-label={t('auth.cancel')}
+                aria-label={t('common.close')}
                 sx={{
                   position: 'absolute',
-                  top: { xs: 12, sm: 16 },
-                  insetInlineEnd: { xs: 12, sm: 16 },
+                  top: { xs: rem(12), sm: rem(16) },
+                  insetInlineEnd: { xs: rem(12), sm: rem(16) },
                   bgcolor: (muiTheme) => alpha(muiTheme.palette.primary.main, 0.08),
                   '&:hover': {
                     bgcolor: (muiTheme) => alpha(muiTheme.palette.primary.main, 0.14),
@@ -282,34 +327,58 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
                 <CloseIcon />
               </IconButton>
 
-              <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', mt: { xs: 4, md: 0 } }}>
-                <Box
+              <Box
+                sx={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  // Center on desktop; start from the top on phones so the keyboard does not clip fields.
+                  justifyContent: { xs: 'flex-start', md: 'center' },
+                }}
+              >
+                {/* Mobile-only lockup: the dark PNG is unreadable on the old blue banner. */}
+                <Stack
+                  spacing={1}
                   sx={{
-                    display: { xs: 'block', md: 'none' },
+                    display: { xs: 'flex', md: 'none' },
+                    alignItems: 'center',
+                    textAlign: 'center',
                     mb: 3,
-                    p: 2,
-                    borderRadius: 3,
-                    color: 'primary.contrastText',
-                    background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.hero.light})`,
+                    pb: 2.5,
+                    borderBottom: 1,
+                    borderColor: 'divider',
                   }}
                 >
-                  <Typography variant="subtitle2" sx={{ opacity: 0.9, mb: 0.5 }}>
+                  <LoginBrandLogo height={rem(48)} />
+                  <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600, lineHeight: 1.5 }}>
                     {t('header.customsDept')}
                   </Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.4 }}>
-                    {t('hero.title')}
-                  </Typography>
-                </Box>
+                </Stack>
 
                 <Typography
                   id="login-access-title"
                   variant="h4"
                   component="h2"
-                  sx={{ fontWeight: 800, mb: 0.75, letterSpacing: '-0.02em' }}
+                  sx={{
+                    fontWeight: 800,
+                    mb: 0.75,
+                    letterSpacing: '-0.02em',
+                    fontSize: { xs: rem(22), sm: rem(28) },
+                    textAlign: { xs: 'center', md: 'start' },
+                  }}
                 >
                   {t('auth.loginTitle')}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 3.5, maxWidth: 360 }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    mb: 3.5,
+                    maxWidth: rem(360),
+                    mx: { xs: 'auto', md: 0 },
+                    textAlign: { xs: 'center', md: 'start' },
+                  }}
+                >
                   {t('header.portalSubtitle')}
                 </Typography>
 
@@ -404,11 +473,11 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
                     fontSize: '1.05rem',
                     fontWeight: 700,
                     background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.hero.dark} 100%)`,
-                    boxShadow: `0 12px 28px ${alpha(theme.palette.primary.main, 0.35)}`,
+                    boxShadow: `0 0.75rem 1.75rem ${alpha(theme.palette.primary.main, 0.35)}`,
                     transition: 'transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease',
                     '&:hover': {
-                      transform: loginMutation.isPending ? 'none' : 'translateY(-2px)',
-                      boxShadow: `0 16px 36px ${alpha(theme.palette.primary.main, 0.42)}`,
+                      transform: loginMutation.isPending ? 'none' : 'translateY(-0.125rem)',
+                      boxShadow: `0 1rem 2.25rem ${alpha(theme.palette.primary.main, 0.42)}`,
                     },
                     '&:disabled': {
                       opacity: 0.72,
@@ -416,13 +485,13 @@ export const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
                   }}
                 >
                   {loginMutation.isPending ? (
-                    <CircularProgress size={22} color="inherit" />
+                    <CircularProgress size={rem(22)} color="inherit" />
                   ) : (
                     <>
                       {t('auth.login')}
                       <ArrowForwardIcon
                         sx={{
-                          fontSize: 20,
+                          fontSize: rem(20),
                           transform: theme.direction === 'rtl' ? 'scaleX(-1)' : 'none',
                         }}
                       />

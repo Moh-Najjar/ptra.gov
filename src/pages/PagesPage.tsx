@@ -67,6 +67,7 @@ import {
 } from '../types/cmsPage';
 import { getApiErrorMessage } from '../utils/apiErrors';
 import { userHasAnyRole } from '../utils/roles';
+import { rem } from '../theme/rem';
 
 type PageDialogMode = 'add' | 'edit';
 
@@ -340,7 +341,7 @@ export const PagesPage = () => {
                     onClick={() => openPageDetails(page)}
                   >
                     <TableCell>{page.id}</TableCell>
-                    <TableCell sx={{ fontWeight: 600, maxWidth: 320 }}>
+                    <TableCell sx={{ fontWeight: 600, maxWidth: rem(320) }}>
                       <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
                         <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>
                           {page.title}
@@ -354,7 +355,7 @@ export const PagesPage = () => {
                         )}
                       </Stack>
                     </TableCell>
-                    <TableCell sx={{ maxWidth: 320 }}>
+                    <TableCell sx={{ maxWidth: rem(320) }}>
                       {page.authors.length > 0 ? (
                         <Stack direction="row" spacing={0.75} useFlexGap sx={{ flexWrap: 'wrap' }}>
                           {page.authors.map((author) => (
