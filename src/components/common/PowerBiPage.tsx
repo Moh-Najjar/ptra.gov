@@ -1,8 +1,9 @@
 import { Box, Breadcrumbs, Container, Link, Typography } from '@mui/material';
-import { getPowerBiReport } from '../../constants/powerBiReports';
+import { getPowerBiEmbedUrl, getPowerBiReport } from '../../constants/powerBiReports';
 import type { PowerBiReportId } from '../../types/powerBi';
 import { Link as RouterLink } from 'react-router-dom';
 import { ROUTES } from '../../app/routes/paths';
+import { useLanguage } from '../../hooks/useLanguage';
 import { useTranslation } from 'react-i18next';
 import { PowerBiEmbed } from './PowerBiEmbed';
 
@@ -13,7 +14,9 @@ interface PowerBiPageProps {
 
 export const PowerBiPage = ({ reportId }: PowerBiPageProps) => {
   const { t } = useTranslation();
+  const { language } = useLanguage();
   const report = getPowerBiReport(reportId);
+  const embedUrl = getPowerBiEmbedUrl(report, language);
   const pageTitle = t(report.titleKey);
   const pageDescription = report.descriptionKey ? t(report.descriptionKey) : undefined;
 
@@ -41,7 +44,7 @@ export const PowerBiPage = ({ reportId }: PowerBiPageProps) => {
       )}
 
       <Box sx={{ mt: pageDescription ? 0 : 2 }}>
-        <PowerBiEmbed title={pageTitle} embedUrl={report.embedUrl} />
+        <PowerBiEmbed key={embedUrl} title={pageTitle} embedUrl={embedUrl} />
       </Box>
     </Container>
   );

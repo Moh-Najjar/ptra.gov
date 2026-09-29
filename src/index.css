@@ -8,6 +8,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Matches the original site: the dark-mode control grays the page instead of restyling it. */
+html.grayscale {
+  filter: grayscale(100%);
+}
+
 body {
   margin: 0;
   min-width: 20rem;

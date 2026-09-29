@@ -1,7 +1,9 @@
-import heroSlide10 from './hero/slide-10.png';
+import heroSlide10Ar from './hero/slide-10-ar.png';
+import heroSlide10En from './hero/slide-10-en.png';
 import heroSlide11 from './hero/slide-11.png';
 import heroSlide12 from './hero/slide-12.png';
 import heroSlide13 from './hero/slide-13.png';
+import { isAppLanguage } from '../../i18n/types';
 
 import foreignTradeCardImage from './cards/foreignTrade.png';
 import logisticsPerformanceCardImage from './cards/logisticsPerformance.png';
@@ -21,8 +23,24 @@ const createGradient = (from: string, to: string): string =>
 
 export const heroBackground = createGradient('#7EC0E8', '#3589C5');
 
+/** Blue wash used on the first hero slide so white text stays readable. */
+const SLIDE_1_OVERLAY = 'linear-gradient(rgb(111 178 208 / 50%), rgb(111 178 208 / 50%))';
+
+/** Arabic artwork is the fallback when the language is missing or not English. */
+const resolveSlide1Image = (language: string): string => {
+  if (isAppLanguage(language) && language === 'en') {
+    return heroSlide10En;
+  }
+  return heroSlide10Ar;
+};
+
+/** First slide uses a language-specific map; other slides share one image. */
+export const getHeroSlide1Background = (language: string): string => {
+  const imageUrl = resolveSlide1Image(language);
+  return `url(${imageUrl})`;
+};
+
 export const heroSlideBackgrounds = {
-  slide1: `linear-gradient(rgb(111 178 208 / 50%), rgb(111 178 208 / 50%)), url(${heroSlide10})`,
   slide2: `linear-gradient(rgba(27, 117, 188, 0.42), rgba(14, 90, 150, 0.55)), url(${heroSlide11})`,
   slide3: `linear-gradient(rgba(27, 79, 114, 0.48), rgba(14, 90, 150, 0.58)), url(${heroSlide12})`,
   slide4: `linear-gradient(rgba(36, 113, 163, 0.45), rgba(14, 90, 150, 0.56)), url(${heroSlide13})`,

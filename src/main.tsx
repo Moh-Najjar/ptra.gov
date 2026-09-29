@@ -1,3 +1,4 @@
+import { applyColorMode, getStoredColorMode } from './constants/colorMode';
 import { applyFontSizeLevel, getStoredFontSizeLevel } from './constants/fontSize';
 import { AppProviders } from './app/providers/AppProviders';
 import { createRoot } from 'react-dom/client';
@@ -11,6 +12,7 @@ import './index.css';
 import './i18n';
 
 applyFontSizeLevel(getStoredFontSizeLevel());
+applyColorMode(getStoredColorMode());
 
 const rootElement = document.getElementById('root');
 

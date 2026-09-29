@@ -1,4 +1,4 @@
-import { HERO_CAROUSEL_RESPONSIVE, HERO_SLIDES } from '../../constants/heroSlides';
+import { getHeroSlides, HERO_CAROUSEL_RESPONSIVE } from '../../constants/heroSlides';
 import type { HeroSlideItem } from '../../constants/heroSlides';
 import { Box, Container, Typography } from '@mui/material';
 import { motion, useReducedMotion, type Variants } from 'motion/react';
@@ -198,7 +198,8 @@ const HeroDot = ({ active = false, onClick, index = 0 }: HeroDotProps) => (
 );
 
 export const HeroSection = () => {
-  const { direction } = useLanguage();
+  const { direction, language } = useLanguage();
+  const slides = getHeroSlides(language);
 
   return (
     <Box
@@ -242,7 +243,7 @@ export const HeroSection = () => {
         customDot={<HeroDot />}
         key={direction}
       >
-        {HERO_SLIDES.map((slide) => (
+        {slides.map((slide) => (
           <HeroSlide key={slide.id} slide={slide} />
         ))}
       </Carousel>

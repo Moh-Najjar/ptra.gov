@@ -52,6 +52,8 @@ export const TopUtilityBar = () => {
   const { decreaseFontSize, increaseFontSize, canDecrease, canIncrease } = useFontSize();
 
   const colorModeTooltip = isDarkMode ? t('utility.switchToLightMode') : t('utility.switchToDarkMode');
+  // row-reverse keeps the Arabic links on the left, and mirrors that row in English.
+  const flowDirection = 'row-reverse' as const;
 
   return (
     <Box
@@ -64,7 +66,7 @@ export const TopUtilityBar = () => {
     >
       <Container maxWidth="xl">
         <Stack
-          direction="row"
+          direction={flowDirection}
           sx={{
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -73,54 +75,60 @@ export const TopUtilityBar = () => {
             minHeight: { xs: 0, md: rem(28) },
           }}
         >
-          {/* Language stays visible on every breakpoint — it is a primary action. */}
-          <Box
-            component="button"
-            type="button"
-            onClick={toggleLanguage}
-            aria-label={switchLabel}
-            sx={{
-              color: 'utilityBar.contrastText',
-              fontWeight: 700,
-              fontSize: '0.8125rem',
-              lineHeight: 1,
-              border: '0.0625rem solid rgba(255, 255, 255, 0.38)',
-              bgcolor: 'rgba(255, 255, 255, 0.12)',
-              cursor: 'pointer',
-              borderRadius: 999,
-              px: { xs: 1.25, md: 1.5 },
-              py: 0.45,
-              flexShrink: 0,
-              '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.22)' },
-            }}
-          >
-            {switchLabel}
-          </Box>
-
-          {/* Portal pages live in the mobile drawer instead of this crowded strip. */}
+          {/* Language and page links stay together on the physical left. */}
           <Stack
-            direction="row"
-            spacing={2}
-            sx={{
-              alignItems: 'center',
-              display: { xs: 'none', md: 'flex' },
-            }}
+            direction={flowDirection}
+            spacing={{ xs: 0, md: 2 }}
+            sx={{ alignItems: 'center', minWidth: 0 }}
           >
-            {UTILITY_LINKS.map((link) => (
-              <Link
-                key={link.path}
-                component={RouterLink}
-                to={link.path}
-                underline="hover"
-                sx={{ color: 'utilityBar.contrastText', fontSize: '0.875rem' }}
-              >
-                {t(link.labelKey)}
-              </Link>
-            ))}
+            <Box
+              component="button"
+              type="button"
+              onClick={toggleLanguage}
+              aria-label={switchLabel}
+              sx={{
+                color: 'utilityBar.contrastText',
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                lineHeight: 1,
+                border: 'none',
+                bgcolor: '#6FB2D0',
+                cursor: 'pointer',
+                borderRadius: 999,
+                px: { xs: 1.25, md: 1.5 },
+                py: 0.6,
+                flexShrink: 0,
+                '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.22)' },
+              }}
+            >
+              {switchLabel}
+            </Box>
+
+            {/* Portal pages live in the mobile drawer instead of this crowded strip. */}
+            <Stack
+              direction={flowDirection}
+              spacing={2}
+              sx={{
+                alignItems: 'center',
+                display: { xs: 'none', md: 'flex' },
+              }}
+            >
+              {UTILITY_LINKS.map((link) => (
+                <Link
+                  key={link.path}
+                  component={RouterLink}
+                  to={link.path}
+                  underline="hover"
+                  sx={{ color: 'utilityBar.contrastText', fontSize: '0.875rem' }}
+                >
+                  {t(link.labelKey)}
+                </Link>
+              ))}
+            </Stack>
           </Stack>
 
           <Stack
-            direction="row"
+            direction={flowDirection}
             spacing={0.5}
             sx={{
               alignItems: 'center',
@@ -144,9 +152,15 @@ export const TopUtilityBar = () => {
             ))}
           </Stack>
 
-          <Stack direction="row" spacing={0.15} sx={{ alignItems: 'center', flexShrink: 0 }}>
+          <Stack direction={flowDirection} spacing={0.15} sx={{ alignItems: 'center', flexShrink: 0 }}>
             {/* Print, favorites, and search are desktop-only — they are unused or awkward on phones. */}
-            <Box sx={{ display: { xs: 'none', md: 'inline-flex' } }}>
+            <Box
+              sx={{
+                display: { xs: 'none', md: 'inline-flex' },
+                flexDirection: flowDirection,
+                alignItems: 'center',
+              }}
+            >
               <Tooltip title={t('utility.favorites')}>
                 <IconButton size="small" sx={iconButtonSx} aria-label={t('utility.favorites')}>
                   <StarBorderIcon fontSize="small" />
@@ -182,13 +196,6 @@ export const TopUtilityBar = () => {
                 A+
               </Box>
             </Tooltip>
-            <Box sx={{ display: { xs: 'none', md: 'inline-flex' } }}>
-              <Tooltip title={t('utility.search')}>
-                <IconButton size="small" sx={iconButtonSx} aria-label={t('utility.search')}>
-                  <SearchIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            </Box>
             <Tooltip title={colorModeTooltip}>
               <IconButton
                 size="small"
@@ -203,6 +210,13 @@ export const TopUtilityBar = () => {
                 )}
               </IconButton>
             </Tooltip>
+            <Box sx={{ display: { xs: 'none', md: 'inline-flex' } }}>
+              <Tooltip title={t('utility.search')}>
+                <IconButton size="small" sx={iconButtonSx} aria-label={t('utility.search')}>
+                  <SearchIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </Box>
           </Stack>
         </Stack>
       </Container>

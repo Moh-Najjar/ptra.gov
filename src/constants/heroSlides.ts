@@ -1,4 +1,4 @@
-import { heroSlideBackgrounds } from '../assets/images';
+import { getHeroSlide1Background, heroSlideBackgrounds } from '../assets/images';
 
 export interface HeroSlideItem {
   id: string;
@@ -7,12 +7,13 @@ export interface HeroSlideItem {
   background: string;
 }
 
-export const HERO_SLIDES: HeroSlideItem[] = [
+/** Slide 1 swaps artwork by language; the remaining slides stay the same. */
+export const getHeroSlides = (language: string): HeroSlideItem[] => [
   {
     id: 'slide-1',
     titleKey: 'hero.slides.slide1.title',
     descriptionKey: 'hero.slides.slide1.description',
-    background: heroSlideBackgrounds.slide1,
+    background: getHeroSlide1Background(language),
   },
   {
     id: 'slide-2',

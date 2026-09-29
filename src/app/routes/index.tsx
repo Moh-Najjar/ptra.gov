@@ -11,7 +11,6 @@ import {
   ContainerDwellTimePage,
   CropsPage,
   FaqPage,
-  ForeignTradeLogisticsPage,
   ContainerFlowStatisticsPage,
   ForeignTradePage,
   ExportsPage,
@@ -26,6 +25,7 @@ import {
   ReleaseTimePage,
   UsersPage,
   SurveysPage,
+  ForeignTradeLogisticsPage,
 } from '../../pages';
 import { ROUTES } from './paths';
 

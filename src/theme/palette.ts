@@ -34,7 +34,7 @@ const lightPalette: PaletteOptions = {
     contrastText: '#FFFFFF',
   },
   footer: {
-    main: '#E8F4FB',
+    main: '#f3f6f7',
     contrastText: '#1A5276',
   },
   hero: {

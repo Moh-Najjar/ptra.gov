@@ -15,8 +15,15 @@ export const getStoredColorMode = (): ColorMode => {
   return stored;
 };
 
+const GRAYSCALE_CLASS = 'grayscale';
+
+/** Dark mode on this site is a grayscale filter, same as the original portal. */
 export const applyColorMode = (mode: ColorMode): ColorMode => {
-  document.documentElement.dataset.colorMode = mode;
-  document.documentElement.style.colorScheme = mode;
+  const root = document.documentElement;
+  const isGrayscale = mode === 'dark';
+
+  root.dataset.colorMode = mode;
+  root.style.colorScheme = 'light';
+  root.classList.toggle(GRAYSCALE_CLASS, isGrayscale);
   return mode;
 };

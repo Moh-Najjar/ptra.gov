@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { prefixer } from 'stylis';
 import rtlPlugin from '@mui/stylis-plugin-rtl';
 import { getDirection } from '../../i18n/types';
-import { useColorMode } from '../../hooks/useColorMode';
 import { createAppTheme } from '../../theme';
 import { ColorModeProvider } from './ColorModeProvider';
 import { FontSizeProvider } from './FontSizeProvider';
@@ -29,10 +28,10 @@ interface AppProvidersProps {
 
 const ThemedApp = ({ children }: AppProvidersProps) => {
   const { i18n, t } = useTranslation();
-  const { mode } = useColorMode();
   const direction = getDirection(i18n.language === 'en' ? 'en' : 'ar');
 
-  const theme = useMemo(() => createAppTheme(direction, mode), [direction, mode]);
+  // The toggle applies grayscale on <html>. The palette stays light.
+  const theme = useMemo(() => createAppTheme(direction, 'light'), [direction]);
   const cache = direction === 'rtl' ? cacheRtl : cacheLtr;
 
   useEffect(() => {

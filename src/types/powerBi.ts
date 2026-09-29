@@ -12,14 +12,20 @@ export type PowerBiReportId =
   | 'aqabaSez' // منطقة العقبة الاقتصادية الخاصة
   | 'containerFlowStatistics' // إحصائيات تدفق الحاويات
 
+/** Public Power BI view links, one per portal language. */
+export interface PowerBiEmbedUrls {
+  ar: string;
+  en: string;
+}
+
 /** Metadata required to render a Power BI report page. */
 export interface PowerBiReportConfig {
   /** Stable id used by page components and lookups. */
   id: PowerBiReportId;
   /** i18n key for the page title (e.g. pages.exports.title). */
   titleKey: string;
-  /** Public Power BI embed URL (view link). */
-  embedUrl: string;
+  /** Public Power BI embed URLs. Arabic is the existing report; English is the localized one. */
+  embedUrls: PowerBiEmbedUrls;
   /** App route path this report is mounted on. */
   route: RoutePath;
   /** Optional i18n key for a page description shown above the report. */
