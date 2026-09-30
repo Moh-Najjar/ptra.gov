@@ -13,6 +13,17 @@ html.grayscale {
   filter: grayscale(100%);
 }
 
+/* High contrast mode for accessibility - inverts colors for maximum contrast. */
+html.high-contrast {
+  filter: invert(100%) hue-rotate(180deg);
+}
+
+/* Fix images in high-contrast mode so they don't look inverted. */
+html.high-contrast img,
+html.high-contrast video {
+  filter: invert(100%) hue-rotate(180deg);
+}
+
 body {
   margin: 0;
   min-width: 20rem;

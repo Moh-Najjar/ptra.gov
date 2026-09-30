@@ -93,5 +93,47 @@ const darkPalette: PaletteOptions = {
   divider: 'rgba(255, 255, 255, 0.12)',
 };
 
-export const getPalette = (mode: ColorMode): PaletteOptions =>
-  mode === 'dark' ? darkPalette : lightPalette;
+const highContrastPalette: PaletteOptions = {
+  mode: 'dark',
+  primary: {
+    main: '#FFFFFF',
+    light: '#FFFFFF',
+    dark: '#CCCCCC',
+    contrastText: '#000000',
+  },
+  secondary: {
+    main: '#FFFFFF',
+    light: '#FFFFFF',
+    dark: '#CCCCCC',
+    contrastText: '#000000',
+  },
+  utilityBar: {
+    main: '#000000',
+    contrastText: '#FFFFFF',
+  },
+  footer: {
+    main: '#000000',
+    contrastText: '#FFFFFF',
+  },
+  hero: {
+    main: '#000000',
+    light: '#333333',
+    dark: '#000000',
+    contrastText: '#FFFFFF',
+  },
+  background: {
+    default: '#000000',
+    paper: '#000000',
+  },
+  text: {
+    primary: '#FFFFFF',
+    secondary: '#FFFFFF',
+  },
+  divider: 'rgba(255, 255, 255, 0.3)',
+};
+
+export const getPalette = (mode: ColorMode): PaletteOptions => {
+  if (mode === 'high-contrast') return highContrastPalette;
+  if (mode === 'dark') return darkPalette;
+  return lightPalette;
+};

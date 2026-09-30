@@ -1,7 +1,7 @@
 import heroSlide10Ar from './hero/slide-10-ar.png';
 import heroSlide10En from './hero/slide-10-en.png';
 import heroSlide11 from './hero/slide-11.png';
-import heroSlide12 from './hero/slide-12.png';
+import heroSlide12 from './hero/slide-12.jpg';
 import heroSlide13 from './hero/slide-13.png';
 import { isAppLanguage } from '../../i18n/types';
 
@@ -38,9 +38,9 @@ export const getHeroSlide1Background = (language: string): string => {
 };
 
 export const heroSlideBackgrounds = {
-  slide2: `linear-gradient(rgba(27, 117, 188, 0.42), rgba(14, 90, 150, 0.55)), url(${heroSlide11})`,
-  slide3: `linear-gradient(rgba(27, 79, 114, 0.48), rgba(14, 90, 150, 0.58)), url(${heroSlide12})`,
-  slide4: `linear-gradient(rgba(36, 113, 163, 0.45), rgba(14, 90, 150, 0.56)), url(${heroSlide13})`,
+  slide2: `url(${heroSlide11})`,
+  slide3: `url(${heroSlide12})`,
+  slide4: `url(${heroSlide13})`,
 } as const;
 
 export const cardBackgrounds = {

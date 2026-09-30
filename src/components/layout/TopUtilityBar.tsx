@@ -9,8 +9,8 @@ import {
   Tooltip,
 } from '@mui/material';
 import { useState } from 'react';
-import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
-import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import PrintIcon from '@mui/icons-material/Print';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { useTranslation } from 'react-i18next';
@@ -63,11 +63,9 @@ const fontSizeControlSx = {
 export const TopUtilityBar = () => {
   const { t } = useTranslation();
   const { toggleLanguage, switchLabel } = useLanguage();
-  const { isDarkMode, toggleColorMode } = useColorMode();
+  const { mode, setColorMode } = useColorMode();
   const { decreaseFontSize, increaseFontSize, canDecrease, canIncrease } = useFontSize();
   const [notice, setNotice] = useState<UtilityNotice | null>(null);
-
-  const colorModeTooltip = isDarkMode ? t('utility.switchToLightMode') : t('utility.switchToDarkMode');
 
   const closeNotice = (): void => {
     setNotice(null);
@@ -139,7 +137,7 @@ export const TopUtilityBar = () => {
                 bgcolor: '#6FB2D0',
                 cursor: 'pointer',
                 borderRadius: 999,
-                px: { xs: 1.25, md: 1.5 },
+                px: { xs: 1.25, md: 5 },
                 py: 0.6,
                 flexShrink: 0,
                 '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.22)' },
@@ -250,20 +248,53 @@ export const TopUtilityBar = () => {
                 A+
               </Box>
             </Tooltip>
-            <Tooltip title={colorModeTooltip}>
+            
+            {/* Color Mode Buttons */}
+            <Tooltip title={t('utility.switchToLightMode')}>
               <IconButton
                 size="small"
-                sx={iconButtonSx}
-                aria-label={colorModeTooltip}
-                onClick={toggleColorMode}
+                sx={{
+                  ...iconButtonSx,
+                  bgcolor: mode === 'light' ? 'rgba(255, 255, 255, 0.3)' : 'transparent',
+                }}
+                aria-label={t('utility.switchToLightMode')}
+                onClick={() => {
+                  setColorMode('light');
+                }}
               >
-                {isDarkMode ? (
-                  <LightModeOutlinedIcon fontSize="small" />
-                ) : (
-                  <DarkModeOutlinedIcon fontSize="small" />
-                )}
+                <VisibilityIcon fontSize="small" />
               </IconButton>
             </Tooltip>
+            <Tooltip title={t('utility.switchToGrayMode')}>
+              <IconButton
+                size="small"
+                sx={{
+                  ...iconButtonSx,
+                  bgcolor: mode === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'transparent',
+                }}
+                aria-label={t('utility.switchToGrayMode')}
+                onClick={() => {
+                  setColorMode('dark');
+                }}
+              >
+                <VisibilityOffIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            {/* <Tooltip title={t('utility.switchToHighContrastMode')}>
+              <IconButton
+                size="small"
+                sx={{
+                  ...iconButtonSx,
+                  bgcolor: mode === 'high-contrast' ? 'rgba(255, 255, 255, 0.3)' : 'transparent',
+                }}
+                aria-label={t('utility.switchToHighContrastMode')}
+                onClick={() => {
+                  setColorMode('high-contrast');
+                }}
+              >
+                <ContrastIcon fontSize="small" />
+              </IconButton>
+            </Tooltip> */}
           </Stack>
         </Stack>
       </Container>

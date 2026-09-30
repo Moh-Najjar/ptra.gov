@@ -100,7 +100,7 @@ const HeroSlide = ({ slide }: HeroSlideProps) => {
         maxWidth="lg"
         sx={{
           position: 'relative',
-          minHeight: { xs: rem(320), md: rem(500) },
+          minHeight: { xs: rem(320), md: rem(530) },
           display: 'flex',
           alignItems: 'flex-end',
           justifyContent: 'start',
@@ -128,12 +128,14 @@ const HeroSlide = ({ slide }: HeroSlideProps) => {
               color: '#FFFFFF',
               fontWeight: 700,
               mb: 2,
+              // Honor an explicit line break in the slide title.
+              whiteSpace: 'pre-line',
             }}
           >
             {t(slide.titleKey)}
           </Typography>
           <Typography
-            variant="body1"
+            variant="h6"
             component={motion.p}
             initial={motionInitial}
             whileInView="visible"
@@ -142,6 +144,7 @@ const HeroSlide = ({ slide }: HeroSlideProps) => {
             sx={{
               color: 'rgba(255,255,255,0.9)',
               lineHeight: 1.8,
+              whiteSpace: 'pre-line',
             }}
           >
             {t(slide.descriptionKey)}
@@ -231,11 +234,11 @@ const PrintHero = ({ slides }: PrintHeroProps) => {
           <Typography
             variant={index === 0 ? 'h3' : 'h5'}
             component={index === 0 ? 'h1' : 'h2'}
-            sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}
+            sx={{ fontWeight: 700, mb: 1, color: 'text.primary', whiteSpace: 'pre-line' }}
           >
             {t(slide.titleKey)}
           </Typography>
-          <Typography variant="body1" sx={{ lineHeight: 1.8, color: 'text.primary' }}>
+          <Typography variant="body1" sx={{ lineHeight: 1.8, color: 'text.primary', whiteSpace: 'pre-line' }}>
             {t(slide.descriptionKey)}
           </Typography>
         </Box>

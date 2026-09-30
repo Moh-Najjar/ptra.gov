@@ -7,7 +7,7 @@ export const DASHBOARD_CARDS: DashboardCardItem[] = [
     id: 'foreign-trade',
     labelKey: 'dashboardCards.foreignTrade',
     descriptionKey: 'dashboardCards.foreignTradeDescription',
-    path: ROUTES.FOREIGN_TRADE_EXPORTS,
+    path: ROUTES.FOREIGN_TRADE,
     background: cardBackgrounds.foreignTrade,
   },
   {

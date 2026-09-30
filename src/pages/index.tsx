@@ -12,8 +12,7 @@ export { PagesPage } from './PagesPage';
 export { PostPage } from './PostPage';
 export { UsersPage } from './UsersPage';
 export { SurveysPage } from './SurveysPage';
-
-export const ForeignTradePage = () => <PagePlaceholder titleKey="pages.foreignTrade.title" />;
+export { ForeignTradePage } from './ForeignTradePage';
 
 export const ContainerDwellTimePage = () => <PowerBiPage reportId="containerDwellTime" />;
 

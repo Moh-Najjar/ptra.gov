@@ -16,9 +16,7 @@ import {
 
 interface ColorModeContextValue {
   mode: ColorMode;
-  isDarkMode: boolean;
   setColorMode: (mode: ColorMode) => void;
-  toggleColorMode: () => void;
 }
 
 const ColorModeContext = createContext<ColorModeContextValue | null>(null);
@@ -42,21 +40,12 @@ export const ColorModeProvider = ({ children }: ColorModeProviderProps) => {
     setMode(persistColorMode(nextMode));
   }, []);
 
-  const toggleColorMode = useCallback(() => {
-    setMode((currentMode) => {
-      const nextMode: ColorMode = currentMode === 'light' ? 'dark' : 'light';
-      return persistColorMode(nextMode);
-    });
-  }, []);
-
   const value = useMemo<ColorModeContextValue>(
     () => ({
       mode,
-      isDarkMode: mode === 'dark',
       setColorMode,
-      toggleColorMode,
     }),
-    [mode, setColorMode, toggleColorMode],
+    [mode, setColorMode],
   );
 
   return <ColorModeContext.Provider value={value}>{children}</ColorModeContext.Provider>;

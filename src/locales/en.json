@@ -53,6 +53,8 @@
     "accessibility": "Accessibility",
     "switchToDarkMode": "Dark mode",
     "switchToLightMode": "Light mode",
+    "switchToGrayMode": "Gray mode",
+    "switchToHighContrastMode": "High contrast mode",
     "decreaseFontSize": "Decrease font size",
     "increaseFontSize": "Increase font size",
     "quickLinks": "Quick links",
@@ -80,20 +82,20 @@
     "description": "An interactive digital platform that provides accurate real-time information on a wealth of trade and logistics performance metrics.",
     "slides": {
       "slide1": {
-        "title": "Jordan Trade and Logistics Performance Gateway",
-        "description": "An interactive digital platform that provides accurate real-time information on a wealth of trade and logistics performance metrics."
+        "title": "Jordan Trade and \nLogistics Performance Gateway",
+        "description": "An interactive digital platform that provides accurate real-time \ninformation on a wealth of trade and logistics performance metrics."
       },
       "slide2": {
-        "title": "Foreign Trade Indicators",
-        "description": "Track the latest export, import, and trade balance data to support your economic decisions."
+        "title": "Jordan Trade and \nLogistics Performance Gateway",
+        "description": "An interactive digital platform that provides accurate real-time \ninformation on a wealth of trade and logistics performance metrics."
       },
       "slide3": {
-        "title": "Logistics Performance at Ports",
-        "description": "View release time and container dwell time indicators to improve supply chain efficiency."
+        "title": "Jordan Trade and \nLogistics Performance Gateway",
+        "description": "An interactive digital platform that provides accurate real-time \ninformation on a wealth of trade and logistics performance metrics."
       },
       "slide4": {
-        "title": "Aqaba Special Economic Zone",
-        "description": "Explore trade and logistics activity indicators in the Aqaba Special Economic Zone."
+        "title": "Jordan Trade and \nLogistics Performance Gateway",
+        "description": "An interactive digital platform that provides accurate real-time \ninformation on a wealth of trade and logistics performance metrics."
       }
     }
   },
@@ -104,6 +106,8 @@
   "dashboardCards": {
     "foreignTrade": "Foreign Trade",
     "foreignTradeDescription": "A comprehensive statistical platform for foreign trade indicators including exports, imports, and transit. It presents trade data in aggregated or detailed views by period, harmonized system classification, customs centers and border points, countries, economic groups, trade agreements, and the international trade balance.",
+    "foreignTradeAreasIntro": "Foreign trade typically includes four main areas:",
+    "foreignTradeAreasConclusion": "Each of these areas plays a vital role in shaping economic performance and integration in global markets.",
     "logisticsPerformance": "Logistics Performance",
     "logisticsPerformanceDescription": "A platform for measuring the time required from the arrival of goods at customs until final release, including the period from unloading at the port or airport until exit through the main gate under the consignee's control, together with the procedures of all authorities related to customs data.",
     "aqabaSez": "Aqaba Special Economic Zone",
@@ -511,27 +515,61 @@
         "percent": "share"
       }
     },
-    "crops": { "title": "Crops" },
-    "foreignTrade": { "title": "Foreign Trade" },
-    "exports": { "title": "Exports" },
-    "imports": { "title": "Imports" },
-    "transit": { "title": "Transit" },
-    "tradeBalance": { "title": "Trade Balance" },
-    "logisticsPerformance": { "title": "Logistics Performance" },
+    "crops": {
+      "title": "Crops"
+    },
+    "foreignTrade": {
+      "title": "Foreign Trade"
+    },
+    "exports": {
+      "title": "Exports"
+    },
+    "imports": {
+      "title": "Imports"
+    },
+    "transit": {
+      "title": "Transit"
+    },
+    "tradeBalance": {
+      "title": "Trade Balance"
+    },
+    "logisticsPerformance": {
+      "title": "Logistics Performance"
+    },
     "releaseTime": {
       "title": "Release Time",
       "description": "An electronic platform for measuring the time taken for customs clearance of goods, from their arrival at customs centers until release, tracking all stages and procedures including those issued by government departments and entities related to customs data. Times are displayed in detail by day, hour, and minute, enabling precise monitoring of customs process performance and identifying improvement opportunities."
     },
-    "containerDwellTime": { "title": "Container Dwell Time" },
-    "aqabaSez": { "title": "Aqaba Special Economic Zone" },
-    "foreignTradeLogistics": { "title": "Foreign Trade Logistics" },
-    "containerFlowStatistics": { "title": "Container Flow Statistics" },
-    "faq": { "title": "FAQ" },
-    "about": { "title": "About the Portal" },
-    "contact": { "title": "Contact Us" },
-    "accessibility": { "title": "Accessibility" },
-    "privacy": { "title": "Privacy and Protection Policy" },
-    "login": { "title": "Login" }
+    "containerDwellTime": {
+      "title": "Container Dwell Time"
+    },
+    "aqabaSez": {
+      "title": "Aqaba Special Economic Zone"
+    },
+    "foreignTradeLogistics": {
+      "title": "Foreign Trade Logistics"
+    },
+    "containerFlowStatistics": {
+      "title": "Container Flow Statistics"
+    },
+    "faq": {
+      "title": "FAQ"
+    },
+    "about": {
+      "title": "About the Portal"
+    },
+    "contact": {
+      "title": "Contact Us"
+    },
+    "accessibility": {
+      "title": "Accessibility"
+    },
+    "privacy": {
+      "title": "Privacy and Protection Policy"
+    },
+    "login": {
+      "title": "Login"
+    }
   },
   "powerBi": {
     "loading": "Loading report...",

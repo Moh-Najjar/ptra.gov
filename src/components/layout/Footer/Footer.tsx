@@ -57,7 +57,7 @@ const PartnerLogoImage = ({ logo }: { logo: PartnerLogo }) => {
         src={logo.src}
         alt={partnerName}
         sx={{
-          height: { xs: rem(40), sm: rem(44) },
+          height: { xs: rem(55), sm: rem(55) },
           maxWidth: { xs: rem(100), sm: rem(120) },
           width: 'auto',
           objectFit: 'contain',
