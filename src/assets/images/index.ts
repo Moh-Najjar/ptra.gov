@@ -23,9 +23,6 @@ const createGradient = (from: string, to: string): string =>
 
 export const heroBackground = createGradient('#7EC0E8', '#3589C5');
 
-/** Blue wash used on the first hero slide so white text stays readable. */
-const SLIDE_1_OVERLAY = 'linear-gradient(rgb(111 178 208 / 50%), rgb(111 178 208 / 50%))';
-
 /** Arabic artwork is the fallback when the language is missing or not English. */
 const resolveSlide1Image = (language: string): string => {
   if (isAppLanguage(language) && language === 'en') {
