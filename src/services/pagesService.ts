@@ -88,6 +88,27 @@ const normalizePageAuthors = (authors: RawPageAuthor[] | undefined): PageAuthor[
     .filter((author): author is PageAuthor => author !== null);
 };
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
+
+const readStringField = (record: Record<string, unknown>, key: string): string | null => {
+  const value = record[key];
+  return typeof value === 'string' ? value : null;
+};
+
+/** GET /Pages/{id} returns PageDetailsDto; only Content is used for the edit form. */
+const extractPageContent = (payload: unknown): string => {
+  if (typeof payload === 'string') {
+    return payload;
+  }
+
+  if (!isRecord(payload)) {
+    return '';
+  }
+
+  return readStringField(payload, 'content') ?? readStringField(payload, 'Content') ?? '';
+};
+
 const normalizeCmsPage = (page: RawCmsPage): CmsPage => ({
   id: page.id,
   title: page.title,
@@ -104,6 +125,11 @@ export const pagesService = {
   getPages: async (): Promise<CmsPage[]> => {
     const { data } = await apiClient.get<ApiResponse<RawCmsPage[]>>('/Pages');
     return data.data.map(normalizeCmsPage);
+  },
+
+  getPageContent: async (pageId: number): Promise<string> => {
+    const { data } = await apiClient.get<ApiResponse<unknown>>(`/Pages/${pageId}`);
+    return extractPageContent(data.data);
   },
 
   createPage: async (payload: CreatePagePayload): Promise<CmsPage> => {

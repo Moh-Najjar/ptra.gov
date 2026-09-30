@@ -197,12 +197,62 @@ const HeroDot = ({ active = false, onClick, index = 0 }: HeroDotProps) => (
   />
 );
 
+interface PrintHeroProps {
+  slides: HeroSlideItem[];
+}
+
+/** Static copy of the slides. The carousel transform and white-on-image text do not print. */
+const PrintHero = ({ slides }: PrintHeroProps) => {
+  const { t } = useTranslation();
+
+  if (slides.length === 0) {
+    return null;
+  }
+
+  return (
+    <Box
+      component="section"
+      sx={{
+        display: 'none',
+        '@media print': {
+          display: 'block',
+          py: 2,
+        },
+      }}
+    >
+      {slides.map((slide, index) => (
+        <Box
+          key={slide.id}
+          sx={{
+            mb: index < slides.length - 1 ? 2.5 : 0,
+            breakInside: 'avoid',
+          }}
+        >
+          <Typography
+            variant={index === 0 ? 'h3' : 'h5'}
+            component={index === 0 ? 'h1' : 'h2'}
+            sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}
+          >
+            {t(slide.titleKey)}
+          </Typography>
+          <Typography variant="body1" sx={{ lineHeight: 1.8, color: 'text.primary' }}>
+            {t(slide.descriptionKey)}
+          </Typography>
+        </Box>
+      ))}
+    </Box>
+  );
+};
+
 export const HeroSection = () => {
   const { direction, language } = useLanguage();
   const slides = getHeroSlides(language);
 
   return (
+    <>
+    <PrintHero slides={slides} />
     <Box
+      className="no-print"
       sx={{
         position: 'relative',
         '& .react-multi-carousel-list': {
@@ -248,5 +298,6 @@ export const HeroSection = () => {
         ))}
       </Carousel>
     </Box>
+    </>
   );
 };

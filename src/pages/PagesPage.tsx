@@ -23,7 +23,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { ROUTES } from '../app/routes/paths';
@@ -52,6 +52,7 @@ import {
   getPagesTableLocale,
   useCreatePage,
   useDeletePage,
+  usePageContent,
   usePages,
   useUpdatePage,
 } from '../hooks/usePages';
@@ -128,6 +129,11 @@ export const PagesPage = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [formValues, setFormValues] = useState<PageFormValues>(createEmptyPageFormValues());
   const [notice, setNotice] = useState<PageNotice | null>(null);
+  const appliedContentPageId = useRef<number | null>(null);
+
+  const editingPageId =
+    isFormDialogOpen && formMode === 'edit' && selectedPage !== null ? selectedPage.id : null;
+  const pageContentQuery = usePageContent(editingPageId, editingPageId !== null);
 
   const canManagePages = userHasAnyRole(user, [
     USER_ROLES.ADMINISTRATOR,
@@ -176,17 +182,48 @@ export const PagesPage = () => {
   };
 
   const openEditDialog = (page: CmsPage) => {
+    appliedContentPageId.current = null;
     setFormMode('edit');
     setSelectedPage(page);
+    // Title and status come from the list row. Content is loaded from GET /Pages/{id}.
     setFormValues(mapCmsPageToFormValues(page));
     setIsFormDialogOpen(true);
   };
 
   const closeFormDialog = () => {
+    appliedContentPageId.current = null;
     setIsFormDialogOpen(false);
     setSelectedPage(null);
     setFormValues(createEmptyPageFormValues());
   };
+
+  useEffect(() => {
+    if (formMode !== 'edit' || selectedPage === null || pageContentQuery.data === undefined) {
+      return;
+    }
+
+    if (appliedContentPageId.current === selectedPage.id) {
+      return;
+    }
+
+    appliedContentPageId.current = selectedPage.id;
+    const loadedContent = pageContentQuery.data;
+    setFormValues((currentValues) => ({
+      ...currentValues,
+      content: loadedContent,
+    }));
+  }, [formMode, pageContentQuery.data, selectedPage]);
+
+  useEffect(() => {
+    if (formMode !== 'edit' || !pageContentQuery.isError) {
+      return;
+    }
+
+    setNotice({
+      severity: 'error',
+      message: getApiErrorMessage(pageContentQuery.error, t('pages.pages.contentLoadError')),
+    });
+  }, [formMode, pageContentQuery.error, pageContentQuery.isError, t]);
 
   const openDeleteDialog = (page: CmsPage) => {
     setSelectedPage(page);
@@ -459,6 +496,7 @@ export const PagesPage = () => {
         open={isFormDialogOpen}
         mode={formMode}
         formValues={formValues}
+        isContentLoading={formMode === 'edit' && pageContentQuery.isFetching}
         isSaving={
           formMode === 'add' ? createPageMutation.isPending : updatePageMutation.isPending
         }

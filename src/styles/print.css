@@ -1,0 +1,63 @@
+/* On screen these classes do nothing. Print rules live in the media query below. */
+
+@media print {
+  @page {
+    margin: 12mm;
+  }
+
+  html,
+  body,
+  #root {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+  }
+
+  /* Dark mode is a grayscale filter plus light text. Paper stays black ink on white. */
+  html.grayscale {
+    filter: none !important;
+  }
+
+  body {
+    background-color: #ffffff !important;
+    color: #1c2833 !important;
+  }
+
+  body * {
+    color: #1c2833 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a * {
+    color: #0e5a96 !important;
+  }
+
+  /* Sticky bars overlap flowing print pages. Let the header sit in normal flow. */
+  .MuiAppBar-root {
+    position: static !important;
+    box-shadow: none !important;
+  }
+
+  /* Chrome that only works on screen: utility bar, menus, dialogs, prompts. */
+  .no-print,
+  .MuiDialog-root,
+  .MuiModal-root,
+  .MuiSnackbar-root,
+  .MuiTooltip-popper {
+    display: none !important;
+  }
+
+  img,
+  svg {
+    max-width: 100% !important;
+    break-inside: avoid;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}

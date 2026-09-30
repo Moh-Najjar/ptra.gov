@@ -10,6 +10,7 @@ import type { PageDetailRecord } from '../../types/pageDetails';
 
 export const pagesKeys = {
   list: ['pages', 'list'] as const,
+  content: (pageId: number) => ['pages', 'content', pageId] as const,
   details: (pageId: number, pageNumber: number, pageSize: number) =>
     ['pages', 'details', pageId, pageNumber, pageSize] as const,
   authors: (pageId: number) => ['pages', pageId, 'authors'] as const,
@@ -21,6 +22,19 @@ export const usePagesQuery = (enabled: boolean, language: AppLanguage) =>
     queryKey: [...pagesKeys.list, language] as const,
     queryFn: pagesService.getPages,
     enabled,
+  });
+
+export const usePageContentQuery = (pageId: number | null, enabled: boolean) =>
+  useQuery({
+    queryKey: pageId === null ? (['pages', 'content', 'idle'] as const) : pagesKeys.content(pageId),
+    queryFn: () => {
+      if (pageId === null) {
+        return Promise.resolve('');
+      }
+
+      return pagesService.getPageContent(pageId);
+    },
+    enabled: enabled && pageId !== null,
   });
 
 export const useCreatePageMutation = () => {

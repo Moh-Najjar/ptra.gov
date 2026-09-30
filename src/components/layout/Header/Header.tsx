@@ -42,6 +42,7 @@ export const Header = () => {
           >
             {/* Menu sits on the inline-start edge so it is a thumb target. */}
             <Box
+              className="no-print"
               sx={{
                 display: { xs: 'flex', md: 'none' },
                 width: MOBILE_SIDE_SLOT,
@@ -65,6 +66,7 @@ export const Header = () => {
             </Box>
 
             <Box
+              className="no-print"
               sx={{
                 display: { xs: 'none', md: 'flex' },
                 flex: '1 1 auto',
@@ -76,6 +78,7 @@ export const Header = () => {
             </Box>
 
             <Box
+              className="no-print"
               sx={{
                 flexShrink: 0,
                 width: { xs: MOBILE_SIDE_SLOT, md: 'auto' },

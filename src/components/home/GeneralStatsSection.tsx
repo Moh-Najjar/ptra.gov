@@ -73,6 +73,7 @@ export const GeneralStatsSection = () => {
 
         {isLoading && (
           <Box
+            className="no-print"
             component={motion.div}
             initial={motionInitial}
             whileInView="visible"
@@ -92,6 +93,32 @@ export const GeneralStatsSection = () => {
 
         {stats && (
           <Box
+            sx={{
+              display: 'none',
+              '@media print': {
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                columnGap: 3,
+                rowGap: 1.5,
+              },
+            }}
+          >
+            {stats.map((stat) => (
+              <Box key={stat.id} sx={{ breakInside: 'avoid' }}>
+                <Typography variant="body2" color="text.secondary">
+                  {stat.label}
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                  {stat.value}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+        )}
+
+        {stats && (
+          <Box
+            className="no-print"
             sx={{
               display: 'flex',
               justifyContent: 'center',

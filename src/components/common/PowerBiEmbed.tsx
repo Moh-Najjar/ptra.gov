@@ -31,7 +31,21 @@ export const PowerBiEmbed = ({ title, embedUrl }: PowerBiEmbedProps) => {
   }, []);
 
   return (
+    <>
+    <Typography
+      variant="body1"
+      sx={{
+        display: 'none',
+        '@media print': {
+          display: 'block',
+          lineHeight: 1.8,
+        },
+      }}
+    >
+      {t('powerBi.printUnavailable')}
+    </Typography>
     <Box
+      className="no-print"
       sx={{
         position: 'relative',
         width: '100%',
@@ -94,5 +108,6 @@ export const PowerBiEmbed = ({ title, embedUrl }: PowerBiEmbedProps) => {
         />
       )}
     </Box>
+    </>
   );
 };

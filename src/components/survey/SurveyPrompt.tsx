@@ -34,6 +34,7 @@ export const SurveyPrompt = ({ open, onDismiss, onHide }: SurveyPromptProps) => 
   return (
     <Slide direction="up" in={open} mountOnEnter unmountOnExit>
       <Paper
+        className="no-print"
         elevation={8}
         role="dialog"
         aria-labelledby="survey-prompt-title"

@@ -35,6 +35,7 @@ interface PageFormDialogProps {
   open: boolean;
   mode: PageFormMode;
   formValues: PageFormValues;
+  isContentLoading?: boolean;
   isSaving?: boolean;
   onClose: () => void;
   onSave: () => void;
@@ -45,6 +46,7 @@ export const PageFormDialog = ({
   open,
   mode,
   formValues,
+  isContentLoading = false,
   isSaving = false,
   onClose,
   onSave,
@@ -123,8 +125,12 @@ export const PageFormDialog = ({
               multiline
               minRows={6}
               error={Boolean(fieldErrors.content)}
-              helperText={fieldErrors.content ?? t('pages.pages.form.contentHint')}
-              disabled={isSaving}
+              helperText={
+                isContentLoading
+                  ? t('pages.pages.form.contentLoading')
+                  : (fieldErrors.content ?? t('pages.pages.form.contentHint'))
+              }
+              disabled={isSaving || isContentLoading}
             />
 
             <FormControl fullWidth required error={Boolean(fieldErrors.status)} disabled={isSaving}>
@@ -153,7 +159,7 @@ export const PageFormDialog = ({
         <AdminDialogCancelButton onClick={handleClose} disabled={isSaving}>
           {t('pages.pages.form.cancel')}
         </AdminDialogCancelButton>
-        <AdminDialogPrimaryButton onClick={handleSaveClick} disabled={isSaving}>
+        <AdminDialogPrimaryButton onClick={handleSaveClick} disabled={isSaving || isContentLoading}>
           {isSaving ? t('pages.pages.form.saving') : t('pages.pages.form.save')}
         </AdminDialogPrimaryButton>
       </AdminDialogFooter>

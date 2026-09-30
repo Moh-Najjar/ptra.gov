@@ -246,6 +246,61 @@ const MobileDashboardRow = ({
   );
 };
 
+/** Absolute URL so a printed link still points at the live page. */
+const toAbsoluteUrl = (path: string): string => {
+  const trimmedPath = path.trim();
+
+  if (trimmedPath.startsWith('http://') || trimmedPath.startsWith('https://')) {
+    return trimmedPath;
+  }
+
+  const normalizedPath = trimmedPath.startsWith('/') ? trimmedPath : `/${trimmedPath}`;
+  return `${window.location.origin}${normalizedPath}`;
+};
+
+interface PrintDashboardCardsProps {
+  cards: DashboardCardItem[];
+}
+
+/** Title, description, and URL. The on-screen cards are image strips with vertical labels. */
+const PrintDashboardCards = ({ cards }: PrintDashboardCardsProps) => {
+  const { t } = useTranslation();
+
+  if (cards.length === 0) {
+    return null;
+  }
+
+  return (
+    <Stack
+      spacing={2.5}
+      sx={{
+        display: 'none',
+        '@media print': {
+          display: 'flex',
+        },
+      }}
+    >
+      {cards.map((card) => {
+        const pageUrl = toAbsoluteUrl(card.path);
+
+        return (
+          <Box key={card.id} sx={{ breakInside: 'avoid' }}>
+            <Typography variant="h6" component="h3" sx={{ fontWeight: 700, mb: 0.75 }}>
+              {t(card.labelKey)}
+            </Typography>
+            <Typography variant="body1" sx={{ lineHeight: 1.8, mb: 0.75 }}>
+              {t(card.descriptionKey)}
+            </Typography>
+            <Link href={pageUrl} underline="hover" sx={{ fontWeight: 700, wordBreak: 'break-all' }}>
+              {pageUrl}
+            </Link>
+          </Box>
+        );
+      })}
+    </Stack>
+  );
+};
+
 export const DashboardCardsSection = () => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
@@ -272,8 +327,10 @@ export const DashboardCardsSection = () => {
           {t('home.dashboardsTitle')}
         </Typography>
 
+        <PrintDashboardCards cards={DASHBOARD_CARDS} />
+
         {/* Mobile: stacked image-over-copy cards — no side-by-side squeeze. */}
-        <Stack spacing={2} sx={{ display: { xs: 'flex', md: 'none' } }}>
+        <Stack className="no-print" spacing={2} sx={{ display: { xs: 'flex', md: 'none' } }}>
           {DASHBOARD_CARDS.map((card) => (
             <Box
               key={card.id}
@@ -296,6 +353,7 @@ export const DashboardCardsSection = () => {
 
         {/* Desktop: original expand / collapse strip. */}
         <Stack
+          className="no-print"
           direction="row"
           spacing={2}
           sx={{

@@ -45,7 +45,10 @@
     "about": "About the Portal",
     "contact": "Contact Us",
     "favorites": "Favorites",
+    "addToFavoritesHint": "Press Ctrl+D to add this page to your favorites.",
+    "addToFavoritesHintMac": "Press Command+D to add this page to your favorites.",
     "print": "Print",
+    "printFailed": "The page could not be printed. Please try again.",
     "search": "Search",
     "accessibility": "Accessibility",
     "switchToDarkMode": "Dark mode",
@@ -239,10 +242,12 @@
       "updateError": "Unable to update page. Please try again later.",
       "deleteError": "Unable to delete page. Please try again later.",
       "validationError": "Please fill in all required fields.",
+      "contentLoadError": "Unable to load page content. Please try again later.",
       "form": {
         "title": "Title",
         "content": "Content",
         "contentHint": "Paste HTML content or a Power BI iframe embed.",
+        "contentLoading": "Loading page content...",
         "status": "Status",
         "save": "Save",
         "saving": "Saving...",
@@ -530,7 +535,8 @@
   },
   "powerBi": {
     "loading": "Loading report...",
-    "loadError": "Unable to load the Power BI report. Please try again later."
+    "loadError": "Unable to load the Power BI report. Please try again later.",
+    "printUnavailable": "This dashboard is interactive and can be viewed on the website. Open this page in a browser to use the report."
   },
   "faq": {
     "items": {

@@ -5,6 +5,7 @@ import {
   useCreatePageMutation,
   useDeletePageMutation,
   usePageAuthorsQuery,
+  usePageContentQuery,
   usePageDetailsQuery,
   usePagesQuery,
   useRemovePageAuthorMutation,
@@ -21,6 +22,11 @@ export const usePages = () => {
   const { isAuthenticated } = useAuth();
   const { language } = useLanguage();
   return usePagesQuery(isAuthenticated, language);
+};
+
+export const usePageContent = (pageId: number | null, enabled: boolean) => {
+  const { isAuthenticated } = useAuth();
+  return usePageContentQuery(pageId, isAuthenticated && enabled);
 };
 
 export const useCreatePage = () => useCreatePageMutation();

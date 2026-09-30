@@ -1,15 +1,17 @@
 import {
+  Alert,
   Box,
   Container,
   IconButton,
   Link,
+  Snackbar,
   Stack,
   Tooltip,
 } from '@mui/material';
+import { useState } from 'react';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import PrintIcon from '@mui/icons-material/Print';
-import SearchIcon from '@mui/icons-material/Search';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
@@ -24,6 +26,19 @@ const iconButtonSx = {
   color: 'utilityBar.contrastText',
   p: 0.5,
   '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.15)' },
+};
+
+type UtilityNoticeSeverity = 'info' | 'error';
+
+type UtilityNotice = {
+  message: string;
+  severity: UtilityNoticeSeverity;
+};
+
+/** Apple browsers bookmark with Command+D; other browsers use Ctrl+D. */
+const usesAppleBookmarkShortcut = (): boolean => {
+  const userAgent = navigator.userAgent;
+  return /Mac|iPhone|iPad|iPod/i.test(userAgent);
 };
 
 const fontSizeControlSx = {
@@ -50,13 +65,42 @@ export const TopUtilityBar = () => {
   const { toggleLanguage, switchLabel } = useLanguage();
   const { isDarkMode, toggleColorMode } = useColorMode();
   const { decreaseFontSize, increaseFontSize, canDecrease, canIncrease } = useFontSize();
+  const [notice, setNotice] = useState<UtilityNotice | null>(null);
 
   const colorModeTooltip = isDarkMode ? t('utility.switchToLightMode') : t('utility.switchToDarkMode');
+
+  const closeNotice = (): void => {
+    setNotice(null);
+  };
+
+  // Browsers block silent bookmarking, so tell the visitor which shortcut to use.
+  const handleAddToFavorites = (): void => {
+    const message = usesAppleBookmarkShortcut()
+      ? t('utility.addToFavoritesHintMac')
+      : t('utility.addToFavoritesHint');
+
+    setNotice({
+      message,
+      severity: 'info',
+    });
+  };
+
+  const handlePrint = (): void => {
+    try {
+      window.print();
+    } catch {
+      setNotice({
+        message: t('utility.printFailed'),
+        severity: 'error',
+      });
+    }
+  };
   // row-reverse keeps the Arabic links on the left, and mirrors that row in English.
   const flowDirection = 'row-reverse' as const;
 
   return (
     <Box
+      className="no-print"
       sx={{
         bgcolor: 'utilityBar.main',
         borderBottom: '0.0625rem solid',
@@ -162,12 +206,22 @@ export const TopUtilityBar = () => {
               }}
             >
               <Tooltip title={t('utility.favorites')}>
-                <IconButton size="small" sx={iconButtonSx} aria-label={t('utility.favorites')}>
+                <IconButton
+                  size="small"
+                  sx={iconButtonSx}
+                  aria-label={t('utility.favorites')}
+                  onClick={handleAddToFavorites}
+                >
                   <StarBorderIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
               <Tooltip title={t('utility.print')}>
-                <IconButton size="small" sx={iconButtonSx} aria-label={t('utility.print')}>
+                <IconButton
+                  size="small"
+                  sx={iconButtonSx}
+                  aria-label={t('utility.print')}
+                  onClick={handlePrint}
+                >
                   <PrintIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
@@ -210,16 +264,24 @@ export const TopUtilityBar = () => {
                 )}
               </IconButton>
             </Tooltip>
-            <Box sx={{ display: { xs: 'none', md: 'inline-flex' } }}>
-              <Tooltip title={t('utility.search')}>
-                <IconButton size="small" sx={iconButtonSx} aria-label={t('utility.search')}>
-                  <SearchIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            </Box>
           </Stack>
         </Stack>
       </Container>
+
+      <Snackbar
+        open={notice !== null}
+        autoHideDuration={6000}
+        onClose={closeNotice}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          severity={notice?.severity ?? 'info'}
+          onClose={closeNotice}
+          sx={{ width: '100%' }}
+        >
+          {notice?.message ?? ''}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
