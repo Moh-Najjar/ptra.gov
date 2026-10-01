@@ -42,7 +42,7 @@ const FOREIGN_TRADE_NAV_ITEMS: ForeignTradeNavItem[] = [
   },
 ];
 
-export const ForeignTradePage = (): JSX.Element => {
+export const ForeignTradePage = (): React.ReactNode => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const isRtl = i18n.language === 'ar';
@@ -246,13 +246,13 @@ export const ForeignTradePage = (): JSX.Element => {
         <Typography variant="h4" component="h1" gutterBottom>
           {t('dashboardCards.foreignTrade')}
         </Typography>
-        <Typography variant="body1" paragraph>
+        <Typography variant="body1" component="p">
           {t('dashboardCards.foreignTradeDescription')}
         </Typography>
         <Box component="ul" sx={{ pl: 4 }}>
           {FOREIGN_TRADE_NAV_ITEMS.map((item) => (
             <li key={item.id}>
-              <Typography variant="body1">
+              <Typography variant="body1" component="span">
                 {t(item.labelKey)}: {window.location.origin}
                 {item.path}
               </Typography>
